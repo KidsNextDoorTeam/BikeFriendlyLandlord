@@ -67,8 +67,7 @@ export default function ProfilePage({userData, isLoggedIn}) {
             reviewFilter: value.value,
           })
         .then (reviewArray => {
-            // console.log(reviewArray)
-            // setReviewData(reviewArray.data)
+            setReviewData(reviewArray.data)
         })      
     }
 
