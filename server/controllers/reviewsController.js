@@ -91,6 +91,32 @@ reviewsController.getAllLandlordReviews = async (req, res, next) => {
   }
 };
 
+reviewsController.updatedLandlordReviewsByFilter = async (req, res, next) => {
+  const { landlordId } = req.params;
+  const { reviewFilter } = req.body;
+  console.log(reviewFilter);
+  console.log('landlord id: ',landlordId)
+  const queryString = `
+    SELECT * FROM reviews 
+    WHERE landlord_id = $1
+    ORDER BY created_at DESC;
+  `;
+
+  try {
+    // const results = await db.query(queryString, [landlordId]);
+    // res.locals.landlordReviews = results.rows;
+    // console.log('landlord Reviews: ', results);
+    return next();
+  } catch (error) {
+    return next({
+      message:
+        "Error occured attempting to fetch all landlord reviews from backend in reviewsController.getAllLandlordReviews",
+      log: "Error: " + error,
+      status: 500,
+    });
+  }
+};
+
 reviewsController.updateReview = async (req, res, next) => {
   const {reviewId, title, description} = req.body;
 

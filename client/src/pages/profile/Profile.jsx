@@ -22,6 +22,7 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import Button from '@mui/material/Button';
 import {  ThemeProvider } from '@mui/material/styles';
+import Select from 'react-select'
 
 import tomatopalette from "../../components/theme/tomatopalette.jsx"
 
@@ -45,7 +46,12 @@ export default function ProfilePage({userData, isLoggedIn}) {
         })
     }, [])
     
-    
+    const reviewFilterOptions = [
+        { value: 'helpful', label: 'Most Helpful' },
+        { value: 'critical', label: 'Most Critical' },
+        { value: 'recent', label: 'Most Recent' }
+      ]
+      
     //onclick for button
     const handleReview = (e) => {
         if (isLoggedIn) {
@@ -54,6 +60,16 @@ export default function ProfilePage({userData, isLoggedIn}) {
         else {
             alert('Please log in to submit a review')
         }
+    }
+
+    const handleFilter = (value) => {
+        axios.post(`http://localhost:3000/reviews/landlordReviews/${landlordId.landlord_id}`,{
+            reviewFilter: value.value,
+          })
+        .then (reviewArray => {
+            // console.log(reviewArray)
+            // setReviewData(reviewArray.data)
+        })      
     }
 
 
@@ -117,13 +133,9 @@ export default function ProfilePage({userData, isLoggedIn}) {
                         <Stack sx={{ alignItems: 'center', p: 1, m: 1,}}>
                             <Button variant="contained" onClick = {handleReview}>Create Review</Button>
                         </Stack>
-                        <Stack>
-                       <select style={{padding: '12px',  marginTop: '7px', marginLeft: '500px'}}>
-                           <option value="helpful">Most Helpful</option>
-                           <option value="critical">Most Critical</option>
-                           <option value="recent">Most Recent</option>
-                       </select>
-                    </Stack>
+                        <Stack sx={{ alignItems: 'center', p: 1, m: 1,}}>
+                       <Select options={reviewFilterOptions} defaultValue={reviewFilterOptions[0]}   onChange={handleFilter}/>
+                       </Stack>
                     </Stack>
                 </Container>
                 <Container>
