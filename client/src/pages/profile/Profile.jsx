@@ -5,7 +5,6 @@ import { Review } from '../../components/Review.jsx';
 import { LandlordInfoCard } from '../../components/LandlordInfoCard.jsx'
 import axios from 'axios'
 import "./profile.css"
-
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -115,9 +114,16 @@ export default function ProfilePage({userData, isLoggedIn}) {
                         <Typography variant="h3" gutterBottom component="div">
                         Reviews
                         </Typography>
-                        <Stack sx={{display: 'flex', alignItems: 'center', p: 1, m: 1,}}>
+                        <Stack sx={{ alignItems: 'center', p: 1, m: 1,}}>
                             <Button variant="contained" onClick = {handleReview}>Create Review</Button>
                         </Stack>
+                        <Stack>
+                       <select style={{padding: '12px',  marginTop: '7px', marginLeft: '500px'}}>
+                           <option value="helpful">Most Helpful</option>
+                           <option value="critical">Most Critical</option>
+                           <option value="recent">Most Recent</option>
+                       </select>
+                    </Stack>
                     </Stack>
                 </Container>
                 <Container>
