@@ -3,6 +3,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const AppError = require('./util/AppError');
 
 const sessionController = require('./controllers/sessionController');
 const landlordRouter = require('./routes/landlord.js');
