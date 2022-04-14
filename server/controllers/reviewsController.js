@@ -1,4 +1,4 @@
-const db = require("../models/BFLL.js");
+const db = require('../models/BFLL.js');
 const AppError = require('../util/AppError');
 
 const reviewsController = {};
@@ -50,7 +50,7 @@ reviewsController.getReviews = async (req, res, next) => {
     WHERE user_id = $1;
     `;
 
-    const result = await db.query(query, [userId])
+    const result = await db.query(query, [userId]);
     res.locals.reviews = result.rows;
     next();
   } catch (error) {
@@ -60,11 +60,11 @@ reviewsController.getReviews = async (req, res, next) => {
 
 reviewsController.getAllLandlordReviews = async (req, res, next) => {
   const { landlordId } = req.params;
-  // console.log('landlord id: ',landlord_id)
+  // default is sort by most helpful 
   const queryString = `
     SELECT * FROM reviews 
     WHERE landlord_id = $1
-    ORDER BY created_at DESC;
+    ORDER BY overall_rating DESC;
   `;
 
   try {
@@ -74,6 +74,38 @@ reviewsController.getAllLandlordReviews = async (req, res, next) => {
     return next();
   } catch (error) {
     return next(new AppError(error, 'reviewsController', 'getAllLandlordReviews', 500));
+  }
+};
+
+reviewsController.updatedLandlordReviewsByFilter = async (req, res, next) => {
+  const { landlordId } = req.params;
+  const { reviewFilter } = req.body;
+  try {
+    if (reviewFilter === 'critical') {
+      const queryString = `
+      SELECT * FROM reviews 
+      WHERE landlord_id = $1
+      ORDER BY overall_rating ASC`;
+      const results = await db.query(queryString, [landlordId]);
+      res.locals.landlordReviews = results.rows;
+    } else if (reviewFilter === 'recent') {
+      const queryString = `
+      SELECT * FROM reviews 
+      WHERE landlord_id = $1
+      ORDER BY created_at DESC`;
+      const results = await db.query(queryString, [landlordId]);
+      res.locals.landlordReviews = results.rows;
+    } else {
+      const queryString = `
+      SELECT * FROM reviews 
+      WHERE landlord_id = $1
+      ORDER BY overall_rating DESC`;
+      const results = await db.query(queryString, [landlordId]);
+      res.locals.landlordReviews = results.rows;
+    }
+    return next();
+  } catch (error) {
+    return next(new AppError(error, 'reviewsController', 'updatedLandlordReviewsByFilter', 500));
   }
 };
 
@@ -95,7 +127,7 @@ reviewsController.updateReview = async (req, res, next) => {
 
 reviewsController.deleteReview = async (req, res, next) => {
   const { reviewId } = req.params;
-  const queryString = `DELETE FROM reviews WHERE _id = $1;`;
+  const queryString = 'DELETE FROM reviews WHERE _id = $1;';
 
   try {
     await db.query(queryString, [reviewId]);

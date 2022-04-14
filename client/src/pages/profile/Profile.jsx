@@ -3,9 +3,9 @@ import { useState} from 'react';
 import {Link, useNavigate, useParams } from "react-router-dom";
 import { Review } from '../../components/Review.jsx';
 import { LandlordInfoCard } from '../../components/LandlordInfoCard.jsx'
+import { FormControl, MenuItem, Select, InputLabel } from '@mui/material';
 import axios from 'axios'
 import "./profile.css"
-
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -29,8 +29,9 @@ import tomatopalette from "../../components/theme/tomatopalette.jsx"
 
 export default function ProfilePage({userData, isLoggedIn}) {
     const navigate = useNavigate();
-    const [landlordData,setLandlordData] = React.useState({})
-    const [reviewData, setReviewData] = React.useState([])
+    const [landlordData,setLandlordData] = useState({})
+    const [reviewData, setReviewData] = useState([])
+    const [reviewFilter, setReviewFilter] = useState("helpful");
 
     const landlordId = useParams();
     React.useEffect(() => {
@@ -46,7 +47,7 @@ export default function ProfilePage({userData, isLoggedIn}) {
         })
     }, [])
     
-    
+      
     //onclick for button
     const handleReview = (e) => {
         if (isLoggedIn) {
@@ -55,6 +56,16 @@ export default function ProfilePage({userData, isLoggedIn}) {
         else {
             alert('Please log in to submit a review')
         }
+    }
+
+    const handleFilter = (e) => {
+        setReviewFilter(e.target.value);
+        axios.post(`/reviews/landlordReviews/${landlordId.landlord_id}`,{
+            reviewFilter: e.target.value,
+          })
+        .then (reviewArray => {
+            setReviewData(reviewArray.data)
+        })      
     }
 
 
@@ -115,9 +126,19 @@ export default function ProfilePage({userData, isLoggedIn}) {
                         <Typography variant="h3" gutterBottom component="div">
                         Reviews
                         </Typography>
-                        <Stack sx={{display: 'flex', alignItems: 'center', p: 1, m: 1,}}>
+                        <Stack sx={{ alignItems: 'center', p: 1, m: 1,}}>
                             <Button variant="contained" onClick = {handleReview}>Create Review</Button>
                         </Stack>
+                        <Stack sx={{ alignItems: 'center', p: 1, m: 1,}}>
+                       <FormControl sx={{ minWidth: 120 }} size="small" >
+                        <InputLabel>Sort by</InputLabel>
+                            <Select value={reviewFilter} label="Sort by"  onChange={handleFilter}>
+                                <MenuItem value={"helpful"}>Most Helpful</MenuItem>
+                                <MenuItem value={"critical"}>Most Critical</MenuItem>
+                                <MenuItem value={"recent"}>Most Recent</MenuItem>
+                            </Select>
+                       </FormControl>
+                       </Stack>
                     </Stack>
                 </Container>
                 <Container>
