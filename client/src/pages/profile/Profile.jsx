@@ -3,6 +3,7 @@ import { useState} from 'react';
 import {Link, useNavigate, useParams } from "react-router-dom";
 import { Review } from '../../components/Review.jsx';
 import { LandlordInfoCard } from '../../components/LandlordInfoCard.jsx'
+import { FormControl, MenuItem, Select, InputLabel } from '@mui/material';
 import axios from 'axios'
 import "./profile.css"
 import Box from '@mui/material/Box';
@@ -22,7 +23,6 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import Button from '@mui/material/Button';
 import {  ThemeProvider } from '@mui/material/styles';
-import Select from 'react-select'
 
 import tomatopalette from "../../components/theme/tomatopalette.jsx"
 
@@ -31,6 +31,7 @@ export default function ProfilePage({userData, isLoggedIn}) {
     const navigate = useNavigate();
     const [landlordData,setLandlordData] = React.useState({})
     const [reviewData, setReviewData] = React.useState([])
+    const [reviewFilter, setReviewFilter] = React.useState("");
 
     const landlordId = useParams();
     React.useEffect(() => {
@@ -46,11 +47,6 @@ export default function ProfilePage({userData, isLoggedIn}) {
         })
     }, [])
     
-    const reviewFilterOptions = [
-        { value: 'helpful', label: 'Most Helpful' },
-        { value: 'critical', label: 'Most Critical' },
-        { value: 'recent', label: 'Most Recent' }
-      ]
       
     //onclick for button
     const handleReview = (e) => {
@@ -62,9 +58,10 @@ export default function ProfilePage({userData, isLoggedIn}) {
         }
     }
 
-    const handleFilter = (value) => {
-        axios.post(`http://localhost:3000/reviews/landlordReviews/${landlordId.landlord_id}`,{
-            reviewFilter: value.value,
+    const handleFilter = (e) => {
+        setReviewFilter(e.target.value);
+        axios.post(`/reviews/landlordReviews/${landlordId.landlord_id}`,{
+            reviewFilter: e.target.value,
           })
         .then (reviewArray => {
             setReviewData(reviewArray.data)
@@ -133,7 +130,14 @@ export default function ProfilePage({userData, isLoggedIn}) {
                             <Button variant="contained" onClick = {handleReview}>Create Review</Button>
                         </Stack>
                         <Stack sx={{ alignItems: 'center', p: 1, m: 1,}}>
-                       <Select options={reviewFilterOptions} defaultValue={reviewFilterOptions[0]}   onChange={handleFilter}/>
+                       <FormControl sx={{ minWidth: 120 }} size="small" >
+                        <InputLabel>Sort by</InputLabel>
+                            <Select value={reviewFilter} label="Sort by"  onChange={handleFilter}>
+                                <MenuItem value={"helpful"}>Most Helpful</MenuItem>
+                                <MenuItem value={"critical"}>Most Critical</MenuItem>
+                                <MenuItem value={"recent"}>Most Recent</MenuItem>
+                            </Select>
+                       </FormControl>
                        </Stack>
                     </Stack>
                 </Container>
