@@ -131,8 +131,8 @@ landlordController.addLandlord = async (req, res, next) => {
     }
 
     const landlordQuery = {
-      text: 'INSERT INTO landlords (pet_friendly, bike_friendly) VALUES ($1,$2)',
-      values: [pet_friendly, bike_friendly],
+      text: 'INSERT INTO landlords (_id, pet_friendly, bike_friendly) VALUES ($1, $2, $3)',
+      values: [userId, pet_friendly, bike_friendly],
     };
 
     await db.query(landlordQuery);
