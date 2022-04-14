@@ -4,11 +4,34 @@ const AppError = require('../util/AppError');
 const landlordController = {};
 
 landlordController.getById = async (req, res, next) => {
-  const queryString = `SELECT * FROM landlords WHERE _id = $1`;
+  const landlordQuery = {
+    text: `SELECT l.*, u.first_name, u.last_name, u.username, u.email, u.profile_pic 
+    FROM landlords l LEFT JOIN users u ON u._id = l._id WHERE l._id = $1`,
+    values: [req.params.landlordId]
+  };
+
+  const propertiesQuery = {
+    text: 'SELECT * FROM properties WHERE landlord_id = $1;',
+    values: [req.params.landlordId]
+  };
+
+  const reviewsQuery = {
+    text: `SELECT _id, title, username, overall_rating, respect_rating, responsiveness_rating, 
+    description, user_id, created_at, pet_friendly, bike_friendly FROM reviews WHERE landlord_id = $1;`,
+    values: [req.params.landlordId],
+  };
 
   try {
-    const results = await db.query(queryString, [req.params.landlord_id]);
-    res.locals.landlord = results.rows[0];
+    const { rows: [landlord] } = await db.query(landlordQuery);
+    const { rows: properties } = await db.query(propertiesQuery);
+    const { rows: reviews } = await db.query(reviewsQuery);
+
+    res.locals.landlord = {
+      ...landlord,
+      reviews,
+      properties,
+    };
+
     return next();
   } catch (error) {
     return next(new AppError(error, 'landlordController', 'getById', 500));
@@ -16,22 +39,34 @@ landlordController.getById = async (req, res, next) => {
 };
 
 landlordController.getAllLandlords = async (req, res, next) => {
-  const queryString = `SELECT * FROM landlords;`;
+  const landlordQuery = `SELECT l.*, u.first_name, u.last_name, u.username, u.email, u.profile_pic 
+    FROM landlords l LEFT JOIN users u ON u._id = l._id;`;
+
+  // TODO: Do we want to send review and property information here? 
+
   try {
-    const results = await db.query(queryString);
-    res.locals.landlords = results.rows;
+    const { rows: landlords } = await db.query(landlordQuery);
+    res.locals.landlords = landlords;
     return next();
   } catch (error) {
     return next(new AppError(error, 'landlordController', 'getAllLandlords', 500));
   }
 };
 
+// TODO: Make this generic
 landlordController.getTopFour = async (req, res, next) => {
-  const queryString = `SELECT landlords.*, addresses.city, addresses.state FROM landlords 
-                       LEFT OUTER JOIN addresses on landlords._id = addresses.landlord_id 
-                       WHERE landlords.overall_rating != 'NaN'
-                       ORDER BY overall_rating DESC 
-                       LIMIT 4;`
+  // Reformatted join to account for landlords with multiple properties
+  // before if a top landlord had multiple properties they would appear twice in the list
+  const queryString = `
+  SELECT l.*, p.city, p.state, u.first_name, u.last_name, u.profile_pic FROM landlords l 
+    LEFT JOIN (
+      SELECT DISTINCT ON (landlord_id) landlord_id, city, state FROM properties
+    ) p 
+	  ON l._id = p.landlord_id
+	  LEFT JOIN users u ON u._id = l._id
+    where l.overall_rating != 'NaN'
+    ORDER BY l.overall_rating desc
+    LIMIT 4; `;
 
   try {
     const results = await db.query(queryString);
@@ -42,86 +77,71 @@ landlordController.getTopFour = async (req, res, next) => {
   }
 };
 
-landlordController.updateLandlordReviews = async (req, res, next) => {
-  const { landlord_id } = req.body;
 
-  let newOverall = newRespect = newResponsiveness = newBike = newPet = 0;
-  // console.log('landlord Reviews: ', res.locals.landlordReviews);
-  // add up total for each review category
-  res.locals.landlordReviews.forEach((review) => {
-    newOverall += Number(review.overall_rating);
-    newRespect += Number(review.respect_rating);
-    newResponsiveness += Number(review.responsiveness_rating);
-    if (review.bike_friendly) newBike += 1;
-    if (review.pet_friendly) newPet += 1;
-  });
-
-  // calculate new average for each review category
-  newOverall /= res.locals.landlordReviews.length;
-  newRespect /= res.locals.landlordReviews.length;
-  newResponsiveness /= res.locals.landlordReviews.length;
-  newBike =
-    newBike >= Math.floor(res.locals.landlordReviews.length / 2)
-      ? true
-      : false;
-  newPet =
-    newPet >= Math.floor(res.locals.landlordReviews.length / 2) ? true : false;
-
-  // push new values to database
-  const queryString = `
-    UPDATE landlords
-    SET overall_rating = $1, respect_rating = $2, responsiveness_rating = $3, bike_friendly = $4, pet_friendly = $5
-    WHERE _id = $6;
-  `;
-  try {
-    await db.query(queryString, [
-      newOverall,
-      newRespect,
-      newResponsiveness,
-      newBike,
-      newPet,
-      landlord_id,
-    ]);
-    return next();
-  } catch (error) {
-    return next(new AppError(error, 'landlordController', 'updateLandlordReviews', 500));
-  }
-};
-
+// TODO: How is this info being used? Can the same be accomplished by searching properties and sending 
+// landlord ids with it?
 landlordController.searchLandlords = async (req, res, next) => {
-  const { city, bike_friendly, pet_friendly } = req.body;
-  let queryString = `
-    SELECT landlords.*, addresses.street_num, addresses.street, addresses.city, addresses.state, addresses.zip_code FROM landlords 
-    INNER JOIN addresses ON landlords._id = addresses.landlord_id
-    WHERE addresses.city = $1
-  `;
-
-  if (bike_friendly) queryString += ' AND bike_friendly = true';
-  if (pet_friendly) queryString += ' AND pet_friendly = true';
-  queryString += ';';
+  const { city, bike_friendly = true, pet_friendly = true } = req.body;
+  const queryString = {
+    text: `
+    SELECT l.* , 
+    p.street_num, p.street, p.city, p.state, p.zip_code, 
+    u.first_name, u.last_name, u.profile_pic FROM landlords l
+    INNER JOIN (
+      SELECT DISTINCT ON (landlord_id) landlord_id, street_num, street, city, state, zip_code FROM properties
+      WHERE city = $1
+    ) p 
+    ON p.landlord_id = l._id
+    LEFT JOIN users u ON u._id = l._id
+    WHERE bike_friendly = $2 AND pet_friendly = $3;`,
+    values: [city, bike_friendly, pet_friendly]
+  };
 
   try {
-    const results = await db.query(queryString, [city]);
-    res.locals.landlords = results.rows;
+    const { rows: landlordData } = await db.query(queryString);
+
+    res.locals.landlords = landlordData;
     return next();
   } catch (error) {
     return next(new AppError(error, 'landlordController', 'searchLandlords', 500));
   }
 };
 
-landlordController.getLandlordsAndAddresses = async (req, res, next) => {
-  try {
-    const queryString = `
-    SELECT l.*, a.city, a.street_num, a.street, a.state, a.zip_code, a.landlord_id FROM landlords l
-    INNER JOIN addresses a ON l._id = a.landlord_id;
-    `;
 
-    const results = await db.query(queryString);
-    res.locals.landlords = results.rows;
+/**
+ * Adds existing users as landlords
+ * @requires userId to exist in re
+ */
+landlordController.addLandlord = async (req, res, next) => {
+  // New landlords do not have a rating and are unverfied by default
+  // we just need to know pet and bike friendliness
+  const { userId, } = req.params;
+  const { bike_friendly = true, pet_friendly = true } = req.body;
+
+  const userQuery = {
+    text: 'SELECT count(*) from users where _id = $1;',
+    values: [userId]
+  };
+
+  try {
+
+    const { rows: [result] } = await db.query(userQuery);
+    if (result === 0) {
+      return res.status(404).send(`User: ${userId} not found`);
+    }
+
+    const landlordQuery = {
+      text: 'INSERT INTO landlords (pet_friendly, bike_friendly) VALUES ($1,$2)',
+      values: [pet_friendly, bike_friendly],
+    };
+
+    await db.query(landlordQuery);
     return next();
   } catch (error) {
-    return next(new AppError(error, 'landlordController', 'getLandlorsAndAddresses', 500));
+    return next(new AppError(error, 'landlordController', 'addLandlord', 500));
   }
+
+
 };
 
 module.exports = landlordController;
