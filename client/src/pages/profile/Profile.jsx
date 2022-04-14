@@ -31,7 +31,7 @@ export default function ProfilePage({userData, isLoggedIn}) {
     const navigate = useNavigate();
     const [landlordData,setLandlordData] = useState({})
     const [reviewData, setReviewData] = useState([])
-    const [reviewFilter, setReviewFilter] = useState("");
+    const [reviewFilter, setReviewFilter] = useState("helpful");
 
     const landlordId = useParams();
     React.useEffect(() => {
