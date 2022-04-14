@@ -1,3 +1,4 @@
+const e = require("express");
 const db = require("../models/BFLL.js");
 
 const reviewsController = {};
@@ -69,11 +70,11 @@ reviewsController.getReviews = async (req, res, next) => {
 
 reviewsController.getAllLandlordReviews = async (req, res, next) => {
   const { landlordId } = req.params;
-  // console.log('landlord id: ',landlord_id)
+  // default is sort by most helpful 
   const queryString = `
     SELECT * FROM reviews 
     WHERE landlord_id = $1
-    ORDER BY created_at DESC;
+    ORDER BY overall_rating DESC;
   `;
 
   try {
@@ -85,6 +86,43 @@ reviewsController.getAllLandlordReviews = async (req, res, next) => {
     return next({
       message:
         "Error occured attempting to fetch all landlord reviews from backend in reviewsController.getAllLandlordReviews",
+      log: "Error: " + error,
+      status: 500,
+    });
+  }
+};
+
+reviewsController.updatedLandlordReviewsByFilter = async (req, res, next) => {
+  const { landlordId } = req.params;
+  const { reviewFilter } = req.body;
+  try {
+    if (reviewFilter === "critical"){
+      const queryString = `
+      SELECT * FROM reviews 
+      WHERE landlord_id = $1
+      ORDER BY overall_rating ASC`;
+      const results = await db.query(queryString, [landlordId]);
+      res.locals.landlordReviews = results.rows;
+    } else if (reviewFilter === "recent") {
+      const queryString = `
+      SELECT * FROM reviews 
+      WHERE landlord_id = $1
+      ORDER BY created_at DESC`;
+      const results = await db.query(queryString, [landlordId]);
+      res.locals.landlordReviews = results.rows;
+    } else {
+      const queryString = `
+      SELECT * FROM reviews 
+      WHERE landlord_id = $1
+      ORDER BY overall_rating DESC`;
+      const results = await db.query(queryString, [landlordId]);
+      res.locals.landlordReviews = results.rows;
+    }
+    return next();
+  } catch (error) {
+    return next({
+      message:
+        "Error occured attempting to filter landlord reviews from backend in reviewsController.updatedLandlordReviewsByFilter",
       log: "Error: " + error,
       status: 500,
     });
