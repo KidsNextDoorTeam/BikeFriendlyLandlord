@@ -1,8 +1,8 @@
 import { Button } from '@mui/material';
 import React, { useState } from 'react';
-import './navbar.css';
+import '../index.css';
 import { NavLink, Link } from 'react-router-dom';
-import { Authenticate } from '../../pages/authenticate/Authenticate.jsx';
+import { Authenticate } from '../pages/Authenticate.jsx';
 
 export function Navbar(props) {
   const {

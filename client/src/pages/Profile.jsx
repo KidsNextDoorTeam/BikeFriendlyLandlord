@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useState} from 'react';
 import {Link, useNavigate, useParams } from "react-router-dom";
-import { Review } from '../../components/Review.jsx';
-import { LandlordInfoCard } from '../../components/LandlordInfoCard.jsx'
+import { Review } from '../components/Review.jsx';
+import { LandlordInfoCard } from '../components/LandlordInfoCard.jsx'
 import { FormControl, MenuItem, Select, InputLabel } from '@mui/material';
 import axios from 'axios'
-import "./profile.css"
+import "../index.css"
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -24,7 +24,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import Button from '@mui/material/Button';
 import {  ThemeProvider } from '@mui/material/styles';
 
-import tomatopalette from "../../components/theme/tomatopalette.jsx"
+import tomatopalette from "../components/tomatopalette.jsx"
 
 
 export default function ProfilePage({userData, isLoggedIn}) {

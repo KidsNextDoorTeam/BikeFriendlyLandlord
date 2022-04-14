@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-import { Navbar } from './components/navbar/Navbar.jsx';
-import ClearNavbar from './components/clearNavbar/ClearNavbar.jsx';
-import Home from './pages/home/Home.jsx';
-import MapSearch from './pages/map/MapSearch.jsx';
-import Profile from './pages/profile/Profile.jsx';
-import Search from './pages/search/Search.jsx';
-import { ReviewPage } from './pages/review/ReviewPage.jsx';
-import { UserProfile } from './pages/user/UserProfile.jsx';
+import { Navbar } from './components/Navbar.jsx';
+import ClearNavbar from './components/ClearNavbar.jsx';
+import Home from './pages/Home.jsx';
+import MapSearch from './pages/MapSearch.jsx';
+import Profile from './pages/Profile.jsx';
+import Search from './pages/Search.jsx';
+import { ReviewPage } from './pages/ReviewPage.jsx';
+import { UserProfile } from './pages/UserProfile.jsx';
 import { Route, Routes, Link } from 'react-router-dom';
-import Footer from "./components/footer/Footer.jsx";
+import Footer from "./components/Footer.jsx";
 
 export function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

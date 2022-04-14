@@ -1,6 +1,6 @@
 import React from "react";
-import HomeCard from "../homeCard/HomeCard.jsx";
-import "./homeCards.css";
+import HomeCard from "./HomeCard.jsx";
+import "../index.css";
 
 export default function homeCards({topFour}) {
   return (

@@ -1,5 +1,5 @@
-import "./home.css";
-import HomeCards from "../../components/homeCards/HomeCards.jsx";
+import "../index.css";
+import HomeCards from "../components/HomeCards.jsx";
 import React, { useEffect, useState } from "react";
 import { Collapse, IconButton, makeStyles } from "@mui/material";
 import { CssBaseline } from "@mui/material";
