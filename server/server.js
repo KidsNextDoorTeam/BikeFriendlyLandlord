@@ -9,7 +9,7 @@ const sessionController = require('./controllers/sessionController');
 const landlordRouter = require('./routes/landlord.js');
 const reviewsRouter = require('./routes/reviews.js');
 const authRouter = require('./routes/auth.js');
-const addressRouter = require('./routes/address.js');
+const propertiesRouter = require('./routes/properties.js');
 const userRouter = require('./routes/user.js');
 
 const app = express();
@@ -37,7 +37,7 @@ app.use('/images', express.static(path.resolve(__dirname, './images')));
 app.use('/landlords', landlordRouter);
 app.use('/reviews', reviewsRouter);
 app.use('/auth', authRouter);
-app.use('/address', addressRouter);
+app.use('/properties', propertiesRouter);
 app.use('/user', userRouter);
 
 /**
