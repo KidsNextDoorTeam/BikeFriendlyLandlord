@@ -29,9 +29,9 @@ import tomatopalette from "../../components/theme/tomatopalette.jsx"
 
 export default function ProfilePage({userData, isLoggedIn}) {
     const navigate = useNavigate();
-    const [landlordData,setLandlordData] = React.useState({})
-    const [reviewData, setReviewData] = React.useState([])
-    const [reviewFilter, setReviewFilter] = React.useState("");
+    const [landlordData,setLandlordData] = useState({})
+    const [reviewData, setReviewData] = useState([])
+    const [reviewFilter, setReviewFilter] = useState("");
 
     const landlordId = useParams();
     React.useEffect(() => {
