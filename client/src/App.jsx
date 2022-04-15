@@ -10,6 +10,7 @@ import { ReviewPage } from './pages/review/ReviewPage.jsx';
 import { UserProfile } from './pages/user/UserProfile.jsx';
 import { Route, Routes, Link } from 'react-router-dom';
 import Footer from "./components/footer/Footer.jsx";
+import Chat from "../src/components/chatbot/chat.jsx"
 
 export function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -53,6 +54,7 @@ export function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/map" element={<MapSearch />} />
         <Route path="/landlord/:landlord_id" element={<Profile userData={userData} isLoggedIn={isLoggedIn}/>} />
+
         <Route
           path="/review/:landlord_id"
           element={<ReviewPage userData={userData} />}
@@ -71,6 +73,7 @@ export function App() {
         <Route path="*" element={<p>404 - nothing here</p>} />
       </Routes>
       <Footer />
+      <Chat />
     </>
   );
 }

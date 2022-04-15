@@ -10,6 +10,7 @@ const reviewsRouter = require('./routes/reviews.js');
 const authRouter = require('./routes/auth.js');
 const addressRouter = require('./routes/address.js');
 const userRouter = require('./routes/user.js');
+// const chatRouter = require('./routes/chat.js');
 
 const app = express();
 dotenv.config({path: path.resolve(__dirname, '../.env')});
@@ -38,6 +39,7 @@ app.use('/reviews', reviewsRouter);
 app.use('/auth', authRouter);
 app.use('/address', addressRouter);
 app.use('/user', userRouter);
+// app.use('/chat', chatRouter);
 
 /**
  *  Serve sheltered google api key
