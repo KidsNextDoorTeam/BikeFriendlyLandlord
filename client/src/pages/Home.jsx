@@ -1,10 +1,11 @@
-import './home.css';
-import HomeCards from '../../components/homeCards/HomeCards.jsx';
 import React, { useEffect, useState } from 'react';
 import { Collapse, IconButton, makeStyles } from '@mui/material';
 import { CssBaseline } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Link as Scroll } from 'react-scroll';
+
+import HomeCards from '../components/HomeCards.jsx';
+import '../index.css';
 
 const axios = require('axios');
 

@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import React from "react";
-import "./clearNavbar.css";
+import "../index.css";
 
 export default function ClearNavbar({ isLoggedIn, authDisplay, logout, setAuthDisplay }) {
   return (

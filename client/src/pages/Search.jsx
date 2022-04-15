@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 // import { Link } from 'react-router-dom'
-import './search.css';
 
 // import MUI components
 import Button from '@mui/material/Button';
@@ -13,10 +13,9 @@ import Checkbox from '@mui/material/Checkbox';
 import { ThemeProvider } from '@mui/material/styles';
 
 // import result component
-import ResultDisplay from '../../components/searchResults/resultDisplay.jsx';
+import ResultDisplay from '../components/resultDisplay.jsx';
 //import theme 
-import tomatopalette from '../../components/theme/tomatopalette.jsx';
-import axios from 'axios';
+import tomatopalette from '../components/tomatopalette.jsx';
 
 export default function Search() {
   // handle search results
@@ -125,5 +124,5 @@ export default function Search() {
         </Container>
       </div>
     </ThemeProvider>
-  )
+  );
 }

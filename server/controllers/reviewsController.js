@@ -96,6 +96,38 @@ reviewsController.getAllReviews = async (req, res, next) => {
   }
 };
 
+reviewsController.updatedLandlordReviewsByFilter = async (req, res, next) => {
+  const { landlordId } = req.params;
+  const { reviewFilter } = req.body;
+  try {
+    if (reviewFilter === 'critical') {
+      const queryString = `
+      SELECT * FROM reviews 
+      WHERE landlord_id = $1
+      ORDER BY overall_rating ASC`;
+      const results = await db.query(queryString, [landlordId]);
+      res.locals.landlordReviews = results.rows;
+    } else if (reviewFilter === 'recent') {
+      const queryString = `
+      SELECT * FROM reviews 
+      WHERE landlord_id = $1
+      ORDER BY created_at DESC`;
+      const results = await db.query(queryString, [landlordId]);
+      res.locals.landlordReviews = results.rows;
+    } else {
+      const queryString = `
+      SELECT * FROM reviews 
+      WHERE landlord_id = $1
+      ORDER BY overall_rating DESC`;
+      const results = await db.query(queryString, [landlordId]);
+      res.locals.landlordReviews = results.rows;
+    }
+    return next();
+  } catch (error) {
+    return next(new AppError(error, 'reviewsController', 'updatedLandlordReviewsByFilter', 500));
+  }
+};
+
 reviewsController.updateReview = async (req, res, next) => {
   // TODO: Add utilcontroller to allow updates of any fields. 
   const { reviewId } = req.params;

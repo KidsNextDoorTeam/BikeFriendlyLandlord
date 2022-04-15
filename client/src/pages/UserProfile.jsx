@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
-import { Review } from '../../components/Review.jsx';
+import { Review } from '../components/Review.jsx';
 
-import './userprofile.css'
+import '../index.css'
 
 export function UserProfile(props) {
   const { userData, setUserData, setIsLoggedIn, setAuthDisplay } = props;
