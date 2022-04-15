@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { Card, Avatar, Input, Typography } from 'antd';
 import './chat.css'
-import 'antd/dist/antd.css'
+// import 'antd/dist/antd.css'
 
 const { Search } = Input;
 const { Text } = Typography;
@@ -49,7 +49,7 @@ export default class Chat extends Component {
   }
   render() {
     return (
-      <div className="main" id='wrapper'>
+      <div className="main" id='antd'>
         {this.state.isLoggedIn ?
         <div>
           <div className="title">

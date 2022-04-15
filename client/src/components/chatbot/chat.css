@@ -1,3 +1,5 @@
+/* #antd { @import '~antd/lib/style/core/index.less'; @import '~antd/lib/style/themes/default.less'; } */
+
 body {
     background-color: #bae7ff;
   }
