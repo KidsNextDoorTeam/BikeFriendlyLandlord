@@ -1,4 +1,5 @@
 const db = require('../models/BFLL.js');
+const AppError = require('../util/AppError');
 
 const addressController = {};
 
@@ -10,11 +11,7 @@ addressController.getUniqueCities = async (req, res, next) => {
         res.locals.cities = results.rows;
         return next();
     } catch (error) {
-        return next({
-            message: 'Error occured attempting to fetch unique list of cities in addressController.getUniqueCities',
-            log: 'Error: ' + error,
-            status: 500
-        });
+        return next(new AppError(error, 'addressController', 'getUniqueCities', 500));
     }
 };
 

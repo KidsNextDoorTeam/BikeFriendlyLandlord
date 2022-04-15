@@ -1,4 +1,5 @@
 const db = require('../models/BFLL.js');
+const AppError = require('../util/AppError');
 
 const landlordController = {};
 
@@ -10,12 +11,7 @@ landlordController.getById = async (req, res, next) => {
     res.locals.landlord = results.rows[0];
     return next();
   } catch (error) {
-    return next({
-      message:
-        'Error occured attempting to get landlord from database in landlordController.getById',
-      log: 'Error: ' + error,
-      status: 500,
-    });
+    return next(new AppError(error, 'landlordController', 'getById', 500));
   }
 };
 
@@ -26,12 +22,7 @@ landlordController.getAllLandlords = async (req, res, next) => {
     res.locals.landlords = results.rows;
     return next();
   } catch (error) {
-    return next({
-      message:
-        'An error occured attempting to query all landlords in landlordController.getAllLandlords',
-      log: 'Error: ' + error,
-      status: 500,
-    });
+    return next(new AppError(error, 'landlordController', 'getAllLandlords', 500));
   }
 };
 
@@ -47,12 +38,7 @@ landlordController.getTopFour = async (req, res, next) => {
     res.locals.topLandlords = results.rows;
     return next();
   } catch (error) {
-    return next({
-      message:
-        'An error occured attempting to fetch the top 4 landlords in landlordController.getTopFour',
-      log: 'Error: ' + error,
-      status: 500,
-    });
+    return next(new AppError(error, 'landlordController', 'getTopFour', 500));
   }
 };
 
@@ -98,12 +84,7 @@ landlordController.updateLandlordReviews = async (req, res, next) => {
     ]);
     return next();
   } catch (error) {
-    return next({
-      message:
-        'An error occured attempting to update database with new ratings in landlordController.updateLandlordReviews',
-      log: 'Error: ' + error,
-      status: 500,
-    });
+    return next(new AppError(error, 'landlordController', 'updateLandlordReviews', 500));
   }
 };
 
@@ -124,12 +105,7 @@ landlordController.searchLandlords = async (req, res, next) => {
     res.locals.landlords = results.rows;
     return next();
   } catch (error) {
-    return next({
-      message:
-        'An error occured attempting to search landlords in landlordController.searchLandlords',
-      log: 'Error: ' + error,
-      status: 500,
-    });
+    return next(new AppError(error, 'landlordController', 'searchLandlords', 500));
   }
 };
 
@@ -144,12 +120,7 @@ landlordController.getLandlordsAndAddresses = async (req, res, next) => {
     res.locals.landlords = results.rows;
     return next();
   } catch (error) {
-    return next({
-      message:
-        'An error occured attempting to search landlords in landlordController.searchLandlords',
-      log: 'Error: ' + error,
-      status: 500,
-    });
+    return next(new AppError(error, 'landlordController', 'getLandlorsAndAddresses', 500));
   }
 };
 

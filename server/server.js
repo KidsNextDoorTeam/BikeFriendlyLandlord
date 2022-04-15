@@ -3,6 +3,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const AppError = require('./util/AppError');
 
 const sessionController = require('./controllers/sessionController');
 const landlordRouter = require('./routes/landlord.js');
@@ -12,7 +13,7 @@ const addressRouter = require('./routes/address.js');
 const userRouter = require('./routes/user.js');
 
 const app = express();
-dotenv.config({path: path.resolve(__dirname, '../.env')});
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 const PORT = 3000;
 
 /** 
@@ -62,14 +63,20 @@ app.get('/*', (req, res) => {
  * global error handler 
  * */
 app.use((err, req, res, next) => {
-  const defaultError = {
-    log: 'Express error handler caught unknown middleware error',
-    status: 400,
-    message: { err: 'An error occurred' },
+  if (!(err instanceof AppError)) return next(err);
+
+  const defaultErr = {
+    serverLog: 'Express err handler caught an unknown middleware error',
+    status: 500,
+    messagE: 'An unkown error occurred'
   };
-  const errorObj = Object.assign(defaultError, err);
-  console.log(`Error: ${errorObj.log}`);
-  return res.status(errorObj.status).send(JSON.stringify(errorObj.message));
+
+  const errObj = Object.assign(defaultErr, err);
+
+  console.error(errObj.serverLog, err);
+
+  return res.status(errObj.status).json(errObj.message);
+
 });
 
 

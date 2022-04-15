@@ -1,5 +1,5 @@
-const e = require("express");
-const db = require("../models/BFLL.js");
+const db = require('../models/BFLL.js');
+const AppError = require('../util/AppError');
 
 const reviewsController = {};
 
@@ -37,12 +37,7 @@ reviewsController.addReview = async (req, res, next) => {
     ]);
     return next();
   } catch (error) {
-    return next({
-      message:
-        "Error occured attempting to add review to database in reviewController.addReview",
-      log: "Error: " + error,
-      status: 500,
-    });
+    return next(new AppError(error, 'reviewsController', 'addReview', 500));
   }
 };
 
@@ -55,16 +50,11 @@ reviewsController.getReviews = async (req, res, next) => {
     WHERE user_id = $1;
     `;
 
-    const result = await db.query(query, [userId])
+    const result = await db.query(query, [userId]);
     res.locals.reviews = result.rows;
     next();
   } catch (error) {
-    return next({
-      message:
-        "Error occured attempting to get reviews from database in reviewController.getReviews",
-      log: "Error: " + error,
-      status: 500,
-    });
+    return next(new AppError(error, 'reviewsController', 'getReviews', 500));
   }
 };
 
@@ -83,12 +73,7 @@ reviewsController.getAllLandlordReviews = async (req, res, next) => {
     // console.log('landlord Reviews: ', results);
     return next();
   } catch (error) {
-    return next({
-      message:
-        "Error occured attempting to fetch all landlord reviews from backend in reviewsController.getAllLandlordReviews",
-      log: "Error: " + error,
-      status: 500,
-    });
+    return next(new AppError(error, 'reviewsController', 'getAllLandlordReviews', 500));
   }
 };
 
@@ -96,14 +81,14 @@ reviewsController.updatedLandlordReviewsByFilter = async (req, res, next) => {
   const { landlordId } = req.params;
   const { reviewFilter } = req.body;
   try {
-    if (reviewFilter === "critical"){
+    if (reviewFilter === 'critical') {
       const queryString = `
       SELECT * FROM reviews 
       WHERE landlord_id = $1
       ORDER BY overall_rating ASC`;
       const results = await db.query(queryString, [landlordId]);
       res.locals.landlordReviews = results.rows;
-    } else if (reviewFilter === "recent") {
+    } else if (reviewFilter === 'recent') {
       const queryString = `
       SELECT * FROM reviews 
       WHERE landlord_id = $1
@@ -120,17 +105,12 @@ reviewsController.updatedLandlordReviewsByFilter = async (req, res, next) => {
     }
     return next();
   } catch (error) {
-    return next({
-      message:
-        "Error occured attempting to filter landlord reviews from backend in reviewsController.updatedLandlordReviewsByFilter",
-      log: "Error: " + error,
-      status: 500,
-    });
+    return next(new AppError(error, 'reviewsController', 'updatedLandlordReviewsByFilter', 500));
   }
 };
 
 reviewsController.updateReview = async (req, res, next) => {
-  const {reviewId, title, description} = req.body;
+  const { reviewId, title, description } = req.body;
 
   const queryString = `
     UPDATE reviews SET title = $2, description = $3 WHERE _id = $1;
@@ -141,27 +121,19 @@ reviewsController.updateReview = async (req, res, next) => {
     console.log(result);
     return next();
   } catch (error) {
-    return next({
-      message: 'Error attempting to update reviews in the database in reviewsController.updateReview',
-      log: 'Error: ' + error,
-      status: 500
-    });
+    return next(new AppError(error, 'reviewsController', 'updateReview', 500));
   }
 };
 
 reviewsController.deleteReview = async (req, res, next) => {
-  const {reviewId} = req.params;
-  const queryString = `DELETE FROM reviews WHERE _id = $1;`;
+  const { reviewId } = req.params;
+  const queryString = 'DELETE FROM reviews WHERE _id = $1;';
 
   try {
     await db.query(queryString, [reviewId]);
     return next();
   } catch (error) {
-    return next({
-      message: 'Error attempting to delete post from database in reviewsController.deleteReview',
-      log: 'Error: ' + error,
-      status: 500
-    });
+    return next(new AppError(error, 'reviewsController', 'deleteReview', 500));
   }
 };
 
