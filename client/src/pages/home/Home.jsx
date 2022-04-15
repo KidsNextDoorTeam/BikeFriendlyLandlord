@@ -1,23 +1,32 @@
-import "./home.css";
-import HomeCards from "../../components/homeCards/HomeCards.jsx";
-import React, { useEffect, useState } from "react";
-import { Collapse, IconButton, makeStyles } from "@mui/material";
-import { CssBaseline } from "@mui/material";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { Link as Scroll } from "react-scroll";
+import './home.css';
+import HomeCards from '../../components/homeCards/HomeCards.jsx';
+import React, { useEffect, useState } from 'react';
+import { Collapse, IconButton, makeStyles } from '@mui/material';
+import { CssBaseline } from '@mui/material';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { Link as Scroll } from 'react-scroll';
 
-const axios = require("axios");
+const axios = require('axios');
 
 export default function Home() {
-  const [checked, setChecked] = useState(false);
   const [topFour, setTopFour] = useState([]);
-  useEffect(() => {
-    setChecked(true);
 
-    axios
-      .get("http://localhost:3000/landlords/topFour")
-      .then((res) => setTopFour(res.data))
-      .catch((error) => console.log(error));
+  useEffect(async () => {
+    let mounted = true;
+
+    try {
+
+      const response = await axios.get('/landlords/topFour');
+      if (response.status >= 200 && response.status < 300) {
+        if (mounted) setTopFour(response.data.landlords);
+      } else {
+        console.error(response.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return () => () => mounted = false;
   }, []);
 
   return (
@@ -31,7 +40,7 @@ export default function Home() {
           data-aos-mirror={true}
         >
           <h1>
-            Welcome to <br />{" "}
+            Welcome to <br />
             <span className="homeTitleText">Bike Friendly Landlord</span>
           </h1>
           <Scroll to="homeCards" smooth={true}>
@@ -45,7 +54,7 @@ export default function Home() {
         </div>
       </div>
       <HomeCards topFour={topFour} />
-      
+
     </div>
   );
 }
