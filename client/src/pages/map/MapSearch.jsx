@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import HomeCard from '../../components/homeCard/HomeCard.jsx';
@@ -9,55 +10,40 @@ export default function MapSearch(props) {
   // 'pins' is an array of pins to post on the map based on address from the database
   const [pins, setPins] = useState([]);
 
-  useEffect(() => {
-    fetch('/landlords/allAddresses')
-      .then((res) => res.json())
-      .then(async (json) => {
-        /**  iterate through the returned array of landlords with addresses
-         *   use the google maps geocoding api to convert address to gpl coordinates
-         */
-        console.log(json)
-        
-        // keep google API key in the backend (safe)
-        const apiKey = await (await fetch('http://localhost:3000/apiKey')).json();
+  useEffect(async () => {
+    let mounted = true;
+    try {
 
-        const pinsToSet = [];
-        for (let i = 0; i < json.length; i++) {
-          const landlord = json[i];
-
-          /**
-           * todo: REFACTOR this to store the coordinates in the database when a a new address is added.
-           * Making the requests to google everytime is expensive in bothh money and time
-           * 
-           * 
+      const response = await axios.get('/properties');
+      if (response.status >= 200 && response.status < 300) {
+        if (mounted) {
+          /**  iterate through the returned array of landlords with addresses
+           *   use the google maps geocoding api to convert address to gpl coordinates
            */
-
-          // query string that sends the landlord address to the google geocoding API
-          const response = await fetch(
-            `https://maps.googleapis.com/maps/api/geocode/json?address=
-            ${landlord.street_num}
-            +${landlord.street.replaceAll(' ', '+')},
-            +${landlord.city.replaceAll(' ', '+')},
-            +${landlord.state}&key=${apiKey}`
-          );
-          const geoCode = await response.json();
-          // strip coordinates off the response from google
-          const coordinates = [
-            geoCode.results[0].geometry.location.lat,
-            geoCode.results[0].geometry.location.lng,
-          ];
-
-          pinsToSet.push(
-            <Marker key={i} position={coordinates}>
+          const pinsToSet = response.data.properties.map((property, i) => (
+            <Marker key={i} position={[property.latitude || 1, property.longitude || 1]}>
               <Popup autoPan={true} closeButton={false}>
-                <HomeCard landlord={landlord} />
+                <HomeCard landlord={{
+                  first_name: property.landlord_first_name,
+                  last_name: property.landlord_last_name,
+                  profile_pic: property.landlord_profile_pic,
+                  ...property
+
+                }} />
               </Popup>
             </Marker>
-          );
+          ));
+          console.log(pinsToSet);
+          setPins(pinsToSet);
         }
-        setPins(pinsToSet);
-      })
-      .catch((err) => console.log('error getting all landlords ->', err));
+
+      }
+    } catch (error) {
+      console.error('error getting all landlords ->', error);
+    }
+
+    return () => () => mounted = false;
+
   }, []);
 
   /** Display the map positioned over the USA by default */

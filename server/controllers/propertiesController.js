@@ -22,7 +22,7 @@ propertiesController.addProperty = async (req, res, next) => {
     const { rowCount, rows: [newProperty] } = await db.query(query);
 
     if (rowCount === 0) {
-      return next(new AppError(new Error('Property failed to save for unknown reason'), 'propertiesController', addProperty));
+      return next(new AppError(new Error('Property failed to save for unknown reason'), 'propertiesController', 'addProperty'));
     }
 
     res.locals.property = { ...newProperty };
@@ -36,7 +36,7 @@ propertiesController.addProperty = async (req, res, next) => {
 
 propertiesController.getAllProperties = async (req, res, next) => {
 
-  const query = `SELECT p.*, u.first_name as landlord_first_name, u.last_name as landlord_last_name 
+  const query = `SELECT p.*, u.first_name as landlord_first_name, u.last_name as landlord_last_name, u.profile_pic as landlord_profile_pic
     FROM properties p
     LEFT JOIN users u ON u._id = p.landlord_id`;
 
