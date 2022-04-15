@@ -11,6 +11,8 @@ const userController = {};
  * hashes the password with bcryptjs and saves the user to the database
  */
 userController.createUser = async (req, res, next) => {
+  // TODO: This controller will need to handle updating landlord and 
+  // tenant tables depending how the user signs up
   try {
     const {
       username,
@@ -127,7 +129,6 @@ userController.deleteUser = async (req, res, next) => {
 userController.getUserData = async (req, res, next) => {
   try {
     const userId = res.locals.user;
-    console.log(userId)
 
     const queryString = `
     SELECT * FROM users
@@ -142,9 +143,9 @@ userController.getUserData = async (req, res, next) => {
     res.locals.userData = result.rows[0];
 
     return next();
-  } catch (err) {
+  } catch (error) {
     return next(new AppError(error, 'userController', 'getUserData', 500));
   }
-}
+};
 
 module.exports = userController;
