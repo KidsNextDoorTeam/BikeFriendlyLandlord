@@ -24,10 +24,11 @@ export default function MapSearch(props) {
             <Marker key={i} position={[property.latitude || 1, property.longitude || 1]}>
               <Popup autoPan={true} closeButton={false}>
                 <HomeCard landlord={{
+                  ...property,
                   first_name: property.landlord_first_name,
                   last_name: property.landlord_last_name,
                   profile_pic: property.landlord_profile_pic,
-                  ...property
+                  _id: property.landlord_id,
 
                 }} />
               </Popup>
