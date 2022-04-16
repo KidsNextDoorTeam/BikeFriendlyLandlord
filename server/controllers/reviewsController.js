@@ -155,7 +155,9 @@ reviewsController.deleteReview = async (req, res, next) => {
   try {
     await client.query('BEGIN');
     const { rows: [landlord] } = await client.query(queryString, [reviewId]);
-    console.log(landlord);
+    if (!landlord) {
+      return res.status(404).send('Error 404: Review Not Found');
+    }
     // Landlord is bike friendly if at least half of their reviews indicate they are bike friendly
     const updateRatingsQuery = {
       text: `UPDATE landlords l SET 
