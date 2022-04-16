@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 import { Navbar } from './components/Navbar.jsx';
-import ClearNavbar from './components/ClearNavbar.jsx';
 import Home from './pages/Home.jsx';
 import MapSearch from './pages/MapSearch.jsx';
 import Profile from './pages/Profile.jsx';

@@ -35,7 +35,7 @@ export default function Signup(props) {
         sx={formStyle}
         component="form"
         onSubmit={() =>
-          handleSubmit('signup', { ...formData /** landlordId */ })
+          handleSubmit('signup', { ...formData /* landlordId */ })
         }
         noValidate>
         <h3>Signup</h3>
