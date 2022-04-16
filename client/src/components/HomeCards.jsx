@@ -1,12 +1,12 @@
-import React from "react";
-import HomeCard from "./HomeCard.jsx";
-import "../index.css";
+import React from 'react';
+import HomeCard from './HomeCard.jsx';
+import '../index.css';
 
-export default function homeCards({topFour}) {
+export default function homeCards({ topFour }) {
   return (
     <div className="homeCardsWrapper">
       <div className="homeCards" data-aos="fade-up" data-aos-duration="1000" id="homeCards">
-        {topFour.map((landlordObj, index) => <HomeCard landlord={landlordObj} key={index}/>)}
+        {topFour.map((landlordObj, index) => <HomeCard landlord={landlordObj} key={index} />)}
       </div>
       <div className="homeCardsUserFeedbackWrapper" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="250">
         <div className="homeCardsUserFeedback">
