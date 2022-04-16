@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import { Review } from '../components/Review.jsx';
 
@@ -8,6 +12,7 @@ import '../index.css'
 export function UserProfile(props) {
   const { userData, setUserData, setIsLoggedIn, setAuthDisplay } = props;
   const [reviews, setReviews] = useState([]);
+  const [currentTab, setCurrentTab] = useState(0);
   let navigate = useNavigate();
   // let [searchParams, setSearchParams] = useSearchParams();
 
@@ -46,14 +51,28 @@ export function UserProfile(props) {
     }
   }, [userData]);
 
+  const handleTabChange = (e, newValue) => {
+    setCurrentTab(newValue);
+  } 
+
   return (
     <div id="userProfile">
-      <h1 id="userProfileTitle">Your Account</h1>
-      <h3>
-        Hello {userData.full_name}
-        {','}
-      </h3>
-      <div>
+        <Typography
+              variant="h6"
+              component="div"
+              style={{ fontFamily: 'Nunito' }}
+        >
+      <h1 id="userProfileTitle" style={{}}>Your Account</h1>
+      <h2> Hello {userData.full_name + ","}</h2>
+      <Box sx={{ marginTop: '20px', marginBottom: '25px'}}>
+      <Tabs textColor="inherit" TabIndicatorProps={{style: { backgroundColor: "#D97D54" }}} value={currentTab} onChange={handleTabChange}>
+        <Tab label="Profile" />
+        <Tab label="Reviews" />
+        <Tab label="Saved Landlords" />
+      </Tabs>
+      </Box>
+     {currentTab === 1 &&
+     <div>
         <h4>Your Reviews</h4>
         {reviews.map((review, index) => {
           return <Review
@@ -69,7 +88,8 @@ export function UserProfile(props) {
             key={index}
           />;
         })}
-      </div>
-    </div>
+      </div> }
+      </Typography>
+    </div> 
   );
 }
