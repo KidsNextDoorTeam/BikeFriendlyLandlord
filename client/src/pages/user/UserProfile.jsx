@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-
-import { Review } from '../../components/Review.jsx';
-
-import './userprofile.css'
+import React, { useState, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { Review } from "../../components/Review.jsx";
+import "./userprofile.css";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from '@mui/icons-material/Add';
 
 export function UserProfile(props) {
   const { userData, setUserData, setIsLoggedIn, setAuthDisplay } = props;
@@ -32,7 +33,7 @@ export function UserProfile(props) {
           if (res.status === 401) {
             setIsLoggedIn(false);
             setAuthDisplay(true);
-            navigate('/');
+            navigate("/");
           } else {
             return res.json();
           }
@@ -41,7 +42,7 @@ export function UserProfile(props) {
           setReviews(json.reviews);
         })
         .catch((err) => {
-          console.log('Error fenching users reviews -->', err);
+          console.log("Error fenching users reviews -->", err);
         });
     }
   }, [userData]);
@@ -49,25 +50,30 @@ export function UserProfile(props) {
   return (
     <div id="userProfile">
       <h1 id="userProfileTitle">Your Account</h1>
-      <h3>
+      <h2>
         Hello {userData.full_name}
-        {','}
-      </h3>
+        {","}
+      </h2>
       <div>
-        <h4>Your Reviews</h4>
+        <h3>Your Reviews</h3>
+
+        <Button variant="contained" margin-bottom= "5px">Add Review<AddIcon></AddIcon></Button>
+
         {reviews.map((review, index) => {
-          return <Review
-            userData={userData}
-            username={review.username}
-            title={review.title}
-            overall_rating={review.overall_rating}
-            respect_rating={review.respect_rating}
-            responsiveness_rating={review.responsiveness_rating}
-            bike_rating={review.bike_rating}
-            pet_friendly_rating={review.pet_friendly}
-            description={review.description}
-            key={index}
-          />;
+          return (
+            <Review
+              userData={userData}
+              username={review.username}
+              title={review.title}
+              overall_rating={review.overall_rating}
+              respect_rating={review.respect_rating}
+              responsiveness_rating={review.responsiveness_rating}
+              bike_rating={review.bike_rating}
+              pet_friendly_rating={review.pet_friendly}
+              description={review.description}
+              key={index}
+            />
+          );
         })}
       </div>
     </div>

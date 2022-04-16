@@ -5,15 +5,22 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
-  
 }
 
 #userProfileTitle {
-
-  font-family: 'Nunito';
+  font-family: "Nunito";
   color: tomato;
   margin-bottom: 50px;
 }
+
+h2 {
+  font-family: "Nunito";
+  color: black;
+}
 h4 {
   margin-bottom: 20px;
+}
+
+.button {
+  display: flex;
 }
