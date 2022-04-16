@@ -8,6 +8,11 @@ const tomatopalette = createTheme({
       contrastText: '#fff',
     },
   },
+  typography: {
+    fontFamily: [
+      'Nunito'
+    ]
+  },
 });
 
 export default tomatopalette;

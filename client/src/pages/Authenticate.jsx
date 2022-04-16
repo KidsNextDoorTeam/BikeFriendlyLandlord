@@ -41,7 +41,7 @@ export function Authenticate(props) {
   }
 
   return (
-      <div id="loginSignup" style={position}>
+      <div id='loginSignup' style={position}>
         {displayLogin && (
           <Login
             loginErrorMessage={loginErrorMessage}

@@ -8,7 +8,7 @@ import Search from './pages/Search.jsx';
 import { ReviewPage } from './pages/ReviewPage.jsx';
 import { UserProfile } from './pages/UserProfile.jsx';
 import { Route, Routes, Link } from 'react-router-dom';
-import Footer from "./components/Footer.jsx";
+import Footer from './components/Footer.jsx';
 
 export function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -48,16 +48,16 @@ export function App() {
         userData={userData}
       />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/map" element={<MapSearch />} />
-        <Route path="/landlord/:landlord_id" element={<Profile userData={userData} isLoggedIn={isLoggedIn}/>} />
+        <Route path='/' element={<Home />} />
+        <Route path='/search' element={<Search />} />
+        <Route path='/map' element={<MapSearch />} />
+        <Route path='/landlord/:landlord_id' element={<Profile userData={userData} isLoggedIn={isLoggedIn}/>} />
         <Route
-          path="/review/:landlord_id"
+          path='/review/:landlord_id'
           element={<ReviewPage userData={userData} />}
         />
         <Route
-          path="/profile/:username"
+          path='/profile/:username'
           element={
             <UserProfile
               userData={userData}
@@ -67,7 +67,7 @@ export function App() {
             />
           }
         />
-        <Route path="*" element={<p>404 - nothing here</p>} />
+        <Route path='*' element={<p>404 - nothing here</p>} />
       </Routes>
       <Footer />
     </>

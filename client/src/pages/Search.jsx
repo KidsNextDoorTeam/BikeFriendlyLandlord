@@ -80,40 +80,41 @@ export default function Search() {
 
   return (
     <ThemeProvider theme={tomatopalette}>
-      <div className="searchPageMain">
-        <Container className="searchMainContainer" maxwidth="sm" sx={{ p: 2 }}>
+      <div className='searchPageMain'>
+        <Container className='searchMainContainer' maxwidth='sm' sx={{ p: 2 }}>
           <Box
-            className="searchContainer"
+            className='searchContainer'
             sx={
               { p: 2 }
             }
           >
-            <Stack className="searchFields" direction="column" spacing={3} justifyContent="center" alignItems="center" >
-              <Stack direction="row" spacing={10} justifyContent="center" alignItems="center">
-                <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
+            <Stack className='searchFields' direction='column' spacing={3} justifyContent='center' alignItems='center' >
+              <Stack direction='row' spacing={10} justifyContent='center' alignItems='center'>
+                <Stack direction='row' spacing={1} justifyContent='center' alignItems='center'>
                   <h2>City</h2>
                   <Autocomplete
                     disablePortal
                     clearOnEscape
                     options={options}
                     sx={{ width: 300 }}
-                    renderInput={(params) => <TextField {...params} label="Select a City" />}
+                    renderInput={(params) => <TextField {...params} label='Select a City' />}
                     value={city}
                     onChange={(e, newVal) => { setCity(newVal); }}
                   />
                 </Stack>
-                <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
+                <Stack direction='row' spacing={1} justifyContent='center' alignItems='center'>
                   <h2>Bike Friendly</h2>
-                  <Checkbox checked={bikeR} onChange={handleBikeRChange} size="large" />
+                  <Checkbox checked={bikeR} onChange={handleBikeRChange} size='large' />
                 </Stack>
-                <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
+                <Stack direction='row' spacing={1} justifyContent='center' alignItems='center'>
                   <h2>Pet Friendly</h2>
-                  <Checkbox checked={petR} onChange={handlePetRChange} size="large" />
+                  <Checkbox checked={petR} onChange={handlePetRChange} size='large' />
                 </Stack>
               </Stack>
               <Button
-                variant="contained"
-                fullWidth
+                variant='contained'
+                
+                // fullWidth
                 onClick={(handleSearch)}
               >
                 Search

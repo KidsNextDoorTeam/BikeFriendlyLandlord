@@ -1,4 +1,7 @@
 import { Button } from '@mui/material';
+import HomeIcon from '@material-ui/icons/Home';
+import SearchIcon from '@material-ui/icons/Search';
+import MapIcon from '@material-ui/icons/Map';
 import React, { useState } from 'react';
 import '../index.css';
 import { NavLink, Link } from 'react-router-dom';
@@ -62,36 +65,37 @@ export function Navbar(props) {
   };
 
   return (
-    <div id="navBar">
-      <div className="navBarLeft">
-        <div id="logo">BFL</div>
+    <div id='navBar'>
+      <div className='navBarLeft'>
+        <div id='logo'>BFL</div>
       </div>
-      <div className="navBarCenter">
-        <ul className="navBarListItems">
-          <li className="navBarListItem">
+      <div className='navBarCenter'>
+        <ul className='navBarListItems'>
+          <li className='navBarListItem'>
             <NavLink
-              to="/"
+              // endIcon={}
+              to='/'
               style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-              Home
+              Home <HomeIcon />
             </NavLink>
           </li>
-          <li className="navBarListItem">
+          <li className='navBarListItem'>
             <NavLink
-              to="/search"
+              to='/search'
               style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-              Search
+              Search <SearchIcon />
             </NavLink>
           </li>
-          <li className="navBarListItem">
+          <li className='navBarListItem'>
             <NavLink
-              to="/map"
+              to='/map'
               style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-              Map
+              Map <MapIcon />
             </NavLink>
           </li>
         </ul>
       </div>
-      <div className="navBarRight">
+      <div className='navBarRight'>
         {!isLoggedIn && (
           <Button
             sx={{
@@ -99,7 +103,7 @@ export function Navbar(props) {
               color: '#666',
               '&:hover': { backgroundColor: 'rgba(253, 143, 124, 0.577)' },
             }}
-            variant="text"
+            variant='text'
             onClick={(e) => {
               toggleAuthDisplay(e);
               // if (authDisplay === true) setAuthDisplay(false);
@@ -112,7 +116,7 @@ export function Navbar(props) {
           <div>
             <Link to={`/profile/${userData.username}`}>My Account</Link>
             <Button
-              variant="text"
+              variant='text'
               sx={{
                 fontFamily: 'Nunito',
                 color: '#666',

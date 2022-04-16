@@ -4,6 +4,7 @@
   background-color: #333;
   color: rgba(255, 255, 255, 0.514);
   font-size: 0.75em;
+  font-family: 'Nunito', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -88,6 +89,7 @@
   flex-direction: row;
   background-color: lightgrey;
   align-items: center;
+  font-family: 'Nunito', sans-serif;
 }
 
 .navBarLeft {
@@ -95,7 +97,6 @@
   display: flex;
   padding-left: 25px;
   align-items: center;
-  font-family: 'Nunito', sans-serif;
   font-size: xx-large;
   font-style: bold;
   color: tomato;
@@ -133,7 +134,7 @@
   color: tomato;
 }
 a {
-  font-family: 'Nunito';
+  /* font-family: 'Nunito'; */
   text-decoration: none;
   padding-right: 10px;
   list-style: none;
@@ -216,13 +217,18 @@ h3 {
   z-index: 0;
 }
 /* Profile */
-#background {
+#profileBackground {
   min-height: 100vh;
   width: auto;
   background-image: url('http://localhost:3000/images/marten-bjork-4WBIyO_2SbU-unsplash.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
+}
+
+.LandlordInfo{
+  font-family: 'Nunito', sans-serif;
+
 }
 
 /* ReviewPage */
@@ -255,7 +261,7 @@ h3 {
 /* Search */
 .searchMainContainer {
   text-decoration: none;
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-family: 'Nunito', sans-serif;
   color: rgb(68, 67, 67);
 }
 

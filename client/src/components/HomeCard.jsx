@@ -15,45 +15,45 @@ import '../index.css';
 
 export default function HomeCard({ landlord }) {
   return (
-    <Link to={`/landlord/${landlord._id}`} className="link">
+    <Link to={`/landlord/${landlord._id}`} className='link'>
       <Card sx={{ width: 245, background: 'rgba(0, 0, 0, 0.5)', margin: '20px', cursor: 'pointer' }}>
         <CardMedia
-          component="img"
-          alt="landlord pic"
-          height="200"
+          component='img'
+          alt='landlord pic'
+          height='200'
           image={`/images/${landlord.profile_pic}`}
         />
         <CardContent>
-          <div className="homeCardContents">
+          <div className='homeCardContents'>
             <Typography
               gutterBottom
-              variant="h5"
-              component="span"
+              variant='h5'
+              component='span'
               style={{ fontFamily: 'Nunito' }}
-              color="#fff"
+              color='#fff'
             >
               {landlord.first_name} {landlord.last_name}
             </Typography>
             <Typography
-              variant="span"
-              className="homeCardTitle"
+              variant='span'
+              className='homeCardTitle'
               style={{ fontFamily: 'Nunito' }}
-              color="#ddd"
+              color='#ddd'
             >
               Location: {landlord.city ? landlord.city + ', ' + landlord.state : 'N/A'}
               <br />
-              <div className="homeCardRating">
+              <div className='homeCardRating'>
                 <span style={{ color: '#ddd' }}>Rating:</span>
                 <Rating
                   required
-                  size="small"
+                  size='small'
                   precision={0.1}
                   value={Number(landlord.overall_rating)}
                   readOnly
                   style={{ color: 'tomato' }}
                 />
               </div>
-              <div className="bikePetFriendlyRating">
+              <div className='bikePetFriendlyRating'>
                 <label>Bike Friendly</label>
                 <Icon>
                   {landlord.bike_friendly ? (
@@ -65,7 +65,7 @@ export default function HomeCard({ landlord }) {
                   )}
                 </Icon>
               </div>
-              <div className="bikePetFriendlyRating">
+              <div className='bikePetFriendlyRating'>
                 <label>Pet Friendly</label>
                 <Icon>
                   {landlord.pet_friendly ? (
@@ -81,8 +81,8 @@ export default function HomeCard({ landlord }) {
           </div>
         </CardContent>
         {/* <CardActions>
-          <Button size="small">Share</Button>
-          <Button size="small">Learn More</Button>
+          <Button size='small'>Share</Button>
+          <Button size='small'>Learn More</Button>
       </CardActions> */}
       </Card>
     </Link>
