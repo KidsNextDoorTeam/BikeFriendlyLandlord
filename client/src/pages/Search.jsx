@@ -1,6 +1,6 @@
-import React, { Component, useEffect } from 'react';
+import React, { Component, useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 // import { Link } from 'react-router-dom'
-import '../index.css';
 
 // import MUI components
 import Button from '@mui/material/Button';
@@ -14,137 +14,108 @@ import { ThemeProvider } from '@mui/material/styles';
 
 // import result component
 import ResultDisplay from '../components/resultDisplay.jsx';
-//import theme
+//import theme 
 import tomatopalette from '../components/tomatopalette.jsx';
 
 export default function Search() {
   // handle search results
-  const [searchResults, setSearchResults] = React.useState([]);
+  const [searchResults, setSearchResults] = useState([]);
 
   // handle city input
-  const [city, setCity] = React.useState('');
+  const [city, setCity] = useState('');
 
   // handle bike / pet friendly
-  const [bikeR, setBikeR] = React.useState(false);
+  const [bikeR, setBikeR] = useState(false);
   const handleBikeRChange = (e) => {
     setBikeR(!bikeR);
   };
 
-  const [petR, setPetR] = React.useState(false);
+  const [petR, setPetR] = useState(false);
   const handlePetRChange = (e) => {
     setPetR(!petR);
   };
 
+  const mounted = useRef(true);
+
   // Request to get values (NEED ALL ADDRESSES -> ALL CITIES)
-  const [options, setOptions] = React.useState([]);
-  useEffect(() => {
-    const opArr = [];
-    fetch(`http://localhost:3000/address/uniqueCities`, {
-      method: 'GET',
-    })
-      .then((res) => res.json())
-      .then((parsed) => {
-        console.log('Fetching cities...');
-        for (let i = 0; i < parsed.length; i++) {
-          opArr.push(parsed[i].city);
-        }
-        setOptions(opArr);
-      })
-      .catch((error) => console.log(error));
+  const [options, setOptions] = useState([]);
+
+  useEffect(async () => {
+    try {
+      const response = await axios.get('/properties/uniqueCities');
+      if (response.status >= 200 && response.status < 300) {
+        if (mounted.current) setOptions(response.data.cities);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return () => () => mounted.current = false;
   }, []);
 
+
   // method to handle search :fetch request using all fields
-  const handleSearch = () => {
+  const handleSearch = async () => {
     // build req body
     const formBody = {
       city: city,
       bike_friendly: bikeR,
-      pet_friendly: petR,
+      pet_friendly: petR
     };
 
     //send request
-    fetch('http://localhost:3000/landlords/search', {
-      method: 'POST',
-      body: JSON.stringify(formBody),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      // response will need to be assigned to a variable to be sent to our results display
-      .then((parsed) => {
-        console.log(parsed);
-        setSearchResults(parsed);
-      })
-      .catch((error) => console.log(error));
+    try {
+      const response = await axios.post('/landlords/search', {
+        ...formBody
+      });
+      if (response.status >= 200 && response.status < 300) {
+        if (mounted.current) setSearchResults(response.data.landlords);
+      } else {
+        console.error(response.data.error);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
+
   return (
     <ThemeProvider theme={tomatopalette}>
-      <div className='searchPageMain'>
-        <Container className='searchMainContainer' maxwidth='sm' sx={{ p: 2 }}>
-          <Box className='searchContainer' sx={{ p: 2 }}>
-            <Stack
-              className='searchFields'
-              direction='column'
-              spacing={3}
-              justifyContent='center'
-              alignItems='center'
-            >
-              <Stack
-                direction='row'
-                spacing={10}
-                justifyContent='center'
-                alignItems='center'
-              >
-                <Stack
-                  direction='row'
-                  spacing={1}
-                  justifyContent='center'
-                  alignItems='center'
-                >
+      <div className="searchPageMain">
+        <Container className="searchMainContainer" maxwidth="sm" sx={{ p: 2 }}>
+          <Box
+            className="searchContainer"
+            sx={
+              { p: 2 }
+            }
+          >
+            <Stack className="searchFields" direction="column" spacing={3} justifyContent="center" alignItems="center" >
+              <Stack direction="row" spacing={10} justifyContent="center" alignItems="center">
+                <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
                   <h2>City</h2>
                   <Autocomplete
                     disablePortal
                     clearOnEscape
                     options={options}
                     sx={{ width: 300 }}
-                    renderInput={(params) => (
-                      <TextField {...params} label='Select a City' />
-                    )}
+                    renderInput={(params) => <TextField {...params} label="Select a City" />}
                     value={city}
-                    onChange={(e, newVal) => {
-                      setCity(newVal);
-                    }}
+                    onChange={(e, newVal) => { setCity(newVal); }}
                   />
                 </Stack>
-                <Stack
-                  direction='row'
-                  spacing={1}
-                  justifyContent='center'
-                  alignItems='center'
-                >
+                <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
                   <h2>Bike Friendly</h2>
-                  <Checkbox
-                    checked={bikeR}
-                    onChange={handleBikeRChange}
-                    size='large'
-                  />
+                  <Checkbox checked={bikeR} onChange={handleBikeRChange} size="large" />
                 </Stack>
-                <Stack
-                  direction='row'
-                  spacing={1}
-                  justifyContent='center'
-                  alignItems='center'
-                >
+                <Stack direction="row" spacing={1} justifyContent="center" alignItems="center">
                   <h2>Pet Friendly</h2>
-                  <Checkbox
-                    checked={petR}
-                    onChange={handlePetRChange}
-                    size='large'
-                  />
+                  <Checkbox checked={petR} onChange={handlePetRChange} size="large" />
                 </Stack>
               </Stack>
-              <Button variant='contained' fullWidth onClick={handleSearch}>
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={(handleSearch)}
+              >
                 Search
               </Button>
             </Stack>
