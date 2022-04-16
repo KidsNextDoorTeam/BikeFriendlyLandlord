@@ -1,5 +1,6 @@
 const db = require('../models/BFLL.js');
 const AppError = require('../util/AppError');
+const format = require('pg-format');
 
 const reviewsController = {};
 
@@ -77,15 +78,49 @@ reviewsController.getReviewById = async (req, res, next) => {
 
     const { rows: [review] } = await db.query(query, [reviewId]);
     res.locals.review = review;
-    next();
+    return next();
   } catch (error) {
     return next(new AppError(error, 'reviewsController', 'getReviews', 500));
   }
 };
 
+reviewsController.getReviewsByUser = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+
+    const query = 'SELECT * FROM reviews WHERE user_id = $1 ORDER BY created_at DESC;';
+
+    const { rows } = await db.query(query, [userId]);
+    res.locals.reviews = rows;
+    return next();
+  } catch (error) {
+    return next(new AppError(error, 'reviewsController', 'getReviewByUser', 500));
+  }
+};
+
 reviewsController.getAllReviews = async (req, res, next) => {
-  // TODO: Support query strings to filter/sort results
-  const query = 'SELECT * FROM reviews;';
+  console.log(req.query);
+  const { sort = 'created_at', order = 'ASC', landlordId } = req.query;
+  // use pg-format since we're dynacmially referring to column names. 
+  let query;
+  if (landlordId) {
+    query = format(
+      `SELECT r.*, u.username FROM reviews r
+     LEFT JOIN users u ON u._id = r.user_id
+     ${landlordId ? 'WHERE r.landlord_id = %L' : ''}
+     ORDER BY r.%I %s
+    ;`,
+      landlordId, sort, order
+    );
+  } else {
+    query = query = format(
+      `SELECT r.*, u.username FROM reviews r
+     LEFT JOIN users u ON u._id = r.user_id
+     ORDER BY r.%I %s
+    ;`,
+      sort, order
+    );
+  }
 
   try {
     const result = await db.query(query);
@@ -93,38 +128,6 @@ reviewsController.getAllReviews = async (req, res, next) => {
     return next();
   } catch (error) {
     return next(new AppError(error, 'reviewsController', 'getReviews', 500));
-  }
-};
-
-reviewsController.updatedLandlordReviewsByFilter = async (req, res, next) => {
-  const { landlordId } = req.params;
-  const { reviewFilter } = req.body;
-  try {
-    if (reviewFilter === 'critical') {
-      const queryString = `
-      SELECT * FROM reviews 
-      WHERE landlord_id = $1
-      ORDER BY overall_rating ASC`;
-      const results = await db.query(queryString, [landlordId]);
-      res.locals.landlordReviews = results.rows;
-    } else if (reviewFilter === 'recent') {
-      const queryString = `
-      SELECT * FROM reviews 
-      WHERE landlord_id = $1
-      ORDER BY created_at DESC`;
-      const results = await db.query(queryString, [landlordId]);
-      res.locals.landlordReviews = results.rows;
-    } else {
-      const queryString = `
-      SELECT * FROM reviews 
-      WHERE landlord_id = $1
-      ORDER BY overall_rating DESC`;
-      const results = await db.query(queryString, [landlordId]);
-      res.locals.landlordReviews = results.rows;
-    }
-    return next();
-  } catch (error) {
-    return next(new AppError(error, 'reviewsController', 'updatedLandlordReviewsByFilter', 500));
   }
 };
 

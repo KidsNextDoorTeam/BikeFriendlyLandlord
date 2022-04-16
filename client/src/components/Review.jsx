@@ -1,47 +1,56 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState } from 'react';
+import axios from 'axios';
 
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import { Stack } from "@mui/material";
-import Rating from "@mui/material/Rating";
-import CheckIcon from "@mui/icons-material/Check";
-import ClearIcon from "@mui/icons-material/Clear";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Icon from "@mui/material/Icon";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import { Stack } from '@mui/material';
+import Rating from '@mui/material/Rating';
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Icon from '@mui/material/Icon';
 
 export function Review(props) {
   const [updateMode, setUpdateMode] = useState(false);
   const [title, setTitle] = useState(props.title);
   const [description, setDescription] = useState(props.description);
 
-  const handleSave = () => {
-    axios
-      .put("/reviews/", {
-        reviewId: props._id,
-        title: title,
-        description: description,
-      })
-      .then((res) => window.location.reload())
-      .catch((error) => console.log(error));
+  const handleSave = async () => {
+    try {
+      const { status, data } = await axios.put(`/reviews/${props._id}`, { title, description });
+      if (status >= 200 && status < 300) {
+        props.onSave();
+      } else {
+        setTitle(props.title);
+        setDescription(props.description);
+        console.error('Review update failed', data);
+      }
+      setUpdateMode(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleDelete = () => {
-    axios
-      .delete(`/reviews/${props._id}`)
-      .then(() => window.location.reload())
-      .catch((error) => console.log(error));
+  const handleDelete = async () => {
+    try {
+      const { status } = await axios.delete(`/reviews/${props._id}`);
+      if (status >= 200 && status < 300) {
+        props.onDelete();
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
-  // console.log('values to compare: ', props.userData.username, props.username);
+
   return (
     <Card sx={{ minWidth: 275, marginBottom: '10px' }}>
       <CardContent direction="row">
         {updateMode ? (
           <input
             type="text"
-            defaultValue={props.title}
+            value={title}
             onChange={(event) => setTitle(event.target.value)}
           />
         ) : (
@@ -174,7 +183,11 @@ export function Review(props) {
                 marginRight: "10px",
                 cursor: "pointer",
               }}
-              onClick={() => setUpdateMode(false)}
+              onClick={() => {
+                setUpdateMode(false)
+                setTitle(props.title);
+                setDescription(props.description);
+              }}
             >
               Cancel
             </button>

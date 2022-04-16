@@ -1,64 +1,63 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { Review } from '../components/Review.jsx';
 
-import '../index.css'
+import '../index.css';
 
 export function UserProfile(props) {
   const { userData, setUserData, setIsLoggedIn, setAuthDisplay } = props;
   const [reviews, setReviews] = useState([]);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   // let [searchParams, setSearchParams] = useSearchParams();
+  const mounted = useRef(true);
+
+  const getReviews = async () => {
+    if (!userData._id) return;
+    try {
+      const { status, data } = await axios.get(`/user/${userData._id}/reviews`);
+      if (status >= 200 && status < 300) {
+        if (mounted.current)
+          setReviews(data.reviews);
+      }
+      else if (status === 401) {
+        // TODO: Move this to protected components
+        // if the user is not authenticated, navigate them back to the hamepage and prompt them to login
+        setIsLoggedIn(false);
+        setAuthDisplay(true);
+        navigate('/');
+      }
+    } catch (err) {
+      console.error('Error fetching users reviews -->', err);
+    }
+  };
 
   useEffect(() => {
-    // fetch('/auth/check', {
-    //   method: 'POST',
-    // })
-    //   .then((res) => {
-    //     if (res.status === 401) {
-    //       setIsLoggedIn(false);
-    //       setAuthDisplay(true);
-    //       navigate('/');
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log('Error check login -->', err);
-    //   });
-    if (userData._id) {
-      fetch(`/reviews/${userData._id}`)
-        .then((res) => {
-          // if the user is not authenticated, navigate them back to the hamepage and prompt them to login
-          if (res.status === 401) {
-            setIsLoggedIn(false);
-            setAuthDisplay(true);
-            navigate('/');
-          } else {
-            return res.json();
-          }
-        })
-        .then((json) => {
-          setReviews(json.reviews);
-        })
-        .catch((err) => {
-          console.log('Error fenching users reviews -->', err);
-        });
-    }
+    getReviews();
+    return () => () => mounted.current = false;
   }, [userData]);
+
+  const onReviewDelete = () => {
+    getReviews();
+  };
+
+  const onReviewSave = () => {
+    getReviews();
+  };
 
   return (
     <div id="userProfile">
       <h1 id="userProfileTitle">Your Account</h1>
       <h3>
-        Hello {userData.full_name}
-        {','}
+        Hello {userData.first_name} {userData.last_name},
       </h3>
       <div>
         <h4>Your Reviews</h4>
         {reviews.map((review, index) => {
           return <Review
             userData={userData}
-            username={review.username}
+            username={userData.username}
+            _id={review._id}
             title={review.title}
             overall_rating={review.overall_rating}
             respect_rating={review.respect_rating}
@@ -67,6 +66,8 @@ export function UserProfile(props) {
             pet_friendly_rating={review.pet_friendly}
             description={review.description}
             key={index}
+            onSave={onReviewSave}
+            onDelete={onReviewDelete}
           />;
         })}
       </div>

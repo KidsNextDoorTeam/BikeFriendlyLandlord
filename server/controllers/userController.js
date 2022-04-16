@@ -74,7 +74,7 @@ userController.createUser = async (req, res, next) => {
 
     next();
   } catch (err) {
-    return next(new AppError(error, 'userController', 'createUser', 500));
+    return next(new AppError(err, 'userController', 'createUser', 500));
   }
 };
 
@@ -99,7 +99,7 @@ userController.verifyUser = async (req, res, next) => {
 
     return next();
   } catch (err) {
-    return next(new AppError(error, 'userController', 'verifyUser', 500));
+    return next(new AppError(err, 'userController', 'verifyUser', 500));
   }
 };
 
@@ -122,7 +122,7 @@ userController.deleteUser = async (req, res, next) => {
 
     return next();
   } catch (err) {
-    return next(new AppError(error, 'userController', 'deleteUser', 500));
+    return next(new AppError(err, 'userController', 'deleteUser', 500));
   }
 };
 

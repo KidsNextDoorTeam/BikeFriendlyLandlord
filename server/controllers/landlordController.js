@@ -16,8 +16,8 @@ landlordController.getById = async (req, res, next) => {
   };
 
   const reviewsQuery = {
-    text: `SELECT _id, title, username, overall_rating, respect_rating, responsiveness_rating, 
-    description, user_id, created_at, pet_friendly, bike_friendly FROM reviews WHERE landlord_id = $1;`,
+    text: `SELECT r._id, r.title, u.username, r.overall_rating, r.respect_rating, r.responsiveness_rating, 
+    r.description, r.user_id, r.created_at, r.pet_friendly, bike_friendly FROM reviews r LEFT JOIN users u ON u._id = r.user_id WHERE r.landlord_id = $1;`,
     values: [req.params.landlordId],
   };
 
