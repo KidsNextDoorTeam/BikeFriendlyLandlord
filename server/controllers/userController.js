@@ -11,6 +11,8 @@ const userController = {};
  * hashes the password with bcryptjs and saves the user to the database
  */
 userController.createUser = async (req, res, next) => {
+  // TODO: This controller will need to handle updating landlord and 
+  // tenant tables depending how the user signs up
   try {
     const {
       username,
@@ -72,7 +74,7 @@ userController.createUser = async (req, res, next) => {
 
     next();
   } catch (err) {
-    return next(new AppError(error, 'userController', 'createUser', 500));
+    return next(new AppError(err, 'userController', 'createUser', 500));
   }
 };
 
@@ -97,7 +99,7 @@ userController.verifyUser = async (req, res, next) => {
 
     return next();
   } catch (err) {
-    return next(new AppError(error, 'userController', 'verifyUser', 500));
+    return next(new AppError(err, 'userController', 'verifyUser', 500));
   }
 };
 
@@ -120,14 +122,13 @@ userController.deleteUser = async (req, res, next) => {
 
     return next();
   } catch (err) {
-    return next(new AppError(error, 'userController', 'deleteUser', 500));
+    return next(new AppError(err, 'userController', 'deleteUser', 500));
   }
 };
 
 userController.getUserData = async (req, res, next) => {
   try {
     const userId = res.locals.user;
-    console.log(userId)
 
     const queryString = `
     SELECT * FROM users
@@ -142,9 +143,9 @@ userController.getUserData = async (req, res, next) => {
     res.locals.userData = result.rows[0];
 
     return next();
-  } catch (err) {
+  } catch (error) {
     return next(new AppError(error, 'userController', 'getUserData', 500));
   }
-}
+};
 
 module.exports = userController;
