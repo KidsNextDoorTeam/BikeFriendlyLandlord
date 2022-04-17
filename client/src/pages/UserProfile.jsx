@@ -6,9 +6,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
-import { Button } from '@material-ui/core';
-import { Grid } from '@material-ui/core';
-
+import { Button, Grid, TextField } from '@material-ui/core';
 
 import { Review } from '../components/Review.jsx';
 
@@ -19,6 +17,7 @@ export function UserProfile(props) {
   const [reviews, setReviews] = useState([]);
   const [currentTab, setCurrentTab] = useState(0);
   const [updateMode, setUpdateMode] = useState(false);
+  const [username, setUsername] = useState('');
   const navigate = useNavigate();
   // let [searchParams, setSearchParams] = useSearchParams();
   const mounted = useRef(true);
@@ -57,7 +56,12 @@ export function UserProfile(props) {
 
   const handleTabChange = (e, newValue) => {
     setCurrentTab(newValue);
-  } 
+  };
+
+  const userProfileChange = () => {
+    setUpdateMode(false);
+    console.log(username);
+  };
 
   return (
     <div id="userProfile">
@@ -71,11 +75,67 @@ export function UserProfile(props) {
             <div>
               <Avatar alt="User picture" src={`/images/${userData.profile_pic}`} sx={{ width: 200, height: 200, minWidth:20, minHeight:20, marginTop: '20px', marginBottom: '20px' }}/>
             </div>
-            <div style={{ marginBottom:'10px' }}>
-              <h2> {userData.first_name} {userData.last_name}</h2>
-              <span> {userData.username} </span> 
-            </div>
-            <Button variant="contained" style={{width: '80%', backgroundColor: 'tomato', color: 'white'}} >Edit Profile</Button>
+            {updateMode ? 
+              <Box> 
+                <div style={{display:'flex', flexDirection: 'column', gap: '10px'}} >
+                  <TextField
+                    label="First Name"
+                    variant="outlined"
+                    // onChange={(e) => setUsername(e.target.value)}
+                    size="small"
+                  /> 
+                  <TextField
+                    label="Last Name"
+                    variant="outlined"
+                    // onChange={(e) => setUsername(e.target.value)}
+                    size="small"
+                  /> 
+                  <TextField
+                    label="Username"
+                    variant="outlined"
+                    onChange={(e) => setUsername(e.target.value)}
+                    size="small"
+                  /> 
+                </div>
+                <button
+                  style={{
+                    padding: '7px 15px',
+                    borderRadius: '10px',
+                    border: '1px solid tomato',
+                    color: 'tomato',
+                    backgroundColor: 'transparent',
+                    marginRight: '10px',
+                    cursor: 'pointer',
+                    marginTop: '10px'
+                  }}
+                  onClick={() => {
+                    setUpdateMode(false);
+                  }}
+                >
+              Cancel
+                </button>
+                <button
+                  style={{
+                    padding: '7px 15px',
+                    borderRadius: '10px',
+                    border: 'none',
+                    color: 'white',
+                    backgroundColor: 'tomato',
+                    marginRight: '10px',
+                    cursor: 'pointer',
+                  }}
+                  onClick={userProfileChange}
+                >
+              Save
+                </button>
+              </Box> : 
+              <Box>
+                <div style={{ marginBottom:'10px' }}>
+                  <h2> {userData.first_name} {userData.last_name}</h2>
+                  <span> {userData.username} </span> 
+                </div>
+                <Button variant="contained" style={{width: '80%', backgroundColor: 'tomato', color: 'white'}} onClick={()=>{setUpdateMode(true)}}>Edit Profile</Button> 
+              </Box>}
           </Grid>
           <Grid item xs={9} >
             <Tabs textColor="inherit" variant="fullWidth" TabIndicatorProps={{style: { backgroundColor: '#df4f35ea' }}} value={currentTab} onChange={handleTabChange}>
