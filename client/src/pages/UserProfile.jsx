@@ -96,6 +96,13 @@ export function UserProfile(props) {
                     onChange={(e) => setUsername(e.target.value)}
                     size="small"
                   /> 
+                  <TextField
+                    label="Bio"
+                    variant="outlined"
+                    multiline
+                    rows={4}
+                    // onChange={(e) => setUsername(e.target.value)}
+                  />
                 </div>
                 <button
                   style={{
