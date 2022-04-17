@@ -3,10 +3,10 @@ const express = require('express');
 const router = express.Router();
 
 const reviewsController = require('../controllers/reviewsController.js');
-const sessionController = require('../controllers/sessionController.js');
+const authController = require('../controllers/authController.js');
 
 router.post('/:landlordId',
-  sessionController.checkSession,
+  authController.isAuthenticated,
   reviewsController.addReview,
   (req, res) => {
     return res.send('Review added successfully!');
@@ -14,7 +14,7 @@ router.post('/:landlordId',
 );
 
 router.get('/',
-  sessionController.checkSession,
+  authController.isAuthenticated,
   reviewsController.getAllReviews,
   (req, res) => {
     res.status(200).json({ reviews: res.locals.reviews });
@@ -22,7 +22,7 @@ router.get('/',
 );
 
 router.get('/:reviewId',
-  sessionController.checkSession,
+  authController.isAuthenticated,
   reviewsController.getReviewById,
   (req, res) => {
     return res.type('application/json').json({ review: res.locals.review });
@@ -30,7 +30,7 @@ router.get('/:reviewId',
 );
 
 router.put('/:reviewId',
-  sessionController.checkSession,
+  authController.isAuthenticated,
   reviewsController.updateReview,
   (req, res) => {
     return res.send('Post updated!');
@@ -38,7 +38,7 @@ router.put('/:reviewId',
 );
 
 router.delete('/:reviewId',
-  sessionController.checkSession,
+  authController.isAuthenticated,
   reviewsController.deleteReview,
   (req, res) => {
     return res.send('Post deleted!');

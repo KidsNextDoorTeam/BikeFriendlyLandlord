@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const landlordController = require('../controllers/landlordController.js');
+const authController = require('../controllers/authController');
 
 router.get('/', landlordController.getAllLandlords, (req, res) => {
   return res.json({ landlords: res.locals.landlords });
@@ -20,7 +21,7 @@ router.post('/search', landlordController.searchLandlords, (req, res) => {
   return res.json({ landlords: res.locals.landlords });
 });
 
-router.post('/:userId', landlordController.addLandlord, (req, res) => {
+router.post('/:userId', authController.isAuthenticated, landlordController.addLandlord, (req, res) => {
   res.status(200).send('Successfully set user as landlord');
 });
 module.exports = router;

@@ -9,7 +9,7 @@ import Search from './pages/Search.jsx';
 import { ReviewPage } from './pages/ReviewPage.jsx';
 import { UserProfile } from './pages/UserProfile.jsx';
 import { Route, Routes, Link } from 'react-router-dom';
-import Footer from "./components/Footer.jsx";
+import Footer from './components/Footer.jsx';
 
 export function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,7 +18,7 @@ export function App() {
   const [userData, setUserData] = useState({});
 
   useEffect(() => {
-    fetch('/user/getUser')
+    fetch('/auth')
       // .then((res) => {
       //   if (res.status === 200) {
       //     return res.json();
@@ -29,7 +29,7 @@ export function App() {
       // })
       .then((res) => {
         // parsing the response will error if the user is not authenticated and no data got returned
-        return res.json()
+        return res.json();
       })
       .then(json => {
         setUserData(json);
@@ -52,7 +52,7 @@ export function App() {
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
         <Route path="/map" element={<MapSearch />} />
-        <Route path="/landlord/:landlord_id" element={<Profile userData={userData} isLoggedIn={isLoggedIn}/>} />
+        <Route path="/landlord/:landlord_id" element={<Profile userData={userData} isLoggedIn={isLoggedIn} />} />
         <Route
           path="/review/:landlord_id"
           element={<ReviewPage userData={userData} />}
