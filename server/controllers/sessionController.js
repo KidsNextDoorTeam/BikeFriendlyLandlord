@@ -38,12 +38,10 @@ sessionController.startSession = (req, res, next) => {
   try {
 
     const userInfo = res.locals.user;
-
     const jwtData = {
       _id: userInfo._id,
-      username: userInfo.username,
-      landlord_id: userInfo.landlord_id
-    }
+      username: userInfo.username
+    };
     // create the json web token
     const jwtToken = jwt.sign(
       jwtData,
@@ -58,7 +56,7 @@ sessionController.startSession = (req, res, next) => {
     });
     next();
   } catch (err) {
-    return next(new AppError(error, 'sessionController', 'checkSession', 500));
+    return next(new AppError(err, 'sessionController', 'checkSession', 500));
   }
 };
 

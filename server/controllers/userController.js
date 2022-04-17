@@ -19,9 +19,7 @@ userController.createUser = async (req, res, next) => {
       password,
       firstname,
       lastname,
-      isLandlord,
       email,
-      landlordId,
     } = req.body;
 
     // ? validate user input
@@ -54,19 +52,16 @@ userController.createUser = async (req, res, next) => {
      * database query to add the new user to the users table
      */
     const userQueryString = `
-    INSERT INTO users (first_name, last_name, full_name, username, email, password, is_landlord, landlord_id) 
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    INSERT INTO users (first_name, last_name, username, email, password) 
+    VALUES ($1, $2, $3, $4, $5)
     RETURNING *;
     `;
     const userValues = [
       firstname,
       lastname,
-      firstname + ' ' + lastname,
       username,
       email,
       hashedPassword,
-      isLandlord,
-      landlordId,
     ];
     const userResult = await db.query(userQueryString, userValues);
     delete userResult.rows[0].password;
