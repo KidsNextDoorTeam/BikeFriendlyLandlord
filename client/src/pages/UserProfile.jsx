@@ -6,8 +6,10 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
-import { Button, Grid, TextField } from '@material-ui/core';
+import { Button, Grid, TextField, Input} from '@material-ui/core';
 import { stringAvatar } from '../common/styling.js';
+import IconButton from '@mui/material/IconButton';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
 import { Review } from '../components/Review.jsx';
 
@@ -73,10 +75,10 @@ export function UserProfile(props) {
       >
         <Grid container spacing={1}>
           <Grid item xs={3} >
-            <div>
+            <div style={{display:'flex'}}>
               {userData.profile_pic ? <Avatar alt="User picture" src={`/images/${userData.profile_pic}`} sx={{ width: 200, height: 200, minWidth:20, minHeight:20, marginTop: '20px', marginBottom: '20px' }}/>
                 : <Avatar alt="User picture" {...stringAvatar(`${userData.first_name} ${userData.last_name}`)}/> }
-            </div>
+            </div> 
             {updateMode ? 
               <Box> 
                 <div style={{display:'flex', flexDirection: 'column', gap: '10px'}} >
@@ -105,6 +107,15 @@ export function UserProfile(props) {
                     rows={4}
                     // onChange={(e) => setUsername(e.target.value)}
                   />
+                  <Button
+                    variant="contained"
+                    component="label"
+                  > Upload Picture
+                    <input
+                      type="file"
+                      hidden
+                    />
+                  </Button>
                 </div>
                 <button
                   style={{
