@@ -24,15 +24,16 @@ module.exports = function (passport) {
 
   passport.serializeUser((user, done) => {
     process.nextTick(() => {
-      done(null, user);
+      // full user object stored on req.user by verify function
+      // this stores object on req.session.passport.user so we can associate sessions with users 
+      done(null, user._id);
     });
   });
 
-  passport.deserializeUser((user, cb) => {
-    console.log('deserialize');
+  passport.deserializeUser((id, cb) => {
     process.nextTick(async () => {
       try {
-        const { rows: [userData] } = await db.query('SELECT * from users where username = $1', [user.username]);
+        const { rows: [userData] } = await db.query('SELECT * from users where _id = $1', [id]);
         delete userData.password;
         cb(null, userData);
       } catch (error) {
