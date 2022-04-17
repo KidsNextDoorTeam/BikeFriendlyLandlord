@@ -4,6 +4,7 @@ import '../index.css';
 import { NavLink, Link } from 'react-router-dom';
 import { Authenticate } from '../pages/Authenticate.jsx';
 import Avatar from '@mui/material/Avatar';
+import { navBarAvatar } from '../common/styling.js';
 
 export function Navbar(props) {
   const {
@@ -111,11 +112,11 @@ export function Navbar(props) {
         )}
         {isLoggedIn && (
           <div style={{display:'flex', alignItems: 'center'}}>
-            <Avatar
+            {userData.profile_pic ? <Avatar
               alt="User picture"
               src={`/images/${userData.profile_pic}`}
               sx={{ width: 35, height:35, marginRight: '15px' }}
-            />
+            /> : <Avatar alt="User picture" {...navBarAvatar(`${userData.first_name} ${userData.last_name}`)}/> }
             <Link to={`/profile/${userData.username}`}>My Account</Link>
             <Button
               variant="text"

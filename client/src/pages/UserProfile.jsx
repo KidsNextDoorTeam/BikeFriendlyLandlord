@@ -7,6 +7,7 @@ import Tab from '@mui/material/Tab';
 import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
 import { Button, Grid, TextField } from '@material-ui/core';
+import { stringAvatar } from '../common/styling.js';
 
 import { Review } from '../components/Review.jsx';
 
@@ -73,7 +74,8 @@ export function UserProfile(props) {
         <Grid container spacing={1}>
           <Grid item xs={3} >
             <div>
-              <Avatar alt="User picture" src={`/images/${userData.profile_pic}`} sx={{ width: 200, height: 200, minWidth:20, minHeight:20, marginTop: '20px', marginBottom: '20px' }}/>
+              {userData.profile_pic ? <Avatar alt="User picture" src={`/images/${userData.profile_pic}`} sx={{ width: 200, height: 200, minWidth:20, minHeight:20, marginTop: '20px', marginBottom: '20px' }}/>
+                : <Avatar alt="User picture" {...stringAvatar(`${userData.first_name} ${userData.last_name}`)}/> }
             </div>
             {updateMode ? 
               <Box> 
@@ -137,7 +139,7 @@ export function UserProfile(props) {
                 </button>
               </Box> : 
               <Box>
-                <div style={{ marginBottom:'10px' }}>
+                <div style={{ marginBottom:'10px', color: '#333' }}>
                   <h2> {userData.first_name} {userData.last_name}</h2>
                   <span> {userData.username} </span> 
                 </div>
@@ -151,10 +153,11 @@ export function UserProfile(props) {
               <Tab label="Saved Landlords" />
             </Tabs>
             {currentTab === 0 && <div id="userDetails">
-              <span style={{marginTop: '2em'}}>{userData.description}</span>
+              { userData.description ? <span style={{marginTop: '2em'}}>{userData.description}</span> : 
+                <span style={{textAlign: 'center', marginTop: '2em'}}>Welcome to Bike Friendly Landlord. <br></br> Edit your profile, add a bio and explore!</span>}
             </div> }
-            {currentTab === 1 && <div>
-              <h4>Your Reviews</h4>
+            {currentTab === 1  && <div>
+              {reviews.length === 0 && <h3 style={{textAlign: 'center', marginTop: '2em'}}>You have no reviews yet</h3>}
               {reviews.map((review, index) => {
                 return <Review
                   userData={userData}
@@ -171,10 +174,10 @@ export function UserProfile(props) {
                   onSave={onReviewSave}
                   onDelete={onReviewDelete}
                 />;
-              })}
+              })} 
             </div> }
             {currentTab === 2 && <div style={{ marginTop: '50px', textAlign:'center' }}>
-              <h2> You don&apos;t have any saved landlords yet</h2>
+              <h3> You don&apos;t have any saved landlords yet</h3>
             </div>}
           </Grid>
         </Grid>
