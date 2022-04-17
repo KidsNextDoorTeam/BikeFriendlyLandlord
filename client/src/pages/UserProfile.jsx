@@ -6,6 +6,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
+import { Button } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 
 import { Review } from '../components/Review.jsx';
@@ -16,7 +18,8 @@ export function UserProfile(props) {
   const { userData, setUserData, setIsLoggedIn, setAuthDisplay } = props;
   const [reviews, setReviews] = useState([]);
   const [currentTab, setCurrentTab] = useState(0);
-  let navigate = useNavigate();
+  const [updateMode, setUpdateMode] = useState(false);
+  const navigate = useNavigate();
   // let [searchParams, setSearchParams] = useSearchParams();
   const mounted = useRef(true);
   const getReviews = async () => {
@@ -58,75 +61,56 @@ export function UserProfile(props) {
 
   return (
     <div id="userProfile">
-        <Typography
-              variant="h6"
-              component="div"
-              style={{ fontFamily: 'Nunito' }}
-        >
-      <div style={{display:'flex'}}>
-      <div>
-      <h1 id="userProfileTitle">Your Account</h1>
-      <h2> Hello {userData.first_name} {userData.last_name},</h2> </div>
-      <div>
-      <Avatar alt="User picture" src={`/images/${userData.profile_pic}`} sx={{ width: 56, height: 56 }}/>
-      </div>
-      </div>
-      <Box sx={{ marginTop: '20px', marginBottom: '25px'}}>
-      <Tabs textColor="inherit" TabIndicatorProps={{style: { backgroundColor: "#df4f35ea" }}} value={currentTab} onChange={handleTabChange}>
-        <Tab label="Profile" />
-        <Tab label="Reviews" />
-        <Tab label="Saved Landlords" />
-      </Tabs>
-      </Box>
-      {currentTab === 0 &&
-      <div id="userDetails">
-      <Box sx={{ backgroundColor: 'rgba(241, 241, 241, 0.4)', padding: '5px'}} > 
-        <span>First Name </span>
-        <span style={{marginLeft: '10em'}}>{userData.first_name}</span>
-      </Box>
-      <Box sx={{ backgroundColor: 'rgba(241, 241, 241, 0.4)'}}> 
-        <span>Last Name </span>
-        <span style={{marginLeft: '10em'}}>{userData.last_name}</span>
-      </Box>
-      <Box sx={{ backgroundColor: 'rgba(241, 241, 241, 0.4)'}}> 
-        <span>Username </span>
-        <span style={{marginLeft: '10em'}}>{userData.username}</span>
-      </Box>
-      <Box sx={{ backgroundColor: 'rgba(241, 241, 241, 0.4)'}}> 
-        <span>Email </span>
-        <span style={{marginLeft: '12em'}}>{userData.email}</span>
-      </Box>
-      <Box sx={{ backgroundColor: 'rgba(241, 241, 241, 0.4)'}}> 
-        <span>Description </span>
-        <span style={{marginLeft: '10em'}}>{userData.description}</span>
-      </Box>
-      </div>
-    }
-     {currentTab === 1 &&
-     <div>
-        <h4>Your Reviews</h4>
-        {reviews.map((review, index) => {
-          return <Review
-            userData={userData}
-            username={userData.username}
-            _id={review._id}
-            title={review.title}
-            overall_rating={review.overall_rating}
-            respect_rating={review.respect_rating}
-            responsiveness_rating={review.responsiveness_rating}
-            bike_rating={review.bike_rating}
-            pet_friendly_rating={review.pet_friendly}
-            description={review.description}
-            key={index}
-            onSave={onReviewSave}
-            onDelete={onReviewDelete}
-          />;
-        })}
-      </div> }
-      {currentTab === 2 &&
-      <div>
-      <h2> You don't have any saved landlords yet</h2>
-      </div>}
+      <Typography
+        variant="h6"
+        component="div"
+        style={{ fontFamily: 'Nunito' }}
+      >
+        <Grid container spacing={1}>
+          <Grid item xs={3} >
+            <div>
+              <Avatar alt="User picture" src={`/images/${userData.profile_pic}`} sx={{ width: 200, height: 200, minWidth:20, minHeight:20, marginTop: '20px', marginBottom: '20px' }}/>
+            </div>
+            <div style={{ marginBottom:'10px' }}>
+              <h2> {userData.first_name} {userData.last_name}</h2>
+              <span> {userData.username} </span> 
+            </div>
+            <Button variant="contained" style={{width: '80%', backgroundColor: 'tomato', color: 'white'}} >Edit Profile</Button>
+          </Grid>
+          <Grid item xs={9} >
+            <Tabs textColor="inherit" variant="fullWidth" TabIndicatorProps={{style: { backgroundColor: '#df4f35ea' }}} value={currentTab} onChange={handleTabChange}>
+              <Tab label="Overview" />
+              <Tab label="Reviews" />
+              <Tab label="Saved Landlords" />
+            </Tabs>
+            {currentTab === 0 && <div id="userDetails">
+              <span style={{marginTop: '2em'}}>{userData.description}</span>
+            </div> }
+            {currentTab === 1 && <div>
+              <h4>Your Reviews</h4>
+              {reviews.map((review, index) => {
+                return <Review
+                  userData={userData}
+                  username={userData.username}
+                  _id={review._id}
+                  title={review.title}
+                  overall_rating={review.overall_rating}
+                  respect_rating={review.respect_rating}
+                  responsiveness_rating={review.responsiveness_rating}
+                  bike_rating={review.bike_rating}
+                  pet_friendly_rating={review.pet_friendly}
+                  description={review.description}
+                  key={index}
+                  onSave={onReviewSave}
+                  onDelete={onReviewDelete}
+                />;
+              })}
+            </div> }
+            {currentTab === 2 && <div style={{ marginTop: '50px', textAlign:'center' }}>
+              <h2> You don&apos;t have any saved landlords yet</h2>
+            </div>}
+          </Grid>
+        </Grid>
       </Typography>
     </div> 
   );
