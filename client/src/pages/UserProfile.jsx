@@ -5,6 +5,9 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import axios from 'axios';
+import Card from '@mui/material/Card';
+import Avatar from '@mui/material/Avatar';
+
 
 import { Review } from '../components/Review.jsx';
 
@@ -17,7 +20,6 @@ export function UserProfile(props) {
   let navigate = useNavigate();
   // let [searchParams, setSearchParams] = useSearchParams();
   const mounted = useRef(true);
-
   const getReviews = async () => {
     if (!userData._id) return;
     try {
@@ -62,15 +64,32 @@ export function UserProfile(props) {
               component="div"
               style={{ fontFamily: 'Nunito' }}
         >
+      <div style={{display:'flex'}}>
+      <div>
       <h1 id="userProfileTitle">Your Account</h1>
-      <h2> Hello {userData.first_name} {userData.last_name},</h2>
+      <h2> Hello {userData.first_name} {userData.last_name},</h2> </div>
+      <div>
+      <Avatar alt="User picture" src={`/images/${userData.profile_pic}`} sx={{ width: 56, height: 56 }}/>
+      </div>
+      </div>
       <Box sx={{ marginTop: '20px', marginBottom: '25px'}}>
-      <Tabs textColor="inherit" TabIndicatorProps={{style: { backgroundColor: "#D97D54" }}} value={currentTab} onChange={handleTabChange}>
+      <Tabs textColor="inherit" TabIndicatorProps={{style: { backgroundColor: "#df4f35ea" }}} value={currentTab} onChange={handleTabChange}>
         <Tab label="Profile" />
         <Tab label="Reviews" />
         <Tab label="Saved Landlords" />
       </Tabs>
       </Box>
+      {currentTab === 0 &&
+      <Card sx={{ backgroundColor: 'rgba(0, 0, 0, 0.5)'}} >
+      <div>
+      <Box component="span" sx={{ display: 'block' }}>{userData.profile_pic}</Box>
+      <Box component="span" sx={{ display: 'block' }}>First Name  {userData.first_name}</Box>
+      <Box component="span" sx={{ display: 'block' }}>Last Name   {userData.last_name}</Box>
+      <Box component="span" sx={{ display: 'block' }}>Username   {userData.username}</Box>
+      <Box component="span" sx={{ display: 'block' }}>Email  {userData.email}</Box>
+      <Box component="span" sx={{ display: 'block' }}>Description  {userData.description}</Box>
+      </div> 
+      </Card>}
      {currentTab === 1 &&
      <div>
         <h4>Your Reviews</h4>
@@ -92,6 +111,10 @@ export function UserProfile(props) {
           />;
         })}
       </div> }
+      {currentTab === 2 &&
+      <div>
+      <h2> You don't have any saved landlords yet</h2>
+      </div>}
       </Typography>
     </div> 
   );

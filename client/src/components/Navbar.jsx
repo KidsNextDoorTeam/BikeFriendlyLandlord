@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import '../index.css';
 import { NavLink, Link } from 'react-router-dom';
 import { Authenticate } from '../pages/Authenticate.jsx';
+import Avatar from '@mui/material/Avatar';
 
 export function Navbar(props) {
   const {
@@ -109,7 +110,12 @@ export function Navbar(props) {
           </Button>
         )}
         {isLoggedIn && (
-          <div>
+          <div style={{display:'flex', alignItems: 'center'}}>
+            <Avatar
+              alt="User picture"
+              src={`/images/${userData.profile_pic}`}
+              sx={{ width: 35, height:35, marginRight: '15px' }}
+            />
             <Link to={`/profile/${userData.username}`}>My Account</Link>
             <Button
               variant="text"
