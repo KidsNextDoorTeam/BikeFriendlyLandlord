@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import axios from 'axios';
-import Card from '@mui/material/Card';
 import Avatar from '@mui/material/Avatar';
 
 
@@ -80,16 +79,29 @@ export function UserProfile(props) {
       </Tabs>
       </Box>
       {currentTab === 0 &&
-      <Card sx={{ backgroundColor: 'rgba(0, 0, 0, 0.5)'}} >
-      <div>
-      <Box component="span" sx={{ display: 'block' }}>{userData.profile_pic}</Box>
-      <Box component="span" sx={{ display: 'block' }}>First Name  {userData.first_name}</Box>
-      <Box component="span" sx={{ display: 'block' }}>Last Name   {userData.last_name}</Box>
-      <Box component="span" sx={{ display: 'block' }}>Username   {userData.username}</Box>
-      <Box component="span" sx={{ display: 'block' }}>Email  {userData.email}</Box>
-      <Box component="span" sx={{ display: 'block' }}>Description  {userData.description}</Box>
-      </div> 
-      </Card>}
+      <div id="userDetails">
+      <Box sx={{ backgroundColor: 'rgba(241, 241, 241, 0.4)', padding: '5px'}} > 
+        <span>First Name </span>
+        <span style={{marginLeft: '10em'}}>{userData.first_name}</span>
+      </Box>
+      <Box sx={{ backgroundColor: 'rgba(241, 241, 241, 0.4)'}}> 
+        <span>Last Name </span>
+        <span style={{marginLeft: '10em'}}>{userData.last_name}</span>
+      </Box>
+      <Box sx={{ backgroundColor: 'rgba(241, 241, 241, 0.4)'}}> 
+        <span>Username </span>
+        <span style={{marginLeft: '10em'}}>{userData.username}</span>
+      </Box>
+      <Box sx={{ backgroundColor: 'rgba(241, 241, 241, 0.4)'}}> 
+        <span>Email </span>
+        <span style={{marginLeft: '12em'}}>{userData.email}</span>
+      </Box>
+      <Box sx={{ backgroundColor: 'rgba(241, 241, 241, 0.4)'}}> 
+        <span>Description </span>
+        <span style={{marginLeft: '10em'}}>{userData.description}</span>
+      </Box>
+      </div>
+    }
      {currentTab === 1 &&
      <div>
         <h4>Your Reviews</h4>

@@ -322,3 +322,9 @@ h4 {
   margin-bottom: 20px;
 }
 
+#userDetails {
+  display: flex;
+  flex-direction:column;
+  gap: 20px;
+}
+
