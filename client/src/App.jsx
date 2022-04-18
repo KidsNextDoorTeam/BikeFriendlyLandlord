@@ -10,7 +10,7 @@ import { ReviewPage } from './pages/ReviewPage.jsx';
 import { UserProfile } from './pages/UserProfile.jsx';
 import { Route, Routes, Link } from 'react-router-dom';
 import Footer from "./components/Footer.jsx";
-import Chat from "../src/components/chatbot/chat.jsx"
+import Chat from "./components/chatbot/chat.jsx"
 
 export function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

@@ -1,9 +1,9 @@
-// const express = require('express');
+const express = require('express');
 
-// const router = express.Router();
+const router = express.Router();
 
-// const chatController = require('../chatbot/chatbot.js');
+const chatController = require('../chatbot/chatbot.js');
 
-// // router.get('/', chatController.request,(req, res) => {
-// //     return res.send('chat success');
-// // })
+router.get('/', chatController.request,(req, res) => {
+    return res.send('chat success');
+})

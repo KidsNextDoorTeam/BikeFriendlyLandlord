@@ -1,7 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack'); 
-
 
 module.exports = {
   mode: process.env.NODE_ENV,
@@ -29,14 +27,7 @@ module.exports = {
       {
         test: /.(css|scss)$/,
         exclude: /node_modules/,
-        use: ['style-loader','css-loader'],
-      },
-      {
-        test: /.(css|less)$/,
-        include: [
-          path.resolve(__dirname, "node_modules/antd"),
-      ],
-        use: ['style-loader','css-loader','less-loader'],
+        use: ['style-loader','css-loader']
       }
     ],
   },
@@ -45,8 +36,7 @@ module.exports = {
       template: './client/public/index.html',
       filename: 'index.html',
       publicPath: process.env.NODE_ENV === 'production' ? 'build' : 'auto',
-    }),
-    new webpack.NormalModuleReplacementPlugin( /node_modules\/antd\/lib\/style\/index\.less/, path.resolve(__dirname, 'client/src/components/chatbot/chat.css') )
+    })
   ],
   devServer: {
     port: 8080,
