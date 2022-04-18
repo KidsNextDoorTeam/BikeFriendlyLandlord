@@ -24,8 +24,9 @@ export function Navbar() {
     try {
       const { status } = await axios.post('/auth/logout');
       if (status === 200) {
-        setUser(null);
         navigate('/');
+        // Clear user after navigate to prevent login alert from flashing after redirect
+        setUser(null);
       }
     } catch (err) {
       console.error(err);
