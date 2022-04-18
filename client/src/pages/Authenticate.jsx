@@ -29,7 +29,7 @@ export function Authenticate(props) {
       if (status === 200) {
         setUser(user.user);
         setAuthDisplay(false);
-        if (isLogin && location.state.path) {
+        if (isLogin && location.state?.path) {
           navigate(location.state.path);
         }
       } else {
