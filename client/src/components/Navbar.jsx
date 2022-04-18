@@ -3,9 +3,11 @@ import { NavLink, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { Button } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
 
 import { Authenticate } from '../pages/Authenticate';
 import UserContext from '../hooks/userContext';
+import { navBarAvatar } from '../common/styling';
 
 export function Navbar() {
   const { user, setUser } = useContext(UserContext);
@@ -94,7 +96,12 @@ export function Navbar() {
           </Button>
         )}
         {user && (
-          <div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {user.profile_pic ? <Avatar
+              alt="User picture"
+              src={`/images/${user.profile_pic}`}
+              sx={{ width: 35, height: 35, marginRight: '15px' }}
+            /> : <Avatar alt="User picture" {...navBarAvatar(`${user.first_name} ${user.last_name}`)} />}
             <Link to={`/profile/${user?.username}`}>My Account</Link>
             <Button
               variant="text"
@@ -102,6 +109,9 @@ export function Navbar() {
                 fontFamily: 'Nunito',
                 color: '#666',
                 '&:hover': { backgroundColor: 'rgba(253, 143, 124, 0.577)' },
+              }}
+              style={{
+                paddingTop: '8px',
               }}
               onClick={logout}>
               Log Out
