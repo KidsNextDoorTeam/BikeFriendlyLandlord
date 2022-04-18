@@ -287,11 +287,13 @@ h3 {
   background-attachment: fixed;
 }
 
-#userProfileTitle {
-  font-family: 'Nunito';
-  color: tomato;
-  margin-bottom: 50px;
-}
 h4 {
   margin-bottom: 20px;
 }
+
+#userDetails {
+  display: flex;
+  flex-direction:column;
+  gap: 20px;
+}
+

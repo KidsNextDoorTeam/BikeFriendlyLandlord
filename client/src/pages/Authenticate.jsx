@@ -41,23 +41,23 @@ export function Authenticate(props) {
   }
 
   return (
-      <div id='loginSignup' style={position}>
-        {displayLogin && (
-          <Login
-            loginErrorMessage={loginErrorMessage}
-            loginError={loginError}
-            handleSubmit={handleSubmit}
-            setAuthDisplay={setAuthDisplay}
-            setDisplayLogin={setDisplayLogin}
-          />
-        )}
-        {!displayLogin && (
-          <Signup
-            handleSubmit={handleSubmit}
-            setAuthDisplay={setAuthDisplay}
-            setDisplayLogin={setDisplayLogin}
-          />
-        )}
-      </div>
+    <div id="loginSignup" style={position}>
+      {displayLogin && (
+        <Login
+          loginErrorMessage={loginErrorMessage}
+          loginError={loginError}
+          handleSubmit={handleSubmit}
+          setAuthDisplay={setAuthDisplay}
+          setDisplayLogin={setDisplayLogin}
+        />
+      )}
+      {!displayLogin && (
+        <Signup
+          handleSubmit={handleSubmit}
+          setAuthDisplay={setAuthDisplay}
+          setDisplayLogin={setDisplayLogin}
+        />
+      )}
+    </div>
   );
 }
