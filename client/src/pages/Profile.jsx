@@ -21,9 +21,9 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import Button from '@mui/material/Button';
 import { ThemeProvider } from '@mui/material/styles';
 
-import tomatopalette from '../components/tomatopalette.jsx';
-import { Review } from '../components/Review.jsx';
-import { LandlordInfoCard } from '../components/LandlordInfoCard.jsx';
+import tomatopalette from '../components/tomatopalette';
+import { Review } from '../components/Review';
+import { LandlordInfoCard } from '../components/LandlordInfoCard';
 
 export default function ProfilePage() {
   const navigate = useNavigate();

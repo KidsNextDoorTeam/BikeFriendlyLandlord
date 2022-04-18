@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Review } from '../components/Review.jsx';
-import UserContext from '../hooks/userContext.js';
+import { Review } from '../components/Review';
+import UserContext from '../hooks/userContext';
 
 import axios from 'axios';
 

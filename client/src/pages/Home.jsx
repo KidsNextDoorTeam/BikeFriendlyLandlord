@@ -4,8 +4,7 @@ import { CssBaseline } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Link as Scroll } from 'react-scroll';
 
-import HomeCards from '../components/HomeCards.jsx';
-import '../index.css';
+import HomeCards from '../components/HomeCards';
 
 const axios = require('axios');
 

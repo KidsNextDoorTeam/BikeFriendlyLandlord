@@ -16,7 +16,7 @@ import Grid from '@mui/material/Grid';
 import { ThemeProvider } from '@mui/material/styles';
 
 // import theme
-import tomatopalette from '../components/tomatopalette.jsx';
+import tomatopalette from '../components/tomatopalette';
 
 export default function ReviewPage() {
   const mounted = useRef(true);

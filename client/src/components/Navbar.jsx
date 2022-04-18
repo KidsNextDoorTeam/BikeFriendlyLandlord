@@ -4,8 +4,8 @@ import axios from 'axios';
 
 import { Button } from '@mui/material';
 
-import { Authenticate } from '../pages/Authenticate.jsx';
-import UserContext from '../hooks/userContext.js';
+import { Authenticate } from '../pages/Authenticate';
+import UserContext from '../hooks/userContext';
 
 export function Navbar() {
   const { user, setUser } = useContext(UserContext);

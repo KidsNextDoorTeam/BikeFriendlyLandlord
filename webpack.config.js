@@ -56,5 +56,8 @@ module.exports = {
       '/properties': 'http://localhost:3000',
     },
   },
+  resolve: {
+    extensions: ['.js', '.jsx', '.json'],
+  },
 };
 

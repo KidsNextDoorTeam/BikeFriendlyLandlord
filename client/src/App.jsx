@@ -1,15 +1,15 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import { Navbar } from './components/Navbar.jsx';
-import Footer from './components/Footer.jsx';
-import Home from './pages/Home.jsx';
-import MapSearch from './pages/MapSearch.jsx';
-import Profile from './pages/Profile.jsx';
-import Search from './pages/Search.jsx';
-import ReviewPage from './pages/ReviewPage.jsx';
-import UserProfile from './pages/UserProfile.jsx';
-import ProtectedRoute from './components/ProtectedRoute.jsx';
+import { Navbar } from './components/Navbar';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import MapSearch from './pages/MapSearch';
+import Profile from './pages/Profile';
+import Search from './pages/Search';
+import ReviewPage from './pages/ReviewPage';
+import UserProfile from './pages/UserProfile';
+import ProtectedRoute from './components/ProtectedRoute';
 import useAuth from './hooks/useAuth';
 import UserContext from './hooks/userContext';
 

@@ -11,8 +11,6 @@ import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import { Link } from 'react-router-dom';
 
-import '../index.css';
-
 export default function HomeCard({ landlord }) {
   return (
     <Link to={`/landlord/${landlord._id}`} className="link">

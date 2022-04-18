@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import HomeCard from '../components/HomeCard.jsx';
-
-import '../index.css';
+import HomeCard from '../components/HomeCard';
 
 export default function MapSearch(props) {
   // 'pins' is an array of pins to post on the map based on address from the database
