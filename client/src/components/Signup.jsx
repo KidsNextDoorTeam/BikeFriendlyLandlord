@@ -7,9 +7,9 @@ import TextField from '@mui/material/TextField';
 export default function Signup(props) {
   const { handleSubmit, setAuthDisplay, setDisplayLogin } = props;
 
-  const [isLandlord, setIsLandlord] = useState(false);
+  // const [isLandlord, setIsLandlord] = useState(false);
   const [formData, setFormData] = useState({
-    isLandlord: isLandlord,
+    // isLandlord: isLandlord,
     firstname: '',
     lastname: '',
     username: '',
@@ -34,8 +34,8 @@ export default function Signup(props) {
       <Box
         sx={formStyle}
         component="form"
-        onSubmit={() =>
-          handleSubmit('signup', { ...formData /** landlordId */ })
+        onSubmit={(e) =>
+          handleSubmit(e, { ...formData }, false)
         }
         noValidate>
         <h3>Signup</h3>

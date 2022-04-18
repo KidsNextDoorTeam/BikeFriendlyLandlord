@@ -1,6 +1,8 @@
-import React, { Component, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import '../index.css';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+import UserContext from '../hooks/userContext';
 
 // import MUI components
 import Button from '@mui/material/Button';
@@ -16,33 +18,33 @@ import { ThemeProvider } from '@mui/material/styles';
 // import theme
 import tomatopalette from '../components/tomatopalette.jsx';
 
-export function ReviewPage({ userData }) {
-  // get landlord id
-  const landlordID = useParams();
-  // console.log('landlordID:  ',landlordID)
-  // console.log('userdata:  ',userData)
-  //get landlordName
-  const [landlordName, setlandlordName] = React.useState('');
+export default function ReviewPage() {
+  const mounted = useRef(true);
+  const { user } = useContext(UserContext);
+  const { landlord_id } = useParams();
 
-  useEffect(() => {
-    fetch(`/landlords/getByID/${landlordID.landlord_id}`, {
-      method: 'GET',
-    })
-      .then((res) => res.json())
-      .then((parsed) => {
-        console.log(parsed);
-        setlandlordName(parsed.first_name + ' ' + parsed.last_name);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const [landlordName, setlandlordName] = useState('');
+  const [title, setTitle] = useState(''); // (limit 100)
+  const [respect, setRespect] = useState(null);
+  const [response, setResponse] = useState(null);
+  const [bike, setBike] = useState(false);
+  const [pet, setPet] = useState(false);
+  const [description, setDescription] = useState(''); // limit 1000
+
+  const navigate = useNavigate();
+
+  useEffect(async () => {
+    const { status, data } = await axios.get(`/landlords/${landlord_id}`);
+
+    if (status === 200) {
+      if (mounted.current) {
+        setlandlordName(data.landlord.first_name + ' ' + data.landlord.last_name);
+      }
+    } else {
+      console.error(data);
+    }
+    return () => () => mounted.current = false;
   }, []);
-
-  // handle title input (limit 100)
-  const [title, setTitle] = React.useState('');
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-  };
 
   // calculate overall rating
   const overallCalc = (...values) => {
@@ -51,58 +53,52 @@ export function ReviewPage({ userData }) {
     if (newArr.length === 0) return 0;
     return newArr.reduce((a, b) => a + b) / newArr.length;
   };
-  // handle rating inputs
-  const [respect, setRespect] = React.useState(null);
-  const [response, setResponse] = React.useState(null);
 
-  // handle bike / pet friendly
-  const [bike, setBike] = React.useState(false);
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  };
+
   const handleBikeChange = (e) => {
     setBike(!bike);
   };
 
-  const [pet, setPet] = React.useState(false);
   const handlePetChange = (e) => {
     setPet(!pet);
   };
 
-  //handle description input (limit 1000)
-  const [description, setDescription] = React.useState('');
   const handleDescChange = (e) => {
     setDescription(e.target.value);
   };
 
   // method to handle form submission
-  const sendReview = () => {
+  const sendReview = async () => {
     // build req body
     const formBody = {
-      title: title,
-      username: userData.username,
+      title,
+      description,
+      landlord_id,
+      user_id: user._id,
       overall_rating: overallCalc(respect, response),
       respect_rating: respect,
       responsiveness_rating: response,
       bike_friendly: bike,
       pet_friendly: pet,
-      description: description,
-      user_id: userData._id,
-      landlord_id: landlordID.landlord_id,
     };
 
-    fetch(`/reviews/${landlordID.landlord_id}`, {
-      method: 'POST',
-      body: JSON.stringify(formBody),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        console.log(res);
-        window.location = `/landlord/${landlordID.landlord_id}`;
-      })
-      .catch((error) => console.log(error));
+    try {
+      const { status, data } = await axios.post(`/reviews/${landlord_id}`, {
+        ...formBody,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (status === 200) {
+        navigate(`/landlord/${landlord_id}`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
-
-  // will need the Landlord name from somewhere (props?)
 
   return (
     <ThemeProvider theme={tomatopalette}>
@@ -198,9 +194,7 @@ export function ReviewPage({ userData }) {
             <Stack direction="row" spacing={2} justifyContent="flex-end">
               <Button
                 variant="outlined"
-                onClick={() =>
-                  window.location.replace(`/landlord/${landlordID.landlord_id}`)
-                }
+                onClick={() => navigate(`/landlord/${landlord_id}`)}
               >
                 Cancel
               </Button>
@@ -211,6 +205,6 @@ export function ReviewPage({ userData }) {
           </Box>
         </Container>
       </div>
-    </ThemeProvider>
+    </ThemeProvider >
   );
 }

@@ -1,53 +1,40 @@
-import { Button } from '@mui/material';
-import React, { useState } from 'react';
-import '../index.css';
-import { NavLink, Link } from 'react-router-dom';
-import { Authenticate } from '../pages/Authenticate.jsx';
+import React, { useContext, useState } from 'react';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-export function Navbar(props) {
-  const {
-    isLoggedIn,
-    authDisplay,
-    setAuthDisplay,
-    setIsLoggedIn,
-    setUserData,
-    userData,
-  } = props;
+import { Button } from '@mui/material';
+
+import { Authenticate } from '../pages/Authenticate.jsx';
+import UserContext from '../hooks/userContext.js';
+
+export function Navbar() {
+  const { user, setUser } = useContext(UserContext);
+  const [authDisplay, setAuthDisplay] = useState(false);
+  const navigate = useNavigate();
 
   const [authPosition, setAuthPosition] = useState({
     top: '',
     left: '',
   });
 
-  function logout(event) {
+  async function logout(event) {
     event.preventDefault();
-    fetch(`/auth/logout`, {
-      method: 'POST',
-      // Adding headers to the request
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          // if successfully logged out, reset login state to false
-          setIsLoggedIn(false);
-          setAuthDisplay(false);
-          setUserData({});
-        } else {
-          console.log('logout status not 200 -->', res);
-        }
-      })
-      .then(() => window.location.replace('/'))
-      .catch((err) => {
-        console.log('Error from logout --> ', err);
-      });
+    try {
+      const { status } = await axios.post('/auth/logout');
+      if (status === 200) {
+        setUser(null);
+        navigate('/');
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   function toggleAuthDisplay(e) {
+    // FIXME: Should this just be a fixed position
     const top = e.pageY + 30;
     const left = e.pageX - 250;
-    if (authDisplay === true) setAuthDisplay(false);
+    if (authDisplay) setAuthDisplay(false);
     else {
       setAuthDisplay(true);
       setAuthPosition({
@@ -57,7 +44,7 @@ export function Navbar(props) {
     }
   }
 
-  let activeStyle = {
+  const activeStyle = {
     color: 'tomato',
   };
 
@@ -92,7 +79,7 @@ export function Navbar(props) {
         </ul>
       </div>
       <div className="navBarRight">
-        {!isLoggedIn && (
+        {!user && (
           <Button
             sx={{
               fontFamily: 'Nunito',
@@ -102,15 +89,13 @@ export function Navbar(props) {
             variant="text"
             onClick={(e) => {
               toggleAuthDisplay(e);
-              // if (authDisplay === true) setAuthDisplay(false);
-              // else setAuthDisplay(true);
             }}>
             Login/Signup
           </Button>
         )}
-        {isLoggedIn && (
+        {user && (
           <div>
-            <Link to={`/profile/${userData.username}`}>My Account</Link>
+            <Link to={`/profile/${user?.username}`}>My Account</Link>
             <Button
               variant="text"
               sx={{
@@ -118,7 +103,7 @@ export function Navbar(props) {
                 color: '#666',
                 '&:hover': { backgroundColor: 'rgba(253, 143, 124, 0.577)' },
               }}
-              onClick={(e) => logout(e)}>
+              onClick={logout}>
               Log Out
             </Button>
           </div>
@@ -126,8 +111,6 @@ export function Navbar(props) {
         {authDisplay && (
           <Authenticate
             setAuthDisplay={setAuthDisplay}
-            setIsLoggedIn={setIsLoggedIn}
-            setUserData={setUserData}
             position={authPosition}
           />
         )}

@@ -25,9 +25,7 @@ import tomatopalette from '../components/tomatopalette.jsx';
 import { Review } from '../components/Review.jsx';
 import { LandlordInfoCard } from '../components/LandlordInfoCard.jsx';
 
-import '../index.css';
-
-export default function ProfilePage({ userData, isLoggedIn }) {
+export default function ProfilePage() {
   const navigate = useNavigate();
   const [landlordData, setLandlordData] = useState({});
   const [reviewData, setReviewData] = useState([]);
@@ -55,22 +53,13 @@ export default function ProfilePage({ userData, isLoggedIn }) {
   }, []);
 
 
-  //onclick for button
   const handleReview = (e) => {
-    if (isLoggedIn) {
-      // TODO: Map this as /landlord/:landlordId/review
-      navigate(`/review/${landlordId}/`);
-    }
-    else {
-      alert('Please log in to submit a review');
-    }
+    navigate(`/review/${landlordId}/`);
   };
 
-  const handleFilter = async (e) => {
+  const handleFilter = (e) => {
     setReviewFilter(e.target.value);
     getReviews(e.target.value);
-
-
   };
 
   const getReviews = async (filter) => {
@@ -200,7 +189,6 @@ export default function ProfilePage({ userData, isLoggedIn }) {
                   <Review
                     key={i}
                     {...eachReview}
-                    userData={userData}
                     onSave={onReviewSave}
                     onDelete={onReviewDelete}
                   />

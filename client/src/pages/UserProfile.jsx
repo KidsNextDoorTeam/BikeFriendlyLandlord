@@ -1,41 +1,39 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { Review } from '../components/Review.jsx';
+import UserContext from '../hooks/userContext.js';
 
-import '../index.css';
+import axios from 'axios';
 
-export function UserProfile(props) {
-  const { userData, setUserData, setIsLoggedIn, setAuthDisplay } = props;
+export default function UserProfile() {
+  const { user } = useContext(UserContext);
+
   const [reviews, setReviews] = useState([]);
   const navigate = useNavigate();
   // let [searchParams, setSearchParams] = useSearchParams();
   const mounted = useRef(true);
 
   const getReviews = async () => {
-    if (!userData._id) return;
+    if (!user._id) {
+      navigate('/'); // user needs to sign in
+      return;
+    }
     try {
-      const { status, data } = await axios.get(`/user/${userData._id}/reviews`);
-      if (status >= 200 && status < 300) {
-        if (mounted.current)
-          setReviews(data.reviews);
-      }
-      else if (status === 401) {
-        // TODO: Move this to protected components
-        // if the user is not authenticated, navigate them back to the hamepage and prompt them to login
-        setIsLoggedIn(false);
-        setAuthDisplay(true);
-        navigate('/');
-      }
+      const { status, data } = await axios.get(`/user/${user._id}/reviews`);
+      if (status >= 200 && status < 300 && mounted.current) setReviews(data.reviews);
     } catch (err) {
-      console.error('Error fetching users reviews -->', err);
+      if (err?.repsonse?.status === 401) {
+        navigate('/');
+      } else {
+        console.error('Error fetching users reviews -->', err);
+      }
     }
   };
 
   useEffect(() => {
     getReviews();
     return () => () => mounted.current = false;
-  }, [userData]);
+  }, [user]);
 
   const onReviewDelete = () => {
     getReviews();
@@ -49,14 +47,13 @@ export function UserProfile(props) {
     <div id="userProfile">
       <h1 id="userProfileTitle">Your Account</h1>
       <h3>
-        Hello {userData.first_name} {userData.last_name},
+        Hello {user.first_name} {user.last_name},
       </h3>
       <div>
         <h4>Your Reviews</h4>
-        {reviews.map((review, index) => {
+        {reviews?.map((review, index) => {
           return <Review
-            userData={userData}
-            username={userData.username}
+            username={user.username}
             _id={review._id}
             title={review.title}
             overall_rating={review.overall_rating}
