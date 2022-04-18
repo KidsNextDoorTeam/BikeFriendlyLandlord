@@ -107,8 +107,17 @@ export function ReviewPage({ userData }) {
   return (
     <ThemeProvider theme={tomatopalette}>
       <div className='reviewPageGlobalContainer'>
-        <Container className='reviewMainContainer' maxwidth='sm' sx={{ p: 2 }}>
-          <Box className='reviewformContainer' sx={{ p: 2 }}>
+        <Container
+          className='reviewMainContainer'
+          maxwidth='sm'
+          sx={{
+            p: 2,
+            textDecoration: 'none',
+            fontFamily: 'Nunito',
+            color: 'rgb(68, 67, 67)',
+          }}
+        >
+          <Box className='reviewformContainer' sx={{ p: 2, background: 'rgba(241, 241, 241, 0.6)' }}>
             <h2>Review of {landlordName}</h2>
             <TextField
               fullWidth

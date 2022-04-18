@@ -12,108 +12,106 @@ import '../index.css';
 import { ThemeProvider } from '@emotion/react';
 
 const theme = createTheme({
-    typography: {
-      fontFamily: [
-        'Nunito'
-      ].join(','),
-    },
-  });
+  typography: {
+    fontFamily: ['Nunito'].join(','),
+  },
+});
 
 export function LandlordInfoCard(props) {
   return (
-      <ThemeProvider theme={theme}>
-    <Card>
-      <Stack
-        spacing={5}
-        direction='row'
-        sx={{ justifyContent: 'space-between' }}
-      >
-        <Typography
-          variant='h3'
+    <ThemeProvider theme={theme}>
+      <Card>
+        <Stack
+          spacing={5}
+          direction='row'
+          sx={{ justifyContent: 'space-between' }}
+        >
+          <Typography
+            variant='h3'
+            sx={{ m: 3, width: 'auto', justifyContent: 'space-between' }}
+          >
+            {props.full_name}
+          </Typography>
+          {/* <Link to={`/reviews/$/`}><Button variant='contained' sx={{m: 3}}>Is this you?</Button></Link> */}
+        </Stack>
+        <Stack
+          spacing={5}
+          direction='row'
           sx={{ m: 3, width: 'auto', justifyContent: 'space-between' }}
         >
-          {props.full_name}
-        </Typography>
-        {/* <Link to={`/reviews/$/`}><Button variant='contained' sx={{m: 3}}>Is this you?</Button></Link> */}
-      </Stack>
-      <Stack
-        spacing={5}
-        direction='row'
-        sx={{ m: 3, width: 'auto', justifyContent: 'space-between' }}
-      >
-        <Typography variant='h5'>Overall Rating</Typography>
-        <Rating
-          style={{ color: 'tomato' }}
-          required
-          size='large'
-          precision={0.5}
-          value={Number(props.overall_rating)}
-          readOnly
-        ></Rating>
-      </Stack>
-      <Stack
-        spacing={5}
-        direction='row'
-        sx={{ m: 3, width: 'auto', justifyContent: 'space-between' }}
-      >
-        <Typography variant='h5'>Respectful</Typography>
-        <Rating
-          style={{ color: 'tomato' }}
-          required
-          size='large'
-          precision={0.5}
-          value={Number(props.respect_rating)}
-          readOnly
-        />
-      </Stack>
-      <Stack
-        spacing={5}
-        direction='row'
-        sx={{ m: 3, width: 'auto', justifyContent: 'space-between' }}
-      >
-        <Typography variant='h5'>Responsiveness</Typography>
-        <Rating
-          style={{ color: 'tomato' }}
-          required
-          size='large'
-          precision={0.5}
-          value={Number(props.responsiveness_rating)}
-          readOnly
-        />
-      </Stack>
-      <Stack
-        spacing={5}
-        direction='row'
-        sx={{ m: 3, width: 'auto', justifyContent: 'space-between' }}
-      >
-        <Typography variant='h5'>Bike Friendly</Typography>
-        <Icon>
-          {props.bike_friendly ? (
-            <CheckIcon
-              style={{ color: 'limeGreen', fontSize: '20px' }}
-            ></CheckIcon>
-          ) : (
-            <ClearIcon style={{ color: 'tomato', fontSize: '20px' }} />
-          )}
-        </Icon>
-      </Stack>
-      <Stack
-        spacing={5}
-        direction='row'
-        sx={{ m: 3, width: 'auto', justifyContent: 'space-between' }}
-      >
-        <Typography variant='h5'>Pet Friendly </Typography>
-        <Icon>
-          {props.pet_friendly ? (
-            <CheckIcon
-              style={{ color: 'limeGreen', fontSize: '20px' }}
-            ></CheckIcon>
-          ) : (
-            <ClearIcon style={{ color: 'tomato', fontSize: '20px' }} />
-          )}
-        </Icon>
-      </Stack>
-    </Card>
+          <Typography variant='h5'>Overall Rating</Typography>
+          <Rating
+            style={{ color: 'tomato' }}
+            required
+            size='large'
+            precision={0.5}
+            value={Number(props.overall_rating)}
+            readOnly
+          ></Rating>
+        </Stack>
+        <Stack
+          spacing={5}
+          direction='row'
+          sx={{ m: 3, width: 'auto', justifyContent: 'space-between' }}
+        >
+          <Typography variant='h5'>Respectful</Typography>
+          <Rating
+            style={{ color: 'tomato' }}
+            required
+            size='large'
+            precision={0.5}
+            value={Number(props.respect_rating)}
+            readOnly
+          />
+        </Stack>
+        <Stack
+          spacing={5}
+          direction='row'
+          sx={{ m: 3, width: 'auto', justifyContent: 'space-between' }}
+        >
+          <Typography variant='h5'>Responsiveness</Typography>
+          <Rating
+            style={{ color: 'tomato' }}
+            required
+            size='large'
+            precision={0.5}
+            value={Number(props.responsiveness_rating)}
+            readOnly
+          />
+        </Stack>
+        <Stack
+          spacing={5}
+          direction='row'
+          sx={{ m: 3, width: 'auto', justifyContent: 'space-between' }}
+        >
+          <Typography variant='h5'>Bike Friendly</Typography>
+          <Icon>
+            {props.bike_friendly ? (
+              <CheckIcon
+                style={{ color: 'limeGreen', fontSize: '20px' }}
+              ></CheckIcon>
+            ) : (
+              <ClearIcon style={{ color: 'tomato', fontSize: '20px' }} />
+            )}
+          </Icon>
+        </Stack>
+        <Stack
+          spacing={5}
+          direction='row'
+          sx={{ m: 3, width: 'auto', justifyContent: 'space-between' }}
+        >
+          <Typography variant='h5'>Pet Friendly </Typography>
+          <Icon>
+            {props.pet_friendly ? (
+              <CheckIcon
+                style={{ color: 'limeGreen', fontSize: '20px' }}
+              ></CheckIcon>
+            ) : (
+              <ClearIcon style={{ color: 'tomato', fontSize: '20px' }} />
+            )}
+          </Icon>
+        </Stack>
+      </Card>
     </ThemeProvider>
   );
 }
