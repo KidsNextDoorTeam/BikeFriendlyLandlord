@@ -39,7 +39,7 @@ export function Navbar() {
   }
 
   function toggleAuthDisplay(e) {
-    // FIXME: Should this just be a fixed position
+    // FIXME: Should this just be a fixed position. Doesn't account for screen resizes
     const top = e.pageY + 30;
     const left = e.pageX - 250;
     if (authDisplay) setAuthDisplay(false);
@@ -52,9 +52,16 @@ export function Navbar() {
     }
   }
 
-  const activeStyle = {
-    color: 'tomato',
+  const defaultStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   };
+  const setActiveStyle = ({ isActive }) => ({
+    ...defaultStyle,
+    color: (isActive ? 'tomato' : undefined),
+  });
+
 
   return (
     <div id='navBar'>
@@ -67,22 +74,25 @@ export function Navbar() {
             <NavLink
               // endIcon={}
               to='/'
-              style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-              Home <HomeIcon />
+              style={setActiveStyle}
+            >
+              <HomeIcon sx={{ mx: 1 }} /> Home
             </NavLink>
           </li>
           <li className='navBarListItem'>
             <NavLink
               to='/search'
-              style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-              Search <SearchIcon />
+              style={setActiveStyle}
+            >
+              <SearchIcon sx={{ mx: 1 }} /> Search
             </NavLink>
           </li>
           <li className='navBarListItem'>
             <NavLink
               to='/map'
-              style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-              Map <MapIcon />
+              style={setActiveStyle}
+            >
+              <MapIcon sx={{ mx: 1 }} /> Map
             </NavLink>
           </li>
           {/* <Chat /> */}
