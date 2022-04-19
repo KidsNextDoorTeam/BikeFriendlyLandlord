@@ -49,6 +49,7 @@ export function App() {
         setUserData={setUserData}
         userData={userData}
       />
+        <Chat />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
@@ -73,7 +74,6 @@ export function App() {
         <Route path="*" element={<p>404 - nothing here</p>} />
       </Routes>
       <Footer />
-      <Chat />
     </>
   );
 }

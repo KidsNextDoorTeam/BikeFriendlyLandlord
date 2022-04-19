@@ -27,16 +27,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { ListItemIcon } from '@mui/material';
 
-
-const StyledFab = styled(Fab)({
-  position: 'absolute',
-  zIndex: 1,
-  top: -30,
-  left: 0,
-  right: 0,
-  margin: '0 auto',
-});
-
 const client = new W3CWebSocket('ws://localhost:3001');
 
 const SpecialTextField = styled((props) => (
@@ -58,7 +48,8 @@ export default class Chat extends Component {
     userName: '',
     isLoggedIn: false,
     initialMessage: '',
-    messages: []
+    messages: [],
+    minimized: false
   }
   
   onButtonClicked = (value) => {
@@ -95,12 +86,12 @@ export default class Chat extends Component {
     let theUser = '';
     return (
       <div>
-          {this.state.isLoggedIn ?
       <React.Fragment >
         <CssBaseline />
         <ThemeProvider theme={darkTheme}>
-        <Box sx={{width: "100vw",height: "100vh",display: "flex",alignItems: "bottom",justifyContent: "center", overflowY: "scroll"}}>
-          <Paper sx={{ width: "80vw",height: "80vh",maxWidth: "300px",maxHeight: "500px",display: "flex",flexDirection: "column", position: "relative" }}>
+        <Box sx={{width: "100vw",height: "100vh",position:'absolute',display: "flex",alignItems: "bottom",justifyContent: "right", overflowY: "scroll"}}>
+          {this.state.isLoggedIn ?
+          <Paper sx={{ width: "80vw",height: "80vh",maxWidth: "300px",maxHeight: "500px",display: "flex",flexDirection: "column", position: "absolute" }}>
             <Typography variant="h8" gutterBottom component="div" sx={{ p: 2, pb: 0 }}>
               {this.state.userName}'s Chat Window
             </Typography>
@@ -120,16 +111,16 @@ export default class Chat extends Component {
             }
             </List>
             <Box mt={3} position="absolute" bottom="0px">
-              <SpecialTextField className='userText'
+              <SpecialTextField
                 label="Type a message"
                 variant="filled"
                 value={this.state.initialMessage}
                 onChange={e => this.setState({initialMessage: e.target.value})}
               />
-              <Button  variant="contained" onClick={() => {this.onButtonClicked(this.state.initialMessage)}}>Send</Button>
+              <Button sx={{height:'40px',padding:'11px'}} variant="contained" onClick={() => {this.onButtonClicked(this.state.initialMessage)}}>Send</Button>
             </Box>
             </Paper>
-          {/* <AppBar position="fixed" color="primary" sx={{ top: 'auto', bottom: 0 }}>
+          /* <AppBar position="fixed" color="primary" sx={{ top: 'auto', bottom: 0 }}>
             <Toolbar>
               <IconButton color="inherit" aria-label="open drawer">
                 <MenuIcon />
@@ -145,24 +136,24 @@ export default class Chat extends Component {
                 <MoreIcon />
               </IconButton>
             </Toolbar>
-          </AppBar> */}
-        </Box>
-          </ThemeProvider>
-          </React.Fragment>
+          </AppBar> */
           :
-          <Box sx={{display: 'grid'}}>
+          <Box>
           <SpecialTextField
             label="Your Name"
             variant="filled"
             style={{ marginTop: 11 }}
             onChange={e => theUser = e.target.value}
           />
-          <Button  variant="contained"
+          <Button sx={{height:'40px',margin:'11px'}} variant="contained"
           onClick={() => {this.setState({ isLoggedIn: true, userName: theUser})}
           }
           >Submit</Button>
+          </Box>
+        }
         </Box>
-          }
+          </ThemeProvider>
+          </React.Fragment>
       </div>
     );
   }
