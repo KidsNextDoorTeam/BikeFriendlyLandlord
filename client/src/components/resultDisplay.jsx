@@ -29,7 +29,7 @@ export default function ResultDisplay({ resultsArr }) {
   }
   else {
     return (
-      <div className="homeCards" data-aos="fade-up" data-aos-duration="1000" id="homeCards">
+      <div className='homeCards' data-aos='fade-up' data-aos-duration='1000' id='homeCards'>
         {resultsArr.map((landlordObj, index) => <HomeCard landlord={landlordObj} key={index} />)}
       </div>
     );

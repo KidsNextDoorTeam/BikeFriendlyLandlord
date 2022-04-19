@@ -16,6 +16,7 @@ const landlordRouter = require('./routes/landlord.js');
 const reviewsRouter = require('./routes/reviews.js');
 const propertiesRouter = require('./routes/properties.js');
 const userRouter = require('./routes/user.js');
+require('./chatbot/chatbot.js');
 
 const app = express();
 const PORT = 3000;

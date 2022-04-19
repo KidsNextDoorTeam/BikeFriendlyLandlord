@@ -102,28 +102,57 @@ export default function ReviewPage() {
 
   return (
     <ThemeProvider theme={tomatopalette}>
-      <div className="reviewPageGlobalContainer">
-        <Container className="reviewMainContainer" maxwidth="sm" sx={{ p: 2 }}>
-          <Box className="reviewformContainer" sx={{ p: 2 }}>
+      <div
+        className='reviewPageGlobalContainer'
+        sx={{
+          margin: 0,
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+        }}
+      >
+        <Container
+          className='reviewMainContainer'
+          maxwidth='sm'
+          sx={{
+            p: 2,
+            textDecoration: 'none',
+            fontFamily: 'Nunito',
+            color: 'rgb(68, 67, 67)',
+          }}
+        >
+          <Box
+            className='reviewformContainer'
+            sx={{ p: 2, background: 'rgba(241, 241, 241, 0.6)' }}
+          >
             <h2>Review of {landlordName}</h2>
             <TextField
               fullWidth
               required
-              label="Title"
+              label='Title'
               value={title}
               onChange={handleTitleChange}
               inputProps={{ maxLength: 100 }}
-              helperText="Max 100 Characters"
+              helperText='Max 100 Characters'
               sx={{ mb: 2, mt: 2 }}
             />
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <h3 className="reviewLabel">Overall Rating</h3>
+                <h3
+                  className='reviewLabel'
+                  sx={{
+                    margin: 0,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingTop: 4,
+                  }}
+                >
+                  Overall Rating
+                </h3>
               </Grid>
               <Grid item xs={6}>
                 <Rating
                   required
-                  size="large"
+                  size='large'
                   style={{ color: 'tomato' }}
                   precision={0.5}
                   value={overallCalc(respect, response)}
@@ -131,12 +160,12 @@ export default function ReviewPage() {
                 />
               </Grid>
               <Grid item xs={6}>
-                <h3 className="reviewLabel">Respectfulness</h3>
+                <h3 className='reviewLabel'>Respectfulness</h3>
               </Grid>
               <Grid item xs={6}>
                 <Rating
                   required
-                  size="large"
+                  size='large'
                   style={{ color: 'tomato' }}
                   precision={0.5}
                   value={respect}
@@ -144,12 +173,12 @@ export default function ReviewPage() {
                 />
               </Grid>
               <Grid item xs={6}>
-                <h3 className="reviewLabel">Responsiveness</h3>
+                <h3 className='reviewLabel'>Responsiveness</h3>
               </Grid>
               <Grid item xs={6}>
                 <Rating
                   required
-                  size="large"
+                  size='large'
                   style={{ color: 'tomato' }}
                   precision={0.5}
                   value={response}
@@ -157,24 +186,24 @@ export default function ReviewPage() {
                 />
               </Grid>
               <Grid item xs={6}>
-                <h3 className="reviewLabel">Bike Friendly?</h3>
+                <h3 className='reviewLabel'>Bike Friendly?</h3>
               </Grid>
               <Grid item xs={6}>
                 <Checkbox
                   checked={bike}
                   onChange={handleBikeChange}
-                  size="medium"
+                  size='medium'
                   style={{ paddingTop: 4, paddingLeft: 0 }}
                 />
               </Grid>
               <Grid item xs={6}>
-                <h3 className="reviewLabel">Pet Friendly?</h3>
+                <h3 className='reviewLabel'>Pet Friendly?</h3>
               </Grid>
               <Grid item xs={6}>
                 <Checkbox
                   checked={pet}
                   onChange={handlePetChange}
-                  size="medium"
+                  size='medium'
                   style={{ paddingTop: 4, paddingLeft: 0 }}
                 />
               </Grid>
@@ -182,23 +211,23 @@ export default function ReviewPage() {
             <TextField
               fullWidth
               required
-              label="Additional Comments"
+              label='Additional Comments'
               multiline
               rows={4}
               inputProps={{ maxLength: 1000 }}
-              helperText="Max 1000 Characters"
+              helperText='Max 1000 Characters'
               value={description}
               onChange={handleDescChange}
               sx={{ mb: 2, mt: 2 }}
             />
-            <Stack direction="row" spacing={2} justifyContent="flex-end">
+            <Stack direction='row' spacing={2} justifyContent='flex-end'>
               <Button
                 variant="outlined"
                 onClick={() => navigate(`/landlord/${landlord_id}`)}
               >
                 Cancel
               </Button>
-              <Button variant="contained" onClick={sendReview}>
+              <Button variant='contained' onClick={sendReview}>
                 Submit
               </Button>
             </Stack>

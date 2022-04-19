@@ -46,7 +46,7 @@ export default function MapSearch(props) {
 
   /** Display the map positioned over the USA by default */
   return (
-    <div id="map">
+    <div id='map'>
       <MapContainer center={[37.09024, -95.712891]} zoom={4}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

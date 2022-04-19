@@ -41,9 +41,10 @@ module.exports = {
       template: './client/public/index.html',
       filename: 'index.html',
       publicPath: process.env.NODE_ENV === 'production' ? 'build' : 'auto',
-    }),
+    })
   ],
   devServer: {
+    port: 8080,
     historyApiFallback: true,
     hot: true,
     magicHtml: true,
@@ -54,10 +55,14 @@ module.exports = {
       '/user': 'http://localhost:3000',
       '/images': 'http://localhost:3000',
       '/properties': 'http://localhost:3000',
+      '/chat': {
+        'target': 'http://localhost:3001',
+        'ws': true
+      }
     },
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.json'],
+    extensions: ['.js', '.jsx', 'jpg', 'png']
   },
 };
 

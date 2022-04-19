@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import axios from 'axios';
+
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
@@ -68,55 +68,67 @@ export default function UserProfile() {
   };
 
   return (
-    <div id="userProfile">
-      <Typography
-        variant="h6"
-        component="div"
-        style={{ fontFamily: 'Nunito' }}
-      >
+    <div
+      id='userProfile'
+      sx={{
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      <Typography variant='h6' component='div' style={{ fontFamily: 'Nunito' }}>
         <Grid container spacing={1}>
           <Grid item xs={3} >
             <div style={{ display: 'flex' }}>
-              {user.profile_pic ? <Avatar alt="User picture" src={`/images/${user.profile_pic}`} sx={{ width: 200, height: 200, minWidth: 20, minHeight: 20, marginTop: '20px', marginBottom: '20px' }} />
-                : <Avatar alt="User picture" {...stringAvatar(`${user.first_name} ${user.last_name}`)} />}
+              {user.profile_pic ?
+                <Avatar
+                  alt="User picture"
+                  src={`/images/${user.profile_pic}`}
+                  sx={{
+                    width: 200,
+                    height: 200,
+                    minWidth: 20,
+                    minHeight: 20,
+                    my: 2.5,
+                  }} />
+                : <Avatar
+                  alt="User picture"
+                  {...stringAvatar(`${user.first_name} ${user.last_name}`)}
+                />}
             </div>
             {updateMode ?
               <Box>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }} >
                   {/* TODO: Hanlde form updates and submission */}
                   <TextField
-                    label="First Name"
-                    variant="outlined"
+                    label='First Name'
+                    variant='outlined'
                     // onChange={(e) => setUsername(e.target.value)}
                     size="small"
                   />
                   <TextField
-                    label="Last Name"
-                    variant="outlined"
+                    label='Last Name'
+                    variant='outlined'
                     // onChange={(e) => setUsername(e.target.value)}
                     size="small"
                   />
                   <TextField
-                    label="Username"
-                    variant="outlined"
+                    label='Username'
+                    variant='outlined'
                     onChange={(e) => setUsername(e.target.value)}
                     size="small"
                   />
                   <TextField
-                    label="Bio"
-                    variant="outlined"
+                    label='Bio'
+                    variant='outlined'
                     multiline
                     rows={4}
                   // onChange={(e) => setUsername(e.target.value)}
                   />
-                  <Button
-                    variant="contained"
-                    component="label"
-                  > Upload Picture
-                    <input
-                      type="file"
-                      hidden
-                    />
+                  <Button variant='contained' component='label'>
+                    {' '}
+                    Upload Picture
+                    <input type='file' hidden />
                   </Button>
                 </div>
                 <button
@@ -128,7 +140,7 @@ export default function UserProfile() {
                     backgroundColor: 'transparent',
                     marginRight: '10px',
                     cursor: 'pointer',
-                    marginTop: '10px'
+                    marginTop: '10px',
                   }}
                   onClick={() => {
                     setUpdateMode(false);
@@ -150,27 +162,70 @@ export default function UserProfile() {
                 >
                   Save
                 </button>
-              </Box> :
+              </Box > :
               <Box>
                 <div style={{ marginBottom: '10px', color: '#333' }}>
                   <h2> {user.first_name} {user.last_name}</h2>
                   <span> {user.username} </span>
                 </div>
-                <Button variant="contained" style={{ width: '80%', backgroundColor: 'tomato', color: 'white' }} onClick={() => { setUpdateMode(true); }}>Edit Profile</Button>
-              </Box>}
-          </Grid>
+                <Button
+                  variant="contained"
+                  style={{
+                    width: '80%',
+                    backgroundColor: 'tomato',
+                    color: 'white'
+                  }}
+                  onClick={() => { setUpdateMode(true); }}
+                >
+                  Edit Profile
+                </Button>
+              </Box>
+            }
+          </Grid >
           <Grid item xs={9} >
-            <Tabs textColor="inherit" variant="fullWidth" TabIndicatorProps={{ style: { backgroundColor: '#df4f35ea' } }} value={currentTab} onChange={handleTabChange}>
+            <Tabs
+              textColor="inherit"
+              variant="fullWidth"
+              TabIndicatorProps={{
+                style: {
+                  backgroundColor: '#df4f35ea'
+                }
+              }}
+              value={currentTab}
+              onChange={handleTabChange}
+            >
               <Tab label="Overview" />
               <Tab label="Reviews" />
               <Tab label="Saved Landlords" />
             </Tabs>
-            {currentTab === 0 && <div id="userDetails">
-              {user.description ? <span style={{ marginTop: '2em' }}>{user.description}</span> :
-                <span style={{ textAlign: 'center', marginTop: '2em' }}>Welcome to Bike Friendly Landlord. <br></br> Edit your profile, add a bio and explore!</span>}
-            </div>}
+            {currentTab === 0 &&
+              <div id="userDetails">
+                {user.description
+                  ? <span
+                    style={{ marginTop: '2em' }}
+                  >
+                    {user.description}
+                  </span>
+                  : <span
+                    style={{
+                      textAlign: 'center',
+                      marginTop: '2em'
+                    }}
+                  >
+                    Welcome to Bike Friendly Landlord.<br></br>
+                    Edit your profile, add a bio and explore!
+                  </span>}
+              </div>}
             {currentTab === 1 && <div>
-              {reviews.length === 0 && <h3 style={{ textAlign: 'center', marginTop: '2em' }}>You have no reviews yet</h3>}
+              {reviews.length === 0 &&
+                <h3
+                  style={{
+                    textAlign: 'center',
+                    marginTop: '2em'
+                  }}
+                >
+                  You have no reviews yet
+                </h3>}
               {reviews.map((review, index) => {
                 return <Review
                   username={user.username}
@@ -188,12 +243,18 @@ export default function UserProfile() {
                 />;
               })}
             </div>}
-            {currentTab === 2 && <div style={{ marginTop: '50px', textAlign: 'center' }}>
-              <h3> You don&apos;t have any saved landlords yet</h3>
-            </div>}
+            {currentTab === 2 &&
+              <div
+                style={{
+                  marginTop: '50px',
+                  textAlign: 'center'
+                }}
+              >
+                <h3> You don&apos;t have any saved landlords yet</h3>
+              </div>}
           </Grid>
-        </Grid>
-      </Typography>
-    </div>
+        </Grid >
+      </Typography >
+    </div >
   );
 }

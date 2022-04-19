@@ -31,18 +31,18 @@ export default function Login(props) {
         noValidate>
         <h3>Login</h3>
         <TextField
-          id="outlined-basic"
-          label="Username"
-          variant="outlined"
+          id='outlined-basic'
+          label='Username'
+          variant='outlined'
           onChange={(event) => setUsername(event.target.value)}
           value={username}
           sx={{ mb: 2 }}
         />
         <TextField
-          id="outlined-basic"
-          label="Password"
-          variant="outlined"
-          type="password"
+          id='outlined-basic'
+          label='Password'
+          variant='outlined'
+          type='password'
           error={loginError}
           helperText={loginErrorMessage}
           onChange={(event) => setPassword(event.target.value)}
@@ -52,10 +52,15 @@ export default function Login(props) {
         <Button variant="contained" type="submit" sx={{ mb: 2 }}>
           Login
         </Button>
-        <div className="linkButton" onClick={() => setDisplayLogin(false)}>
+        <div className='linkButton'
+          sx={{
+            color: 'blueviolet',
+            textDecoration: 'underline',
+          }}
+          onClick={() => setDisplayLogin(false)}>
           Need an account? Signup
         </div>
-        <button className="exitButton" onClick={() => setAuthDisplay(false)}>
+        <button className='exitButton' onClick={() => setAuthDisplay(false)}>
           Continue without logging in
         </button>
       </Box>

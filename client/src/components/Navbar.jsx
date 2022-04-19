@@ -3,11 +3,16 @@ import { NavLink, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { Button } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import SearchIcon from '@mui/icons-material/Search';
+import MapIcon from '@mui/icons-material/Map';
 import Avatar from '@mui/material/Avatar';
+
 
 import { Authenticate } from '../pages/Authenticate';
 import UserContext from '../hooks/userContext';
 import { navBarAvatar } from '../common/styling';
+import Chat from "./chatbot/chat.jsx"
 
 export function Navbar() {
   const { user, setUser } = useContext(UserContext);
@@ -52,33 +57,35 @@ export function Navbar() {
   };
 
   return (
-    <div id="navBar">
-      <div className="navBarLeft">
-        <div id="logo">BFL</div>
+    <div id='navBar'>
+      <div className='navBarLeft'>
+        <div id='logo'>BFL</div>
       </div>
-      <div className="navBarCenter">
-        <ul className="navBarListItems">
-          <li className="navBarListItem">
+      <div className='navBarCenter'>
+        <ul className='navBarListItems'>
+          <li className='navBarListItem'>
             <NavLink
-              to="/"
+              // endIcon={}
+              to='/'
               style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-              Home
+              Home <HomeIcon />
             </NavLink>
           </li>
-          <li className="navBarListItem">
+          <li className='navBarListItem'>
             <NavLink
-              to="/search"
+              to='/search'
               style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-              Search
+              Search <SearchIcon />
             </NavLink>
           </li>
-          <li className="navBarListItem">
+          <li className='navBarListItem'>
             <NavLink
-              to="/map"
+              to='/map'
               style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-              Map
+              Map <MapIcon />
             </NavLink>
           </li>
+          <Chat />
         </ul>
       </div>
       <div className="navBarRight">
@@ -89,7 +96,7 @@ export function Navbar() {
               color: '#666',
               '&:hover': { backgroundColor: 'rgba(253, 143, 124, 0.577)' },
             }}
-            variant="text"
+            variant='text'
             onClick={(e) => {
               toggleAuthDisplay(e);
             }}>
@@ -105,7 +112,7 @@ export function Navbar() {
             /> : <Avatar alt="User picture" {...navBarAvatar(`${user.first_name} ${user.last_name}`)} />}
             <Link to={`/profile/${user?.username}`}>My Account</Link>
             <Button
-              variant="text"
+              variant='text'
               sx={{
                 fontFamily: 'Nunito',
                 color: '#666',
