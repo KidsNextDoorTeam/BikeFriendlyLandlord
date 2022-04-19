@@ -12,7 +12,7 @@ module.exports = {
     filename: 'bundle.js',
     // publicPath: '/build'
   },
-  
+
   module: {
     rules: [
       {
@@ -52,11 +52,12 @@ module.exports = {
     hot: true,
     magicHtml: true,
     proxy: {
-      'apiKey':'http://localhost:3000',
       '/auth': 'http://localhost:3000',
       '/reviews': 'http://localhost:3000',
       '/landlords': 'http://localhost:3000',
       '/user': 'http://localhost:3000',
+      '/images': 'http://localhost:3000',
+      '/properties': 'http://localhost:3000',
       '/chat': {
         'target':'http://localhost:3001',
         'ws':true

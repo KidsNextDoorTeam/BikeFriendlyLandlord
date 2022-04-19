@@ -7,7 +7,8 @@
     "test": "",
     "start": "nodemon server/server.js",
     "build": " NODE_ENV=production webpack ",
-    "dev": "concurrently \"cross-env NODE_ENV=development webpack serve --open\" \"nodemon server/server.js\" & \"nodemon server/chatbot/chatbot.js\""
+    "dev": "concurrently \"cross-env NODE_ENV=development webpack serve --open\" \"nodemon server/server.js\" & \"nodemon server/chatbot/chatbot.js\"",
+    "staging": "concurrently 'cross-env NODE_ENV=development webpack serve --open' 'cross-env NODE_ENV=staging nodemon server/server.js'"
   },
   "repository": {
     "type": "git",
@@ -40,9 +41,9 @@
     "http": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
     "leaflet": "^1.7.1",
-    "less": "^4.1.2",
-    "less-loader": "^10.2.0",
+    "node-fetch": "^3.2.3",
     "pg": "^8.7.3",
+    "pg-format": "^1.0.4",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-leaflet": "^3.2.5",
@@ -60,6 +61,11 @@
     "concurrently": "^7.1.0",
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.29.4",
     "html-webpack-plugin": "^5.5.0",
     "nodemon": "^2.0.15",
     "style-loader": "^3.3.1",
