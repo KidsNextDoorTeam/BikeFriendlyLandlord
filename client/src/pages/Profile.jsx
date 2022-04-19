@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -24,12 +24,14 @@ import { ThemeProvider } from '@mui/material/styles';
 import tomatopalette from '../components/tomatopalette';
 import { Review } from '../components/Review';
 import { LandlordInfoCard } from '../components/LandlordInfoCard';
+import UserContext from '../hooks/userContext';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
   const [landlordData, setLandlordData] = useState({});
   const [reviewData, setReviewData] = useState([]);
   const [reviewFilter, setReviewFilter] = useState('helpful');
+  const { user } = useContext(UserContext);
 
   const { landlord_id: landlordId } = useParams();
   const mounted = useRef(true);
@@ -114,9 +116,7 @@ export default function ProfilePage() {
   return (
     <ThemeProvider theme={tomatopalette}>
       <div id='profileBackground'
-      sx={{
-        width: 'auto'
-      }}>
+        sx={{ width: 'auto' }}>
         <Container className='MainContainer' >
           <Stack className='LandlordInfo' sx={{ pb: 5, pl: 5 }} direction='row' justifyContent='space-around'>
             <Stack>
@@ -171,7 +171,7 @@ export default function ProfilePage() {
                 Reviews
               </Typography>
               <Stack sx={{ alignItems: 'center', p: 1, m: 1, }}>
-                <Button variant='contained' onClick={handleReview}>Create Review</Button>
+                {user && <Button variant='contained' onClick={handleReview}>Create Review</Button>}
               </Stack>
               <Stack sx={{ alignItems: 'center', p: 1, m: 1, }}>
                 <FormControl sx={{ minWidth: 120 }} size='small' >

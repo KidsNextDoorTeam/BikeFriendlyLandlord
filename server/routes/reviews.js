@@ -14,7 +14,7 @@ router.post('/:landlordId',
 );
 
 router.get('/',
-  authController.isAuthenticated,
+  // authController.isAuthenticated,
   reviewsController.getAllReviews,
   (req, res) => {
     res.status(200).json({ reviews: res.locals.reviews });
