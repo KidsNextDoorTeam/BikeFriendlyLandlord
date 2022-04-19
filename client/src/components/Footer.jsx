@@ -7,7 +7,7 @@ const useStyles = makeStyles({
   height: 40,
   backgroundColor: 'grey',
   color: 'white',
-  fontSize: 20,
+  fontSize: 40,
   fontFamily: 'Nunito',
   display: 'flex',
   justifyContent: 'center',
