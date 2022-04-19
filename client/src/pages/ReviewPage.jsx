@@ -106,7 +106,14 @@ export function ReviewPage({ userData }) {
 
   return (
     <ThemeProvider theme={tomatopalette}>
-      <div className='reviewPageGlobalContainer'>
+      <div
+        className='reviewPageGlobalContainer'
+        sx={{
+          margin: 0,
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+        }}
+      >
         <Container
           className='reviewMainContainer'
           maxwidth='sm'
@@ -117,7 +124,10 @@ export function ReviewPage({ userData }) {
             color: 'rgb(68, 67, 67)',
           }}
         >
-          <Box className='reviewformContainer' sx={{ p: 2, background: 'rgba(241, 241, 241, 0.6)' }}>
+          <Box
+            className='reviewformContainer'
+            sx={{ p: 2, background: 'rgba(241, 241, 241, 0.6)' }}
+          >
             <h2>Review of {landlordName}</h2>
             <TextField
               fullWidth
@@ -131,7 +141,17 @@ export function ReviewPage({ userData }) {
             />
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <h3 className='reviewLabel'>Overall Rating</h3>
+                <h3
+                  className='reviewLabel'
+                  sx={{
+                    margin: 0,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingTop: 4,
+                  }}
+                >
+                  Overall Rating
+                </h3>
               </Grid>
               <Grid item xs={6}>
                 <Rating

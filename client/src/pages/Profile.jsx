@@ -124,14 +124,17 @@ export default function ProfilePage({ userData, isLoggedIn }) {
 
   return (
     <ThemeProvider theme={tomatopalette}>
-      <div id='profileBackground'>
+      <div id='profileBackground'
+      sx={{
+        width: 'auto'
+      }}>
         <Container className='MainContainer' >
           <Stack className='LandlordInfo' sx={{ pb: 5, pl: 5 }} direction='row' justifyContent='space-around'>
             <Stack>
               <Card sx={{ minWidth: 275 }}>
                 <CardContent>
                   <div className='ProfilePicture'>
-                    <img style={{ height: '100px' }} src={`/images/${landlordData.profile_pic}`} />
+                    <img style={{ height: '150px' }} src={`/images/${landlordData.profile_pic}`} />
                   </div>
                 </CardContent>
               </Card>

@@ -32,7 +32,12 @@ export default function Home() {
 
   return (
     <div className='home'>
-      <div className='homeBanner'>
+      <div className='homeBanner'
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',     
+      }}>
         <CssBaseline />
         <div
           className='homeTitle'

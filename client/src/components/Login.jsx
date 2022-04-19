@@ -57,7 +57,12 @@ export default function Login(props) {
         <Button variant='contained' type='submit' sx={inputButtonStyle}>
           Login
         </Button>
-        <div className='linkButton' onClick={() => setDisplayLogin(false)}>
+        <div className='linkButton' 
+        sx={{
+          color: 'blueviolet',
+          textDecoration: 'underline',
+        }}
+        onClick={() => setDisplayLogin(false)}>
           Need an account? Signup
         </div>
         <button className='exitButton' onClick={() => setAuthDisplay(false)}>

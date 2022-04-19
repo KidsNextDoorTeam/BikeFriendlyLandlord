@@ -13,7 +13,7 @@ import { ThemeProvider } from '@emotion/react';
 
 const theme = createTheme({
   typography: {
-    fontFamily: ['Nunito'].join(','),
+    fontFamily: ['Nunito']
   },
 });
 
