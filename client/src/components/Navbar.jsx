@@ -12,7 +12,7 @@ import Avatar from '@mui/material/Avatar';
 import { Authenticate } from '../pages/Authenticate';
 import UserContext from '../hooks/userContext';
 import { navBarAvatar } from '../common/styling';
-import Chat from "./chatbot/chat.jsx"
+// import Chat from "./chatbot/chat.jsx"
 
 export function Navbar() {
   const { user, setUser } = useContext(UserContext);
@@ -85,7 +85,7 @@ export function Navbar() {
               Map <MapIcon />
             </NavLink>
           </li>
-          <Chat />
+          {/* <Chat /> */}
         </ul>
       </div>
       <div className="navBarRight">

@@ -15,7 +15,7 @@ import UserContext from './hooks/userContext';
 import Alerts from './components/Alerts';
 import AlertContext from './hooks/alertContext';
 import useAlert from './hooks/useAlert';
-import Chat from "../src/components/chatbot/chat.jsx"
+import Chat from '../src/components/chatbot/chat';
 // Global styling
 import './index.css';
 
@@ -28,7 +28,6 @@ export function App() {
       <AlertContext.Provider value={{ alert, setAlert, alertSeverity, setAlertSeverity }}>
         <Navbar />
         <Alerts />
-        <Chat />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<Search />} />
@@ -44,6 +43,7 @@ export function App() {
           />
           <Route path="*" element={<p>404 - nothing here</p>} />
         </Routes>
+        <Chat />
         <Footer />
       </AlertContext.Provider>
     </UserContext.Provider>
