@@ -8,7 +8,7 @@
     "start": "nodemon server/server.js",
     "build": " NODE_ENV=production webpack ",
     "dev": "concurrently \"cross-env NODE_ENV=development webpack serve --open\" \"nodemon server/server.js\" & \"nodemon server/chatbot/chatbot.js\"",
-    "staging": "concurrently 'cross-env NODE_ENV=development webpack serve --open' 'cross-env NODE_ENV=staging nodemon server/server.js'"
+    "staging": "concurrently 'cross-env NODE_ENV=development webpack serve --open' 'cross-env NODE_ENV=staging nodemon server/server.js' 'nodemon server/chatbot/chatbot.js'"
   },
   "repository": {
     "type": "git",
