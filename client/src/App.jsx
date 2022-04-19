@@ -9,7 +9,7 @@ import Search from './pages/Search.jsx';
 import { ReviewPage } from './pages/ReviewPage.jsx';
 import { UserProfile } from './pages/UserProfile.jsx';
 import { Route, Routes, Link } from 'react-router-dom';
-import Footer from "./components/footer/Footer.jsx";
+import Footer from "./components/Footer.jsx";
 import Chat from "../src/components/chatbot/chat.jsx"
 
 export function App() {
@@ -49,6 +49,7 @@ export function App() {
         setUserData={setUserData}
         userData={userData}
       />
+        <Chat />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
@@ -73,7 +74,6 @@ export function App() {
         <Route path="*" element={<p>404 - nothing here</p>} />
       </Routes>
       <Footer />
-      <Chat />
     </>
   );
 }

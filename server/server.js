@@ -11,7 +11,7 @@ const reviewsRouter = require('./routes/reviews.js');
 const authRouter = require('./routes/auth.js');
 const propertiesRouter = require('./routes/properties.js');
 const userRouter = require('./routes/user.js');
-// const chatRouter = require('./routes/chat.js');
+require('./chatbot/chatbot.js');
 
 const app = express();
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
@@ -40,7 +40,6 @@ app.use('/reviews', reviewsRouter);
 app.use('/auth', authRouter);
 app.use('/properties', propertiesRouter);
 app.use('/user', userRouter);
-// app.use('/chat', chatRouter);
 
 /** 
  *  Serve the home/login-signup page and the main app on these routes 

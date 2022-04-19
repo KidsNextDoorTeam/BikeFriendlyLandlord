@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const AntDesignThemePlugin = require('antd-theme-webpack-plugin'); 
 
 module.exports = {
   mode: process.env.NODE_ENV,
@@ -28,14 +27,7 @@ module.exports = {
       {
         test: /.(css|scss)$/,
         exclude: /node_modules/,
-        use: ['style-loader','css-loader'],
-      },
-      {
-        test: /.(css|less)$/,
-        include: [
-          path.resolve(__dirname, "node_modules/antd"),
-      ],
-        use: ['style-loader','css-loader','less-loader'],
+        use: ['style-loader','css-loader']
       }
     ],
   },
