@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
-import HomeIcon from '@material-ui/icons/Home';
-import SearchIcon from '@material-ui/icons/Search';
-import MapIcon from '@material-ui/icons/Map';
+import HomeIcon from '@mui/icons-material/Home';
+import SearchIcon from '@mui/icons-material/Search';
+import MapIcon from '@mui/icons-material/Map';
 import React, { useState } from 'react';
 import '../index.css';
 import { NavLink, Link } from 'react-router-dom';
