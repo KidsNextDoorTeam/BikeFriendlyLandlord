@@ -8,6 +8,8 @@ import { NavLink, Link } from 'react-router-dom';
 import { Authenticate } from '../pages/Authenticate.jsx';
 import Avatar from '@mui/material/Avatar';
 import { navBarAvatar } from '../common/styling.js';
+import Chat from "./chatbot/chat.jsx"
+
 
 export function Navbar(props) {
   const {
@@ -95,6 +97,7 @@ export function Navbar(props) {
               Map <MapIcon />
             </NavLink>
           </li>
+        <Chat />
         </ul>
       </div>
       <div className='navBarRight'>
@@ -136,12 +139,12 @@ export function Navbar(props) {
         )}
         {authDisplay && (
           <Authenticate
-            setAuthDisplay={setAuthDisplay}
-            setIsLoggedIn={setIsLoggedIn}
-            setUserData={setUserData}
-            position={authPosition}
+          setAuthDisplay={setAuthDisplay}
+          setIsLoggedIn={setIsLoggedIn}
+          setUserData={setUserData}
+          position={authPosition}
           />
-        )}
+          )}
       </div>
     </div>
   );

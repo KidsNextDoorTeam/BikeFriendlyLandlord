@@ -1,3 +1,45 @@
+
+/* ClearNavBar */
+#clearNavBar {
+  display: flex;
+  justify-content: space-between;
+  background-color: none;
+  padding: 15px;
+  position: absolute;
+  width: 100%;
+}
+
+#logo {
+  font-family: "Nunito", sans-serif;
+  font-size: xx-large;
+  font-style: bold;
+  color: tomato;
+  font-weight: 700; 
+}
+
+.clearNavBarListItems {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.clearNavBarListItem {
+  list-style: none;
+  margin-left: 50px;
+  color: #666;
+}
+
+/* Footer */
+#footer {
+  height: 40px;
+  background-color: #333;
+  color: rgba(255, 255, 255, 0.514);
+  font-size: 0.75em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* HomeCard */
 .homeCardContents {
   display: flex;

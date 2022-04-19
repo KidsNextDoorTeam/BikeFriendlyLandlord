@@ -11,6 +11,7 @@ const reviewsRouter = require('./routes/reviews.js');
 const authRouter = require('./routes/auth.js');
 const propertiesRouter = require('./routes/properties.js');
 const userRouter = require('./routes/user.js');
+require('./chatbot/chatbot.js');
 
 const app = express();
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
