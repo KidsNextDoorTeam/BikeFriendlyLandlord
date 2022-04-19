@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Collapse, IconButton, makeStyles } from '@mui/material';
 import { CssBaseline } from '@mui/material';
+import Box from '@mui/material/Box';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Link as Scroll } from 'react-scroll';
 
@@ -31,12 +32,11 @@ export default function Home() {
 
   return (
     <div className='home'>
-      <div className='homeBanner'
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',     
-      }}>
+      <Box className='homeBanner'
+        display='flex'
+        justifyContent='center'
+        alignItems='center'
+      >
         <CssBaseline />
         <div
           className='homeTitle'
@@ -57,9 +57,9 @@ export default function Home() {
             </IconButton>
           </Scroll>
         </div>
-      </div>
+      </Box>
       <HomeCards topFour={topFour} />
 
-    </div>
+    </div >
   );
 }
