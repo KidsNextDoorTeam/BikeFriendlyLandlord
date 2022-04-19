@@ -46,27 +46,27 @@ export function Review(props) {
 
   return (
     <Card sx={{ minWidth: 275, marginBottom: '10px' }}>
-      <CardContent direction="row">
+      <CardContent direction='row'>
         {updateMode ? (
           <input
-            type="text"
+            type='text'
             value={title}
             onChange={(event) => setTitle(event.target.value)}
           />
         ) : (
           <>
             <div
-              className="userDisplayAndActions"
+              className='userDisplayAndActions'
               style={{ display: 'flex', justifyContent: 'space-between' }}
             >
-              <div className="userDisplay">
-                <Typography sx={{ color: '#666' }} variant="subtitle1">
+              <div className='userDisplay'>
+                <Typography sx={{ color: '#666' }} variant='subtitle1'>
                   Posted by: {props.username}
                 </Typography>
               </div>
               {props.userData?.username === props.username && (
                 <div
-                  className="userActions"
+                  className='userActions'
                   style={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -96,52 +96,52 @@ export function Review(props) {
                 </div>
               )}
             </div>
-            <Stack direction="row" sx={{ justifyContent: 'space-between' }}>
-              <Typography className="Title" variant="h5">
+            <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
+              <Typography className='Title' variant='h5'>
                 {props.title}
               </Typography>
             </Stack>
           </>
         )}
-        <Stack spacing={5} direction="row">
-          <Stack spacing={2} direction="row">
-            <Typography variant="h7">Overall Rating</Typography>
+        <Stack spacing={5} direction='row'>
+          <Stack spacing={2} direction='row'>
+            <Typography variant='h7'>Overall Rating</Typography>
             <Rating
               style={{ color: 'tomato' }}
-              name="read-only"
+              name='read-only'
               required
-              size="small"
+              size='small'
               precision={0.5}
               value={Number(props.overall_rating)}
               readOnly
             />
           </Stack>
-          <Stack spacing={2} direction="row">
-            <Typography variant="h7">Respectful</Typography>
+          <Stack spacing={2} direction='row'>
+            <Typography variant='h7'>Respectful</Typography>
             <Rating
               style={{ color: 'tomato' }}
-              name="read-only"
+              name='read-only'
               required
-              size="small"
+              size='small'
               precision={0.5}
               value={Number(props.respect_rating)}
               readOnly
             />
           </Stack>
-          <Stack spacing={2} direction="row">
-            <Typography variant="h7">Responsiveness</Typography>
+          <Stack spacing={2} direction='row'>
+            <Typography variant='h7'>Responsiveness</Typography>
             <Rating
               style={{ color: 'tomato' }}
-              name="read-only"
+              name='read-only'
               required
-              size="small"
+              size='small'
               precision={0.5}
               value={Number(props.responsiveness_rating)}
               readOnly
             />
           </Stack>
-          <Stack spacing={2} direction="row">
-            <Typography variant="h7">Bike</Typography>
+          <Stack spacing={2} direction='row'>
+            <Typography variant='h7'>Bike</Typography>
             <Icon>
               {props.bike_friendly ? (
                 <CheckIcon
@@ -152,8 +152,8 @@ export function Review(props) {
               )}
             </Icon>
           </Stack>
-          <Stack spacing={2} direction="row">
-            <Typography variant="h7">Pet Friendly</Typography>
+          <Stack spacing={2} direction='row'>
+            <Typography variant='h7'>Pet Friendly</Typography>
             <Icon>
               {props.pet_friendly ? (
                 <CheckIcon
@@ -168,7 +168,7 @@ export function Review(props) {
         {updateMode ? (
           <>
             <textarea
-              type="text"
+              type='text'
               defaultValue={props.description}
               style={{ width: '100%' }}
               onChange={(event) => setDescription(event.target.value)}
@@ -207,7 +207,7 @@ export function Review(props) {
             </button>
           </>
         ) : (
-          <Typography className="Description" variant="h7">
+          <Typography className='Description' variant='h7'>
             {props.description}
           </Typography>
         )}

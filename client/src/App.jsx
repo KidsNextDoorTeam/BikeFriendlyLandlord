@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 import { Navbar } from './components/Navbar.jsx';
-import ClearNavbar from './components/ClearNavbar.jsx';
 import Home from './pages/Home.jsx';
 import MapSearch from './pages/MapSearch.jsx';
 import Profile from './pages/Profile.jsx';
@@ -57,11 +56,11 @@ export function App() {
         <Route path="/landlord/:landlord_id" element={<Profile userData={userData} isLoggedIn={isLoggedIn}/>} />
 
         <Route
-          path="/review/:landlord_id"
+          path='/review/:landlord_id'
           element={<ReviewPage userData={userData} />}
         />
         <Route
-          path="/profile/:username"
+          path='/profile/:username'
           element={
             <UserProfile
               userData={userData}
@@ -71,7 +70,7 @@ export function App() {
             />
           }
         />
-        <Route path="*" element={<p>404 - nothing here</p>} />
+        <Route path='*' element={<p>404 - nothing here</p>} />
       </Routes>
       <Footer />
     </>

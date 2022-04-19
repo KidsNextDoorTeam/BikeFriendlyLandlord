@@ -36,7 +36,7 @@ export function Authenticate(props) {
         console.log(json);
       })
       .catch((err) => {
-        console.log('Error from hadleSubmit --> ', err);
+        console.log('Error from handleSubmit --> ', err);
       });
   }
 

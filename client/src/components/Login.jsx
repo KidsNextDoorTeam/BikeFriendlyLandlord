@@ -3,9 +3,9 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import '../index.css';
-// import { InputAdornment, IconButton } from "@material-ui/core";
-// import Visibility from "@material-ui/icons/Visibility";
-// import VisibilityOff from "@material-ui/icons/VisibilityOff";
+// import { InputAdornment, IconButton } from '@material-ui/core';
+// import Visibility from '@material-ui/icons/Visibility';
+// import VisibilityOff from '@material-ui/icons/VisibilityOff';
 // import Typography from '@mui/material/Typography';
 
 export default function Login(props) {
@@ -29,38 +29,43 @@ export default function Login(props) {
     <>
       <Box
         sx={formStyle}
-        component="form"
+        component='form'
         onSubmit={() =>
           handleSubmit('login', { username: username, password: password })
         }
         noValidate>
         <h3>Login</h3>
         <TextField
-          id="outlined-basic"
-          label="Username"
-          variant="outlined"
+          id='outlined-basic'
+          label='Username'
+          variant='outlined'
           onChange={(event) => setUsername(event.target.value)}
           value={username}
           sx={inputButtonStyle}
         />
         <TextField
-          id="outlined-basic"
-          label="Password"
-          variant="outlined"
-          type="password"
+          id='outlined-basic'
+          label='Password'
+          variant='outlined'
+          type='password'
           error={loginError}
           helperText={loginErrorMessage}
           onChange={(event) => setPassword(event.target.value)}
           value={password}
           sx={inputButtonStyle}
         />
-        <Button variant="contained" type="submit" sx={inputButtonStyle}>
+        <Button variant='contained' type='submit' sx={inputButtonStyle}>
           Login
         </Button>
-        <div className="linkButton" onClick={() => setDisplayLogin(false)}>
+        <div className='linkButton' 
+        sx={{
+          color: 'blueviolet',
+          textDecoration: 'underline',
+        }}
+        onClick={() => setDisplayLogin(false)}>
           Need an account? Signup
         </div>
-        <button className="exitButton" onClick={() => setAuthDisplay(false)}>
+        <button className='exitButton' onClick={() => setAuthDisplay(false)}>
           Continue without logging in
         </button>
       </Box>

@@ -124,27 +124,30 @@ export default function ProfilePage({ userData, isLoggedIn }) {
 
   return (
     <ThemeProvider theme={tomatopalette}>
-      <div id='background'>
-        <Container className="MainContainer" >
-          <Stack className="LandlordInfo" sx={{ pb: 5, pl: 5 }} direction="row" justifyContent="space-around">
+      <div id='profileBackground'
+      sx={{
+        width: 'auto'
+      }}>
+        <Container className='MainContainer' >
+          <Stack className='LandlordInfo' sx={{ pb: 5, pl: 5 }} direction='row' justifyContent='space-around'>
             <Stack>
               <Card sx={{ minWidth: 275 }}>
                 <CardContent>
-                  <div className="ProfilePicture">
-                    <img style={{ height: '100px' }} src={`/images/${landlordData.profile_pic}`} />
+                  <div className='ProfilePicture'>
+                    <img style={{ height: '150px' }} src={`/images/${landlordData.profile_pic}`} />
                   </div>
                 </CardContent>
               </Card>
               <Card>
                 <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                  <nav aria-label="main mailbox folders">
+                  <nav aria-label='main mailbox folders'>
                     <List>
                       <ListItem disablePadding>
                         <ListItemButton>
                           <ListItemIcon>
                             <EmailIcon />
                           </ListItemIcon>
-                          <ListItemText primary="Email" />
+                          <ListItemText primary='Email' />
                           <ListItemText />
                         </ListItemButton>
                       </ListItem>
@@ -153,7 +156,7 @@ export default function ProfilePage({ userData, isLoggedIn }) {
                           <ListItemIcon>
                             <LocalPhoneIcon />
                           </ListItemIcon>
-                          <ListItemText primary="Phone Number" />
+                          <ListItemText primary='Phone Number' />
                         </ListItemButton>
                       </ListItem>
                     </List>
@@ -162,7 +165,7 @@ export default function ProfilePage({ userData, isLoggedIn }) {
                         <ListItemIcon>
                           <ApartmentIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Office Location" />
+                        <ListItemText primary='Office Location' />
                       </ListItemButton>
                     </ListItem>
                   </nav>
@@ -174,17 +177,17 @@ export default function ProfilePage({ userData, isLoggedIn }) {
             </Stack>
           </Stack>
           <Container>
-            <Stack spacing={2} direction="row" >
-              <Typography variant="h3" gutterBottom component="div">
+            <Stack spacing={2} direction='row' >
+              <Typography variant='h3' gutterBottom component='div'>
                 Reviews
               </Typography>
               <Stack sx={{ alignItems: 'center', p: 1, m: 1, }}>
-                <Button variant="contained" onClick={handleReview}>Create Review</Button>
+                <Button variant='contained' onClick={handleReview}>Create Review</Button>
               </Stack>
               <Stack sx={{ alignItems: 'center', p: 1, m: 1, }}>
-                <FormControl sx={{ minWidth: 120 }} size="small" >
+                <FormControl sx={{ minWidth: 120 }} size='small' >
                   <InputLabel>Sort by</InputLabel>
-                  <Select value={reviewFilter} label="Sort by" onChange={handleFilter}>
+                  <Select value={reviewFilter} label='Sort by' onChange={handleFilter}>
                     <MenuItem value={'helpful'}>Most Helpful</MenuItem>
                     <MenuItem value={'critical'}>Most Critical</MenuItem>
                     <MenuItem value={'recent'}>Most Recent</MenuItem>
