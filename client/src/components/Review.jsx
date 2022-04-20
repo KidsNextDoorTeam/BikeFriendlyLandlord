@@ -149,7 +149,7 @@ export function Review(props) {
             <Icon>
               {props.bike_friendly ? (
                 <CheckIcon
-                  style={{ color: 'limeGreen', fontSize: '20px' }}
+                  style={{ color: 'green', fontSize: '20px' }}
                 ></CheckIcon>
               ) : (
                 <ClearIcon style={{ color: 'tomato', fontSize: '20px' }} />
