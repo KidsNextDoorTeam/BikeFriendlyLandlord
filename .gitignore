@@ -106,4 +106,4 @@ dist
 *.DS_Store
 
 # Session DB Store
-server/data/*
+server/data/sessions.db

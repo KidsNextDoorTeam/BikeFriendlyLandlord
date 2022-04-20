@@ -1,5 +1,4 @@
 const path = require('path');
-const fs = require('fs');
 
 const express = require('express');
 const cookieParser = require('cookie-parser');
@@ -35,9 +34,6 @@ app.use(cookieParser());
 app.use('/build', express.static(path.join(__dirname, '../build')));
 app.use('/images', express.static(path.resolve(__dirname, './images')));
 
-if (!fs.existsSync(path.join(__dirname, 'data'))) {
-  fs.mkdirSync(path.join(__dirname, 'data'));
-}
 // Configure session
 app.use(session({
   // TODO: Expire these sessions
