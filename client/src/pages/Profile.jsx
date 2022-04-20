@@ -24,6 +24,7 @@ import tomatopalette from '../components/tomatopalette';
 import { Review } from '../components/Review';
 import { LandlordInfoCard } from '../components/LandlordInfoCard';
 import UserContext from '../hooks/userContext';
+import { PropertyCard } from '../components/PropertyCard';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -116,8 +117,6 @@ export default function ProfilePage() {
   const handleTabChange = (e, newValue) => {
     setCurrentTab(newValue);
   };
-
-  console.log(landlordData)
 
   return (
     <ThemeProvider theme={tomatopalette}>
@@ -215,6 +214,20 @@ export default function ProfilePage() {
               </div>
             </Stack> 
           </Container> }
+          {currentTab === 2 &&
+          <Stack sx={{marginTop:'20px'}}>
+            <div>
+              {landlordData.properties.map((eachProperty, i) => (
+                <PropertyCard
+                  key={i}
+                  {...eachProperty}
+
+                />
+              ))}
+            </div>
+          </Stack> 
+
+          }
         </Container> 
       </div>
     </ThemeProvider>
