@@ -20,15 +20,11 @@ const theme = createTheme({
 export function LandlordInfoCard(props) {
   return (
     <ThemeProvider theme={theme}>
-      <Card sx={{ backgroundColor: 'lightgrey' }}>
-        <Stack
-          spacing={5}
-          direction='row'
-          sx={{ justifyContent: 'space-between' }}
-        >
+      <Card sx={{ bgcolor: 'transparent' }}>
+        <Stack>
           <Typography
             variant='h3'
-            sx={{ m: 3, width: 'auto', justifyContent: 'space-between', fontSize: '30px' }}
+            sx={{ m: 1, width: 'auto', justifyContent: 'space-between', fontSize: '30px' }}
           >
           </Typography>
           {/* <Link to={`/reviews/$/`}><Button variant='contained' sx={{m: 3}}>Is this you?</Button></Link> */}
@@ -87,10 +83,10 @@ export function LandlordInfoCard(props) {
           <Icon>
             {props.bike_friendly ? (
               <CheckIcon
-                style={{ color: 'limeGreen', fontSize: '20px' }}
+                style={{ color: 'green', fontSize: '30px' }}
               ></CheckIcon>
             ) : (
-              <ClearIcon style={{ color: 'tomato', fontSize: '20px' }} />
+              <ClearIcon style={{ color: 'tomato', fontSize: '30px' }} />
             )}
           </Icon>
         </Stack>
@@ -103,10 +99,10 @@ export function LandlordInfoCard(props) {
           <Icon>
             {props.pet_friendly ? (
               <CheckIcon
-                style={{ color: 'limeGreen', fontSize: '20px' }}
+                style={{ color: 'limeGreen', fontSize: '30px' }}
               ></CheckIcon>
             ) : (
-              <ClearIcon style={{ color: 'tomato', fontSize: '20px' }} />
+              <ClearIcon style={{ color: 'tomato', fontSize: '30px' }} />
             )}
           </Icon>
         </Stack>
