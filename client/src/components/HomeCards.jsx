@@ -1,6 +1,5 @@
 import React from 'react';
-import HomeCard from './HomeCard.jsx';
-import '../index.css';
+import HomeCard from './HomeCard';
 
 export default function homeCards({ topFour }) {
   return (
@@ -16,9 +15,9 @@ export default function homeCards({ topFour }) {
           </p>
           <p className='feedbackUser'>- Michael Snyder</p>
         </div>
-        <div className='homeCardsUserFeedback'>
-          <p className='feedbackDesc'>
-            I can't believe I finally found a way to search for bike-friendliness AHEAD OF TIME! What an amazing resource!
+        <div className="homeCardsUserFeedback">
+          <p className="feedbackDesc">
+            I can&#39;t believe I finally found a way to search for bike-friendliness AHEAD OF TIME! What an amazing resource!
           </p>
           <p className='feedbackUser'>- Evan McNeely</p>
         </div>

@@ -12,10 +12,8 @@ import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import { ThemeProvider } from '@mui/material/styles';
 
-// import result component
-import ResultDisplay from '../components/resultDisplay.jsx';
-//import theme
-import tomatopalette from '../components/tomatopalette.jsx';
+import ResultDisplay from '../components/resultDisplay';
+import tomatopalette from '../components/tomatopalette';
 
 export default function Search() {
   // handle search results

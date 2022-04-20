@@ -1,78 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-import { Navbar } from './components/Navbar.jsx';
-import Home from './pages/Home.jsx';
-import MapSearch from './pages/MapSearch.jsx';
-import Profile from './pages/Profile.jsx';
-import Search from './pages/Search.jsx';
-import { ReviewPage } from './pages/ReviewPage.jsx';
-import { UserProfile } from './pages/UserProfile.jsx';
-import { Route, Routes, Link } from 'react-router-dom';
-import Footer from "./components/Footer.jsx";
-import Chat from "../src/components/chatbot/chat.jsx"
+import { Navbar } from './components/Navbar';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import MapSearch from './pages/MapSearch';
+import Profile from './pages/Profile';
+import Search from './pages/Search';
+import ReviewPage from './pages/ReviewPage';
+import UserProfile from './pages/UserProfile';
+import ProtectedRoute from './components/ProtectedRoute';
+import useAuth from './hooks/useAuth';
+import UserContext from './hooks/userContext';
+import Alerts from './components/Alerts';
+import AlertContext from './hooks/alertContext';
+import useAlert from './hooks/useAlert';
+import Chat from '../src/components/chatbot/chat';
+// Global styling
+import './index.css';
 
 export function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [authDisplay, setAuthDisplay] = useState(false);
-
-  const [userData, setUserData] = useState({});
-
-  useEffect(() => {
-    fetch('/user/getUser')
-      // .then((res) => {
-      //   if (res.status === 200) {
-      //     return res.json();
-      //   } else {
-      //     // break the promise chain from updating state
-      //     return { then: function () {} };
-      //   }
-      // })
-      .then((res) => {
-        // parsing the response will error if the user is not authenticated and no data got returned
-        return res.json()
-      })
-      .then(json => {
-        setUserData(json);
-        setIsLoggedIn(true);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  const { isLoading, user, setUser } = useAuth();
+  const { alert, setAlert, alertSeverity, setAlertSeverity } = useAlert();
 
   return (
-    <>
-      <Navbar
-        isLoggedIn={isLoggedIn}
-        authDisplay={authDisplay}
-        setAuthDisplay={setAuthDisplay}
-        setIsLoggedIn={setIsLoggedIn}
-        setUserData={setUserData}
-        userData={userData}
-      />
+    <UserContext.Provider value={{ user, setUser, isLoading }}>
+      <AlertContext.Provider value={{ alert, setAlert, alertSeverity, setAlertSeverity }}>
+        <Navbar />
+        <Alerts />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/map" element={<MapSearch />} />
+          <Route path="/landlord/:landlord_id" element={<Profile />} />
+          <Route
+            path="/review/:landlord_id"
+            element={<ProtectedRoute><ReviewPage /></ProtectedRoute>}
+          />
+          <Route
+            path="/profile/:username"
+            element={<ProtectedRoute><UserProfile /></ProtectedRoute>}
+          />
+          <Route path="*" element={<p>404 - nothing here</p>} />
+        </Routes>
         <Chat />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/map" element={<MapSearch />} />
-        <Route path="/landlord/:landlord_id" element={<Profile userData={userData} isLoggedIn={isLoggedIn}/>} />
-
-        <Route
-          path='/review/:landlord_id'
-          element={<ReviewPage userData={userData} />}
-        />
-        <Route
-          path='/profile/:username'
-          element={
-            <UserProfile
-              userData={userData}
-              setUserData={setUserData}
-              setIsLoggedIn={setIsLoggedIn}
-              setAuthDisplay={setAuthDisplay}
-            />
-          }
-        />
-        <Route path='*' element={<p>404 - nothing here</p>} />
-      </Routes>
-      <Footer />
-    </>
+        <Footer />
+      </AlertContext.Provider>
+    </UserContext.Provider>
   );
 }

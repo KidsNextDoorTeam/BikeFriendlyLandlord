@@ -107,7 +107,8 @@ CREATE TABLE public.users (
     email character varying(50) NOT NULL,
     password character varying(100) NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    profile_pic character varying NOT NULL
+    profile_pic character varying(100),
+    description character varying(255)
 );
 
 

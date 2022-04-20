@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -21,17 +21,17 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import Button from '@mui/material/Button';
 import { ThemeProvider } from '@mui/material/styles';
 
-import tomatopalette from '../components/tomatopalette.jsx';
-import { Review } from '../components/Review.jsx';
-import { LandlordInfoCard } from '../components/LandlordInfoCard.jsx';
+import tomatopalette from '../components/tomatopalette';
+import { Review } from '../components/Review';
+import { LandlordInfoCard } from '../components/LandlordInfoCard';
+import UserContext from '../hooks/userContext';
 
-import '../index.css';
-
-export default function ProfilePage({ userData, isLoggedIn }) {
+export default function ProfilePage() {
   const navigate = useNavigate();
   const [landlordData, setLandlordData] = useState({});
   const [reviewData, setReviewData] = useState([]);
   const [reviewFilter, setReviewFilter] = useState('helpful');
+  const { user } = useContext(UserContext);
 
   const { landlord_id: landlordId } = useParams();
   const mounted = useRef(true);
@@ -55,22 +55,13 @@ export default function ProfilePage({ userData, isLoggedIn }) {
   }, []);
 
 
-  //onclick for button
   const handleReview = (e) => {
-    if (isLoggedIn) {
-      // TODO: Map this as /landlord/:landlordId/review
-      navigate(`/review/${landlordId}/`);
-    }
-    else {
-      alert('Please log in to submit a review');
-    }
+    navigate(`/review/${landlordId}/`);
   };
 
-  const handleFilter = async (e) => {
+  const handleFilter = (e) => {
     setReviewFilter(e.target.value);
     getReviews(e.target.value);
-
-
   };
 
   const getReviews = async (filter) => {
@@ -125,9 +116,7 @@ export default function ProfilePage({ userData, isLoggedIn }) {
   return (
     <ThemeProvider theme={tomatopalette}>
       <div id='profileBackground'
-      sx={{
-        width: 'auto'
-      }}>
+        sx={{ width: 'auto' }}>
         <Container className='MainContainer' >
           <Stack className='LandlordInfo' sx={{ pb: 5, pl: 5 }} direction='row' justifyContent='space-around'>
             <Stack>
@@ -182,7 +171,7 @@ export default function ProfilePage({ userData, isLoggedIn }) {
                 Reviews
               </Typography>
               <Stack sx={{ alignItems: 'center', p: 1, m: 1, }}>
-                <Button variant='contained' onClick={handleReview}>Create Review</Button>
+                {user && <Button variant='contained' onClick={handleReview}>Create Review</Button>}
               </Stack>
               <Stack sx={{ alignItems: 'center', p: 1, m: 1, }}>
                 <FormControl sx={{ minWidth: 120 }} size='small' >
@@ -203,7 +192,6 @@ export default function ProfilePage({ userData, isLoggedIn }) {
                   <Review
                     key={i}
                     {...eachReview}
-                    userData={userData}
                     onSave={onReviewSave}
                     onDelete={onReviewDelete}
                   />

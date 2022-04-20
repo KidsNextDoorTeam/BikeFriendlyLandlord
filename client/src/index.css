@@ -1,4 +1,3 @@
-
 /* ClearNavBar */
 #clearNavBar {
   display: flex;
@@ -14,7 +13,7 @@
   font-size: xx-large;
   font-style: bold;
   color: tomato;
-  font-weight: 700; 
+  font-weight: 700;
 }
 
 .clearNavBarListItems {
@@ -160,9 +159,11 @@
   align-items: center;
   padding-right: 25px;
 }
+
 */ a:hover {
   color: tomato;
 }
+
 a {
   /* font-family: 'Nunito'; */
   text-decoration: none;
@@ -174,9 +175,11 @@ a {
 h3 {
   margin-bottom: 15px;
 }
+
 .css-binzgt {
   margin-top: 0px;
 }
+
 .exitButton {
   margin-bottom: 10px;
   background-color: tomato;
@@ -184,6 +187,7 @@ h3 {
   border: none;
   border-radius: 3px;
 }
+
 .exitButton:hover {
   color: white;
 }
@@ -243,6 +247,7 @@ h3 {
   height: 100%;
   z-index: 0;
 }
+
 /* Profile added*/
 #profileBackground {
   min-height: 100vh;

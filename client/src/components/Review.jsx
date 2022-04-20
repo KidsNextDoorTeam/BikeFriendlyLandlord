@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 
 import Card from '@mui/material/Card';
@@ -12,10 +12,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Icon from '@mui/material/Icon';
 
+import UserContext from '../hooks/userContext';
+
 export function Review(props) {
   const [updateMode, setUpdateMode] = useState(false);
   const [title, setTitle] = useState(props.title);
   const [description, setDescription] = useState(props.description);
+
+  const { user } = useContext(UserContext);
 
   const handleSave = async () => {
     try {
@@ -64,7 +68,7 @@ export function Review(props) {
                   Posted by: {props.username}
                 </Typography>
               </div>
-              {props.userData?.username === props.username && (
+              {user.username === props.username && (
                 <div
                   className='userActions'
                   style={{

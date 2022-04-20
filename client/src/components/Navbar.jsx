@@ -1,60 +1,48 @@
+import React, { useContext, useState } from 'react';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 import { Button } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
 import MapIcon from '@mui/icons-material/Map';
-import React, { useState } from 'react';
-import '../index.css';
-import { NavLink, Link } from 'react-router-dom';
-import { Authenticate } from '../pages/Authenticate.jsx';
 import Avatar from '@mui/material/Avatar';
-import { navBarAvatar } from '../common/styling.js';
-import Chat from "./chatbot/chat.jsx"
 
 
-export function Navbar(props) {
-  const {
-    isLoggedIn,
-    authDisplay,
-    setAuthDisplay,
-    setIsLoggedIn,
-    setUserData,
-    userData,
-  } = props;
+import { Authenticate } from '../pages/Authenticate';
+import UserContext from '../hooks/userContext';
+import { navBarAvatar } from '../common/styling';
+// import Chat from "./chatbot/chat.jsx"
+
+export function Navbar() {
+  const { user, setUser } = useContext(UserContext);
+  const [authDisplay, setAuthDisplay] = useState(false);
+  const navigate = useNavigate();
 
   const [authPosition, setAuthPosition] = useState({
     top: '',
     left: '',
   });
 
-  function logout(event) {
+  async function logout(event) {
     event.preventDefault();
-    fetch(`/auth/logout`, {
-      method: 'POST',
-      // Adding headers to the request
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          // if successfully logged out, reset login state to false
-          setIsLoggedIn(false);
-          setAuthDisplay(false);
-          setUserData({});
-        } else {
-          console.log('logout status not 200 -->', res);
-        }
-      })
-      .then(() => window.location.replace('/'))
-      .catch((err) => {
-        console.log('Error from logout --> ', err);
-      });
+    try {
+      const { status } = await axios.post('/auth/logout');
+      if (status === 200) {
+        navigate('/');
+        // Clear user after navigate to prevent login alert from flashing after redirect
+        setUser(null);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   function toggleAuthDisplay(e) {
+    // FIXME: Should this just be a fixed position. Doesn't account for screen resizes
     const top = e.pageY + 30;
     const left = e.pageX - 250;
-    if (authDisplay === true) setAuthDisplay(false);
+    if (authDisplay) setAuthDisplay(false);
     else {
       setAuthDisplay(true);
       setAuthPosition({
@@ -64,9 +52,16 @@ export function Navbar(props) {
     }
   }
 
-  let activeStyle = {
-    color: 'tomato',
+  const defaultStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   };
+  const setActiveStyle = ({ isActive }) => ({
+    ...defaultStyle,
+    color: (isActive ? 'tomato' : undefined),
+  });
+
 
   return (
     <div id='navBar'>
@@ -79,29 +74,32 @@ export function Navbar(props) {
             <NavLink
               // endIcon={}
               to='/'
-              style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-              Home <HomeIcon />
+              style={setActiveStyle}
+            >
+              <HomeIcon sx={{ mx: 1 }} /> Home
             </NavLink>
           </li>
           <li className='navBarListItem'>
             <NavLink
               to='/search'
-              style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-              Search <SearchIcon />
+              style={setActiveStyle}
+            >
+              <SearchIcon sx={{ mx: 1 }} /> Search
             </NavLink>
           </li>
           <li className='navBarListItem'>
             <NavLink
               to='/map'
-              style={({ isActive }) => (isActive ? activeStyle : undefined)}>
-              Map <MapIcon />
+              style={setActiveStyle}
+            >
+              <MapIcon sx={{ mx: 1 }} /> Map
             </NavLink>
           </li>
-        <Chat />
+          {/* <Chat /> */}
         </ul>
       </div>
-      <div className='navBarRight'>
-        {!isLoggedIn && (
+      <div className="navBarRight">
+        {!user && (
           <Button
             sx={{
               fontFamily: 'Nunito',
@@ -111,20 +109,18 @@ export function Navbar(props) {
             variant='text'
             onClick={(e) => {
               toggleAuthDisplay(e);
-              // if (authDisplay === true) setAuthDisplay(false);
-              // else setAuthDisplay(true);
             }}>
             Login/Signup
           </Button>
         )}
-        {isLoggedIn && (
-          <div style={{display:'flex', alignItems: 'center'}}>
-            {userData.profile_pic ? <Avatar
+        {user && (
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {user.profile_pic ? <Avatar
               alt="User picture"
-              src={`/images/${userData.profile_pic}`}
-              sx={{ width: 35, height:35, marginRight: '15px' }}
-            /> : <Avatar alt="User picture" {...navBarAvatar(`${userData.first_name} ${userData.last_name}`)}/> }
-            <Link to={`/profile/${userData.username}`}>My Account</Link>
+              src={`/images/${user.profile_pic}`}
+              sx={{ width: 35, height: 35, marginRight: '15px' }}
+            /> : <Avatar alt="User picture" {...navBarAvatar(`${user.first_name} ${user.last_name}`)} />}
+            <Link to={`/profile/${user?.username}`}>My Account</Link>
             <Button
               variant='text'
               sx={{
@@ -132,19 +128,20 @@ export function Navbar(props) {
                 color: '#666',
                 '&:hover': { backgroundColor: 'rgba(253, 143, 124, 0.577)' },
               }}
-              onClick={(e) => logout(e)}>
+              style={{
+                paddingTop: '8px',
+              }}
+              onClick={logout}>
               Log Out
             </Button>
           </div>
         )}
         {authDisplay && (
           <Authenticate
-          setAuthDisplay={setAuthDisplay}
-          setIsLoggedIn={setIsLoggedIn}
-          setUserData={setUserData}
-          position={authPosition}
+            setAuthDisplay={setAuthDisplay}
+            position={authPosition}
           />
-          )}
+        )}
       </div>
     </div>
   );

@@ -1,43 +1,50 @@
-import React, { useState } from 'react';
-import Login from '../components/Login.jsx';
-import Signup from '../components/Signup.jsx';
-import '../index.css';
+import React, { useState, useContext } from 'react';
+import axios from 'axios';
+
+import Login from '../components/Login';
+import Signup from '../components/Signup';
+import UserContext from '../hooks/userContext';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export function Authenticate(props) {
-  const { setAuthDisplay, setIsLoggedIn, setUserData, position } = props;
+  const { setAuthDisplay, position } = props;
   const [displayLogin, setDisplayLogin] = useState(true);
   const [loginError, setLoginError] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
 
-  function handleSubmit(source, data) {
+  const { setUser } = useContext(UserContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  async function handleSubmit(event, data, isLogin = true) {
     event.preventDefault();
-    fetch(`/auth/${source}`, {
-      method: 'POST',
-      body: JSON.stringify(data),
-      // Adding headers to the request
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    })
-      .then((res) => {
-        if (res.status === 401 && source === 'login') {
-          setLoginError(true);
-          setLoginErrorMessage('Username or password is not correct.');
-        } else if (res.status === 200) {
-          setIsLoggedIn(true);
-          setAuthDisplay(false);
-          return res.json();
-        } else {
-          console.log('status not 200 in handle submit --> ', res);
-        }
-      })
-      .then((json) => {
-        setUserData(json);
-        console.log(json);
-      })
-      .catch((err) => {
-        console.log('Error from handleSubmit --> ', err);
+    try {
+      const { status, data: user } = await axios.post(`/auth/${isLogin ? 'login' : 'signup'}`, {
+        ...data,
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
       });
+
+      if (status === 200) {
+        setUser(user.user);
+        setAuthDisplay(false);
+        if (isLogin && location.state?.path) {
+          navigate(location.state.path);
+        }
+      } else {
+        console.error('status not 200 in handle submit --> ', data);
+      }
+    } catch (error) {
+      if (error?.response?.status === 401 && isLogin) {
+        setLoginError(true);
+        // TODO: Can we get more specific
+        setLoginErrorMessage('Username or password is not correct.');
+      } else {
+        console.error('Error from hadleSubmit --> ', error);
+      }
+
+    }
   }
 
   return (

@@ -93,8 +93,12 @@ landlordController.searchLandlords = async (req, res, next) => {
     ) p 
     ON p.landlord_id = l._id
     LEFT JOIN users u ON u._id = l._id
-    WHERE bike_friendly = $2 AND pet_friendly = $3;`,
-    values: [city, bike_friendly, pet_friendly]
+    ${bike_friendly || pet_friendly ? 'WHERE' : ''}
+    ${bike_friendly ? 'bike_friendly = true' : ''}
+    ${bike_friendly && pet_friendly ? 'AND' : ''}
+    ${pet_friendly ? 'pet_friendly = true' : ''}
+    ;`,
+    values: [city]
   };
 
   try {
