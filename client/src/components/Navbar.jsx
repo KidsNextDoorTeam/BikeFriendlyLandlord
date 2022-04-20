@@ -8,14 +8,13 @@ import SearchIcon from '@mui/icons-material/Search';
 import MapIcon from '@mui/icons-material/Map';
 import Avatar from '@mui/material/Avatar';
 
-
+import { useAuth } from '../hooks/authContext';
 import { Authenticate } from '../pages/Authenticate';
-import UserContext from '../hooks/userContext';
 import { navBarAvatar } from '../common/styling';
 // import Chat from "./chatbot/chat.jsx"
 
 export function Navbar() {
-  const { user, setUser } = useContext(UserContext);
+  const {user, setUser} = useAuth();
   const [authDisplay, setAuthDisplay] = useState(false);
   const navigate = useNavigate();
 
