@@ -20,7 +20,7 @@ const theme = createTheme({
 export function LandlordInfoCard(props) {
   return (
     <ThemeProvider theme={theme}>
-      <Card>
+      <Card sx={{ backgroundColor: 'lightgrey' }}>
         <Stack
           spacing={5}
           direction='row'
@@ -30,7 +30,6 @@ export function LandlordInfoCard(props) {
             variant='h3'
             sx={{ m: 3, width: 'auto', justifyContent: 'space-between', fontSize: '30px' }}
           >
-            {props.first_name} {props.last_name}
           </Typography>
           {/* <Link to={`/reviews/$/`}><Button variant='contained' sx={{m: 3}}>Is this you?</Button></Link> */}
         </Stack>

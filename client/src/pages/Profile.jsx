@@ -121,10 +121,11 @@ export default function ProfilePage() {
           <Stack className='LandlordInfo' sx={{ pb: 5, pl: 5 }} direction='row' justifyContent='space-around'>
             <Stack>
               <Card sx={{ minWidth: 275 }}>
-                <CardContent>
+                <CardContent sx={{ml: '50px', fontSize: '20px'}}>
                   <div className='ProfilePicture'>
                     <img style={{ height: '150px' }} src={`/images/${landlordData.profile_pic}`} />
                   </div>
+                  {landlordData.first_name} {landlordData.last_name}
                 </CardContent>
               </Card>
               <Card>
@@ -176,7 +177,7 @@ export default function ProfilePage() {
               <Stack sx={{ alignItems: 'center', p: 1, m: 1, }}>
                 <FormControl sx={{ minWidth: 120 }} size='small' >
                   <InputLabel>Sort by</InputLabel>
-                  <Select value={reviewFilter} label='Sort by' onChange={handleFilter}>
+                  <Select MenuProps={{ sx: { '&& .MuiPaper-root': { backgroundColor: 'lightgrey' }}}} value={reviewFilter} label='Sort by' onChange={handleFilter}>
                     <MenuItem value={'helpful'}>Most Helpful</MenuItem>
                     <MenuItem value={'critical'}>Most Critical</MenuItem>
                     <MenuItem value={'recent'}>Most Recent</MenuItem>
