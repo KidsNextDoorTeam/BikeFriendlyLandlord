@@ -5,7 +5,7 @@ const landlordController = {};
 
 landlordController.getById = async (req, res, next) => {
   const landlordQuery = {
-    text: `SELECT l.*, u.first_name, u.last_name, u.username, u.email, u.profile_pic 
+    text: `SELECT l.*, u.first_name, u.last_name, u.username, u.email, u.description, u.profile_pic 
     FROM landlords l LEFT JOIN users u ON u._id = l._id WHERE l._id = $1`,
     values: [req.params.landlordId]
   };

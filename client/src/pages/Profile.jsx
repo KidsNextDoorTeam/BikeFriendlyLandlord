@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-
-import { FormControl, MenuItem, Select, InputLabel } from '@mui/material';
+import { FormControl, MenuItem, Select, InputLabel, Tab, Tabs } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -25,6 +24,7 @@ import tomatopalette from '../components/tomatopalette';
 import { Review } from '../components/Review';
 import { LandlordInfoCard } from '../components/LandlordInfoCard';
 import { useAuth } from '../hooks/authContext';
+import { PropertyCard } from '../components/PropertyCard';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -32,6 +32,7 @@ export default function ProfilePage() {
   const [reviewData, setReviewData] = useState([]);
   const [reviewFilter, setReviewFilter] = useState('helpful');
   const {user} = useAuth();
+  const [currentTab, setCurrentTab] = useState(0);
 
   const { landlord_id: landlordId } = useParams();
   const mounted = useRef(true);
@@ -113,6 +114,10 @@ export default function ProfilePage() {
     getReviews();
   };
 
+  const handleTabChange = (e, newValue) => {
+    setCurrentTab(newValue);
+  };
+
   return (
     <ThemeProvider theme={tomatopalette}>
       <div id='profileBackground'
@@ -121,10 +126,11 @@ export default function ProfilePage() {
           <Stack className='LandlordInfo' sx={{ pb: 5, pl: 5 }} direction='row' justifyContent='space-around'>
             <Stack>
               <Card sx={{ minWidth: 275 }}>
-                <CardContent>
+                <CardContent sx={{ml: '50px', fontSize: '20px'}}>
                   <div className='ProfilePicture'>
                     <img style={{ height: '150px' }} src={`/images/${landlordData.profile_pic}`} />
                   </div>
+                  {landlordData.first_name} {landlordData.last_name}
                 </CardContent>
               </Card>
               <Card>
@@ -136,7 +142,7 @@ export default function ProfilePage() {
                           <ListItemIcon>
                             <EmailIcon />
                           </ListItemIcon>
-                          <ListItemText primary='Email' />
+                          <ListItemText primary={landlordData.email} />
                           <ListItemText />
                         </ListItemButton>
                       </ListItem>
@@ -149,14 +155,6 @@ export default function ProfilePage() {
                         </ListItemButton>
                       </ListItem>
                     </List>
-                    <ListItem disablePadding>
-                      <ListItemButton>
-                        <ListItemIcon>
-                          <ApartmentIcon />
-                        </ListItemIcon>
-                        <ListItemText primary='Office Location' />
-                      </ListItemButton>
-                    </ListItem>
                   </nav>
                 </Box>
               </Card>
@@ -165,18 +163,37 @@ export default function ProfilePage() {
               <LandlordInfoCard {...landlordData} />
             </Stack>
           </Stack>
+          <Tabs
+            textColor="inherit"
+            variant="fullWidth"
+            TabIndicatorProps={{
+              style: {
+                backgroundColor: '#df4f35ea'
+              }
+            }}
+            value={currentTab}
+            onChange={handleTabChange}
+            sx={{mt:'35px'}}
+          >
+            <Tab label="About" />
+            <Tab label="Reviews" />
+            <Tab label="All Properties" />
+          </Tabs>
+          {currentTab === 0 &&
+            <div style={{ alignItems: 'center', marginTop: '30px'}}>
+              {landlordData.description}
+            </div>
+          }
+          {currentTab === 1 && 
           <Container>
-            <Stack spacing={2} direction='row' >
-              <Typography variant='h3' gutterBottom component='div'>
-                Reviews
-              </Typography>
-              <Stack sx={{ alignItems: 'center', p: 1, m: 1, }}>
+            <Stack spacing={2} direction='row' sx={{marginTop: '30px'}} >
+              <Stack>
                 {user && <Button variant='contained' onClick={handleReview}>Create Review</Button>}
               </Stack>
-              <Stack sx={{ alignItems: 'center', p: 1, m: 1, }}>
+              <Stack>
                 <FormControl sx={{ minWidth: 120 }} size='small' >
                   <InputLabel>Sort by</InputLabel>
-                  <Select value={reviewFilter} label='Sort by' onChange={handleFilter}>
+                  <Select MenuProps={{ sx: { '&& .MuiPaper-root': { backgroundColor: 'lightgrey' }}}} value={reviewFilter} label='Sort by' onChange={handleFilter}>
                     <MenuItem value={'helpful'}>Most Helpful</MenuItem>
                     <MenuItem value={'critical'}>Most Critical</MenuItem>
                     <MenuItem value={'recent'}>Most Recent</MenuItem>
@@ -184,9 +201,7 @@ export default function ProfilePage() {
                 </FormControl>
               </Stack>
             </Stack>
-          </Container>
-          <Container>
-            <Stack>
+            <Stack >
               <div>
                 {reviewData.map((eachReview, i) => (
                   <Review
@@ -197,9 +212,23 @@ export default function ProfilePage() {
                   />
                 ))}
               </div>
-            </Stack>
-          </Container>
-        </Container>
+            </Stack> 
+          </Container> }
+          {currentTab === 2 &&
+          <Stack sx={{marginTop:'20px'}}>
+            <div>
+              {landlordData.properties.map((eachProperty, i) => (
+                <PropertyCard
+                  key={i}
+                  {...eachProperty}
+
+                />
+              ))}
+            </div>
+          </Stack> 
+
+          }
+        </Container> 
       </div>
     </ThemeProvider>
   );
