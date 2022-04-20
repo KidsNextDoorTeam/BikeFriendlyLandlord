@@ -25,9 +25,12 @@ export function PropertyCard(props) {
           sx={{ m: 1, width: 'auto', justifyContent: 'space-between', fontSize: '30px' }}
         > 
           <Stack>
-            <h5>{props.city},{props.state}</h5>
-            {props.street_num}{props.street} 
-            {/* <Link to={`/reviews/$/`}><Button variant='contained' sx={{m: 3}}>Is this you?</Button></Link> */}
+            <div>
+              <h5>{props.city},{props.state}</h5>
+              <Typography variant='h6'>
+                {props.street_num}{props.street} 
+              </Typography>
+            </div>
             <div>
               <NavLink
                 to='/map'
