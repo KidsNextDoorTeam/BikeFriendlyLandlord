@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import { Stack } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import Button from '@mui/material/Button';
+import { NavLink } from 'react-router-dom';
 
 
 import '../index.css';
@@ -28,7 +29,11 @@ export function PropertyCard(props) {
             {props.street_num}{props.street} 
             {/* <Link to={`/reviews/$/`}><Button variant='contained' sx={{m: 3}}>Is this you?</Button></Link> */}
             <div>
-              <Button sx={{float:'right', fontSize:'20px', color: 'tomato'}}>Open in Map</Button>
+              <NavLink
+                to='/map'
+              >
+                <Button sx={{float:'right', fontSize:'20px', color: 'tomato'}}>Open in Map</Button>
+              </NavLink>
             </div>
           </Stack>
         </Typography>
