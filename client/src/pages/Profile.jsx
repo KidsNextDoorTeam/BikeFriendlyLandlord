@@ -24,14 +24,15 @@ import { ThemeProvider } from '@mui/material/styles';
 import tomatopalette from '../components/tomatopalette';
 import { Review } from '../components/Review';
 import { LandlordInfoCard } from '../components/LandlordInfoCard';
-import UserContext from '../hooks/userContext';
+import { useAuth } from '../hooks/authContext';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
   const [landlordData, setLandlordData] = useState({});
   const [reviewData, setReviewData] = useState([]);
   const [reviewFilter, setReviewFilter] = useState('helpful');
-  const { user } = useContext(UserContext);
+  const auth = useAuth();
+  const {user} = auth;
 
   const { landlord_id: landlordId } = useParams();
   const mounted = useRef(true);

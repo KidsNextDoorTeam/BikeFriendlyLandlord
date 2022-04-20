@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import Login from '../components/Login';
 import Signup from '../components/Signup';
-import UserContext from '../hooks/userContext';
+import { useAuth } from '../hooks/authContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 export function Authenticate(props) {
@@ -12,7 +12,8 @@ export function Authenticate(props) {
   const [loginError, setLoginError] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
 
-  const { setUser } = useContext(UserContext);
+  const auth = useAuth();
+  const { setUser } = auth; 
   const navigate = useNavigate();
   const location = useLocation();
 
