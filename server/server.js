@@ -12,6 +12,7 @@ const passport = require('passport');
 require('./auth/passport')(passport);
 
 const AppError = require('./util/AppError');
+const SqlError = require('./util/SqlError');
 const authRouter = require('./routes/auth.js');
 const landlordRouter = require('./routes/landlord.js');
 const reviewsRouter = require('./routes/reviews.js');
@@ -80,8 +81,7 @@ app.use((req, res) => {
    * global error handler 
    * */
 app.use((err, req, res, next) => {
-  if (!(err instanceof AppError)) return next(err);
-
+  if (!(err instanceof AppError) && !(err instanceof SqlError)) return next(err);
   const defaultErr = {
     serverLog: 'Express err handler caught an unknown middleware error',
     status: 500,
@@ -91,7 +91,7 @@ app.use((err, req, res, next) => {
 
   console.error(errObj.serverLog, err);
 
-  return res.status(errObj.status).json(errObj.message);
+  return res.status(errObj.status).json(errObj.msg);
 
 });
 
