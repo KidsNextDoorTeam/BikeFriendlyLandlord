@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 const db = require('../models/BFLL.js');
+const AppError = require('../util/AppError');
 
 const saltRounds = 10;
 
@@ -10,16 +11,15 @@ const userController = {};
  * hashes the password with bcryptjs and saves the user to the database
  */
 userController.createUser = async (req, res, next) => {
-  console.log('entered userController.createUser');
+  // TODO: This controller will need to handle updating landlord and 
+  // tenant tables depending how the user signs up
   try {
     const {
       username,
       password,
       firstname,
       lastname,
-      isLandlord,
       email,
-      landlordId,
     } = req.body;
 
     // ? validate user input
@@ -52,19 +52,16 @@ userController.createUser = async (req, res, next) => {
      * database query to add the new user to the users table
      */
     const userQueryString = `
-    INSERT INTO users (first_name, last_name, full_name, username, email, password, is_landlord, landlord_id) 
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    INSERT INTO users (first_name, last_name, username, email, password) 
+    VALUES ($1, $2, $3, $4, $5)
     RETURNING *;
     `;
     const userValues = [
       firstname,
       lastname,
-      firstname + ' ' + lastname,
       username,
-      email, 
+      email,
       hashedPassword,
-      isLandlord,
-      landlordId,
     ];
     const userResult = await db.query(userQueryString, userValues);
     delete userResult.rows[0].password;
@@ -72,17 +69,11 @@ userController.createUser = async (req, res, next) => {
 
     next();
   } catch (err) {
-    return next({
-      log: `Error in userController.createUser adding new user -> Error: ${err}`,
-      message: {
-        err: 'Error creating new user',
-      },
-    });
+    return next(new AppError(err, 'userController', 'createUser', 500));
   }
 };
 
 userController.verifyUser = async (req, res, next) => {
-  console.log('entered userController.verifyUser');
   try {
     const { username, password } = req.body;
 
@@ -103,18 +94,12 @@ userController.verifyUser = async (req, res, next) => {
 
     return next();
   } catch (err) {
-    return next({
-      log: `Error in userController.verifyUser verifying the user -> Error: ${err}`,
-      message: {
-        err: 'Error verifying user',
-      },
-    });
+    return next(new AppError(err, 'userController', 'verifyUser', 500));
   }
 };
 
 // ! not tested
 userController.deleteUser = async (req, res, next) => {
-  console.log('entered userController.deleteUser');
   try {
     // pull username form cookie
 
@@ -132,19 +117,13 @@ userController.deleteUser = async (req, res, next) => {
 
     return next();
   } catch (err) {
-    return next({
-      log: `Error in userController.deleteUser removing the user -> Error: ${err}`,
-      message: {
-        err: 'Error deleting user',
-      },
-    });
+    return next(new AppError(err, 'userController', 'deleteUser', 500));
   }
 };
 
-userController.getUserData = async (req,res,next) => {
+userController.getUserData = async (req, res, next) => {
   try {
     const userId = res.locals.user;
-    console.log(userId)
 
     const queryString = `
     SELECT * FROM users
@@ -159,14 +138,9 @@ userController.getUserData = async (req,res,next) => {
     res.locals.userData = result.rows[0];
 
     return next();
-  } catch (err) {
-    return next({
-      log: `Error in userController.getUserData getting user data -> Error: ${err}`,
-      message: {
-        err: 'Error getting data',
-      },
-    });
+  } catch (error) {
+    return next(new AppError(error, 'userController', 'getUserData', 500));
   }
-}
+};
 
 module.exports = userController;

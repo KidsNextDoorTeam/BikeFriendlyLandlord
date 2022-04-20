@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-import { Navbar } from './components/navbar/Navbar.jsx';
-import ClearNavbar from './components/clearNavbar/ClearNavbar.jsx';
-import Home from './pages/home/Home.jsx';
-import MapSearch from './pages/map/MapSearch.jsx';
-import Profile from './pages/profile/Profile.jsx';
-import Search from './pages/search/Search.jsx';
-import { ReviewPage } from './pages/review/ReviewPage.jsx';
-import { UserProfile } from './pages/user/UserProfile.jsx';
+import { Navbar } from './components/Navbar.jsx';
+import Home from './pages/Home.jsx';
+import MapSearch from './pages/MapSearch.jsx';
+import Profile from './pages/Profile.jsx';
+import Search from './pages/Search.jsx';
+import { ReviewPage } from './pages/ReviewPage.jsx';
+import { UserProfile } from './pages/UserProfile.jsx';
 import { Route, Routes, Link } from 'react-router-dom';
-import Footer from "./components/footer/Footer.jsx";
+import Footer from "./components/Footer.jsx";
+import Chat from "../src/components/chatbot/chat.jsx"
 
 export function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -48,17 +48,19 @@ export function App() {
         setUserData={setUserData}
         userData={userData}
       />
+        <Chat />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
         <Route path="/map" element={<MapSearch />} />
         <Route path="/landlord/:landlord_id" element={<Profile userData={userData} isLoggedIn={isLoggedIn}/>} />
+
         <Route
-          path="/review/:landlord_id"
+          path='/review/:landlord_id'
           element={<ReviewPage userData={userData} />}
         />
         <Route
-          path="/profile/:username"
+          path='/profile/:username'
           element={
             <UserProfile
               userData={userData}
@@ -68,7 +70,7 @@ export function App() {
             />
           }
         />
-        <Route path="*" element={<p>404 - nothing here</p>} />
+        <Route path='*' element={<p>404 - nothing here</p>} />
       </Routes>
       <Footer />
     </>
