@@ -1,4 +1,6 @@
 const path = require('path');
+const fs = require('fs');
+
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
@@ -33,6 +35,9 @@ app.use(cookieParser());
 app.use('/build', express.static(path.join(__dirname, '../build')));
 app.use('/images', express.static(path.resolve(__dirname, './images')));
 
+if (!fs.existsSync(path.join(__dirname, 'data'))) {
+  fs.mkdirSync(path.join(__dirname, 'data'));
+}
 // Configure session
 app.use(session({
   // TODO: Expire these sessions
@@ -50,8 +55,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 /**
- *  Direct request to appropriate router files
- * */
+   *  Direct request to appropriate router files
+   * */
 app.use('/auth', authRouter);
 app.use('/landlords', landlordRouter);
 app.use('/reviews', reviewsRouter);
@@ -59,8 +64,8 @@ app.use('/properties', propertiesRouter);
 app.use('/user', userRouter);
 
 /** 
- *  Serve the home/login-signup page and the main app on these routes 
- * */
+   *  Serve the home/login-signup page and the main app on these routes 
+   * */
 app.get('/app', (req, res) => {
   res.setHeader('Content-Type', 'text/html').sendFile(path.join(__dirname, '../build/app.html'));
 });
@@ -76,17 +81,16 @@ app.use((req, res) => {
 });
 
 /** 
- * global error handler 
- * */
+   * global error handler 
+   * */
 app.use((err, req, res, next) => {
   if (!(err instanceof AppError)) return next(err);
 
   const defaultErr = {
     serverLog: 'Express err handler caught an unknown middleware error',
     status: 500,
-    messagE: 'An unkown error occurred'
+    message: 'An unkown error occurred'
   };
-
   const errObj = Object.assign(defaultErr, err);
 
   console.error(errObj.serverLog, err);
