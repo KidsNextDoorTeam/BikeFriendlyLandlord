@@ -20,7 +20,7 @@ export function Review(props) {
   const [description, setDescription] = useState(props.description);
 
   const { user } = useContext(UserContext);
-  
+
   const handleSave = async () => {
     try {
       const { status, data } = await axios.put(`/reviews/${props._id}`, { title, description });
@@ -68,7 +68,7 @@ export function Review(props) {
                   Posted by: {props.username}
                 </Typography>
               </div>
-              {user.username === props.username && (
+              {user?.username === props.username && (
                 <div
                   className='userActions'
                   style={{
