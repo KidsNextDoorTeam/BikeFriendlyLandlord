@@ -18,8 +18,7 @@ export function Review(props) {
   const [title, setTitle] = useState(props.title);
   const [description, setDescription] = useState(props.description);
 
-  const auth = useAuth();
-  const { user } = auth;
+  const { user } = useAuth();
 
   const handleSave = async () => {
     try {

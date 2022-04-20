@@ -4,8 +4,7 @@ import AlertContext from '../hooks/alertContext';
 import { useAuth } from '../hooks/authContext';
 
 export default function ProtectedRoute({ children }) {
-  const auth = useAuth();
-  const {user, isLoading} = auth;
+  const {user, isLoading} = useAuth();
   const { setAlert, setAlertSeverity } = useContext(AlertContext);
 
   const location = useLocation();

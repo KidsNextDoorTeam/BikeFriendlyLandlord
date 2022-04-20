@@ -20,8 +20,7 @@ import tomatopalette from '../components/tomatopalette';
 
 export default function ReviewPage() {
   const mounted = useRef(true);
-  const auth = useAuth();
-  const {user} = auth;
+  const {user} = useAuth();
   const { landlord_id } = useParams();
 
   const [landlordName, setlandlordName] = useState('');

@@ -14,8 +14,7 @@ import { stringAvatar } from '../common/styling.js';
 import { useAuth } from '../hooks/authContext';
 
 export default function UserProfile() {
-  const auth = useAuth();
-  const {user, firstName, setFirstName} = auth;
+  const {user} = useAuth();
 
   const [reviews, setReviews] = useState([]);
   const [username, setUsername] = useState('');
@@ -63,7 +62,6 @@ export default function UserProfile() {
 
   const userProfileChange = () => {
     setUpdateMode(false);
-    console.log(firstName);
     console.log(username);
   };
 
@@ -103,7 +101,7 @@ export default function UserProfile() {
                   <TextField
                     label='First Name'
                     variant='outlined'
-                    onChange={(e) => setFirstName(e.target.value)}
+                    // onChange={(e) => setFirstName(e.target.value)}
                     size="small"
                   />
                   <TextField

@@ -14,8 +14,7 @@ import { navBarAvatar } from '../common/styling';
 // import Chat from "./chatbot/chat.jsx"
 
 export function Navbar() {
-  const auth = useAuth();
-  const {user, setUser} = auth;
+  const {user, setUser} = useAuth();
   const [authDisplay, setAuthDisplay] = useState(false);
   const navigate = useNavigate();
 

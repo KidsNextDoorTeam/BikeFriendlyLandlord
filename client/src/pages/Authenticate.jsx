@@ -12,8 +12,7 @@ export function Authenticate(props) {
   const [loginError, setLoginError] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
 
-  const auth = useAuth();
-  const { setUser } = auth; 
+  const { setUser } = useAuth(); 
   const navigate = useNavigate();
   const location = useLocation();
 

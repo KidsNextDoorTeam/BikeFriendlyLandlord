@@ -31,8 +31,7 @@ export default function ProfilePage() {
   const [landlordData, setLandlordData] = useState({});
   const [reviewData, setReviewData] = useState([]);
   const [reviewFilter, setReviewFilter] = useState('helpful');
-  const auth = useAuth();
-  const {user} = auth;
+  const {user} = useAuth();
 
   const { landlord_id: landlordId } = useParams();
   const mounted = useRef(true);
