@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import UserContext from '../hooks/userContext';
+import { useAuth } from '../hooks/authContext';
 
 // import MUI components
 import Button from '@mui/material/Button';
@@ -20,7 +20,7 @@ import tomatopalette from '../components/tomatopalette';
 
 export default function ReviewPage() {
   const mounted = useRef(true);
-  const { user } = useContext(UserContext);
+  const {user} = useAuth();
   const { landlord_id } = useParams();
 
   const [landlordName, setlandlordName] = useState('');
