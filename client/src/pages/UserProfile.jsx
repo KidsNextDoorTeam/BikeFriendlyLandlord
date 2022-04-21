@@ -43,6 +43,15 @@ export default function UserProfile() {
     }
   };
 
+   // state for addReview onclick leading to landlord selection
+   const [addReview, setAddReview] = useState(false);
+
+   //state for landlord, set landlord state
+   const [landlord, setLandlord] = React.useState("");
+   //for changing landlord state
+   const handleChange = (event) => {
+     setLandlord(event.target.value);
+   };
 
   useEffect(() => {
     getReviews();
