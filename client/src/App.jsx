@@ -10,21 +10,19 @@ import Search from './pages/Search';
 import ReviewPage from './pages/ReviewPage';
 import UserProfile from './pages/UserProfile';
 import ProtectedRoute from './components/ProtectedRoute';
-import useAuth from './hooks/useAuth';
-import UserContext from './hooks/userContext';
 import Alerts from './components/Alerts';
 import AlertContext from './hooks/alertContext';
 import useAlert from './hooks/useAlert';
 import Chat from '../src/components/chatbot/chat';
+import { AuthProvider } from './hooks/authContext';
 // Global styling
 import './index.css';
 
 export function App() {
-  const { isLoading, user, setUser } = useAuth();
   const { alert, setAlert, alertSeverity, setAlertSeverity } = useAlert();
 
   return (
-    <UserContext.Provider value={{ user, setUser, isLoading }}>
+    <AuthProvider>
       <AlertContext.Provider value={{ alert, setAlert, alertSeverity, setAlertSeverity }}>
         <Navbar />
         <Alerts />
@@ -46,6 +44,6 @@ export function App() {
         <Chat />
         <Footer />
       </AlertContext.Provider>
-    </UserContext.Provider>
+    </AuthProvider>
   );
 }

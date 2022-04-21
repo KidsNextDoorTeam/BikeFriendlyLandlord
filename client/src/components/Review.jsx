@@ -11,15 +11,14 @@ import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Icon from '@mui/material/Icon';
-
-import UserContext from '../hooks/userContext';
+import { useAuth } from '../hooks/authContext';
 
 export function Review(props) {
   const [updateMode, setUpdateMode] = useState(false);
   const [title, setTitle] = useState(props.title);
   const [description, setDescription] = useState(props.description);
 
-  const { user } = useContext(UserContext);
+  const { user } = useAuth();
 
   const handleSave = async () => {
     try {
@@ -49,7 +48,7 @@ export function Review(props) {
   };
 
   return (
-    <Card sx={{ minWidth: 275, marginBottom: '10px' }}>
+    <Card sx={{ minWidth: 275, marginBottom: '10px', backgroundColor: 'transparent' }}>
       <CardContent direction='row'>
         {updateMode ? (
           <input

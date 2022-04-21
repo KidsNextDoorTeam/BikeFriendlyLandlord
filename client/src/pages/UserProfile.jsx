@@ -8,19 +8,17 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Avatar from '@mui/material/Avatar';
 import { Button, Grid, TextField, Input } from '@material-ui/core';
-import IconButton from '@mui/material/IconButton';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
 import { Review } from '../components/Review';
 import { stringAvatar } from '../common/styling.js';
-import UserContext from '../hooks/userContext';
-
+import { useAuth } from '../hooks/authContext';
 
 export default function UserProfile() {
-  const { user } = useContext(UserContext);
+  const {user, user : {first_name}} = useAuth();
 
   const [reviews, setReviews] = useState([]);
   const [username, setUsername] = useState('');
+  const [firstname, setFirstName] = useState(first_name);
 
   const [currentTab, setCurrentTab] = useState(0);
   const [updateMode, setUpdateMode] = useState(false);
@@ -45,6 +43,7 @@ export default function UserProfile() {
     }
   };
 
+
   useEffect(() => {
     getReviews();
     return () => () => mounted.current = false;
@@ -64,6 +63,7 @@ export default function UserProfile() {
 
   const userProfileChange = () => {
     setUpdateMode(false);
+    console.log(firstname);
     console.log(username);
   };
 
@@ -103,7 +103,7 @@ export default function UserProfile() {
                   <TextField
                     label='First Name'
                     variant='outlined'
-                    // onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => setFirstName(e.target.value)}
                     size="small"
                   />
                   <TextField

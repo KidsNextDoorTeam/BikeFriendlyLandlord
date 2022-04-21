@@ -23,7 +23,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import tomatopalette from '../components/tomatopalette';
 import { Review } from '../components/Review';
 import { LandlordInfoCard } from '../components/LandlordInfoCard';
-import UserContext from '../hooks/userContext';
+import { useAuth } from '../hooks/authContext';
 import { PropertyCard } from '../components/PropertyCard';
 
 export default function ProfilePage() {
@@ -31,7 +31,7 @@ export default function ProfilePage() {
   const [landlordData, setLandlordData] = useState({});
   const [reviewData, setReviewData] = useState([]);
   const [reviewFilter, setReviewFilter] = useState('helpful');
-  const { user } = useContext(UserContext);
+  const {user} = useAuth();
   const [currentTab, setCurrentTab] = useState(0);
 
   const { landlord_id: landlordId } = useParams();
