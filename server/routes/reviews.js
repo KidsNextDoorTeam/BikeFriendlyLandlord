@@ -3,42 +3,46 @@ const express = require('express');
 const router = express.Router();
 
 const reviewsController = require('../controllers/reviewsController.js');
-const sessionController = require('../controllers/sessionController.js');
-const landlordController = require('../controllers/landlordController.js');
+const authController = require('../controllers/authController.js');
 
-router.post(
-  '/:landlordId',
-  // sessionController.checkSession,
+router.post('/:landlordId',
+  authController.isAuthenticated,
   reviewsController.addReview,
-  reviewsController.getAllLandlordReviews,
-  landlordController.updateLandlordReviews,
   (req, res) => {
     return res.send('Review added successfully!');
   }
 );
 
-router.get(
-  '/:userId',
-  sessionController.checkSession,
-  reviewsController.getReviews,
+router.get('/',
+  // authController.isAuthenticated,
+  reviewsController.getAllReviews,
   (req, res) => {
-    const response = {
-      reviews: res.locals.reviews
-    };
-    return res.type('application/json').json(response);
+    res.status(200).json({ reviews: res.locals.reviews });
   }
 );
 
-router.get('/landlordReviews/:landlordId', reviewsController.getAllLandlordReviews, (req, res) => {
-  return res.json(res.locals.landlordReviews);
-});
+router.get('/:reviewId',
+  authController.isAuthenticated,
+  reviewsController.getReviewById,
+  (req, res) => {
+    return res.type('application/json').json({ review: res.locals.review });
+  }
+);
 
-router.put('/', reviewsController.updateReview, (req, res) => {
-  return res.send('Post updated!');
-});
+router.put('/:reviewId',
+  authController.isAuthenticated,
+  reviewsController.updateReview,
+  (req, res) => {
+    return res.send('Post updated!');
+  }
+);
 
-router.delete('/:reviewId', reviewsController.deleteReview, (req, res) => {
-  return res.send('Post deleted!');
-})
+router.delete('/:reviewId',
+  authController.isAuthenticated,
+  reviewsController.deleteReview,
+  (req, res) => {
+    return res.send('Post deleted!');
+  }
+);
 
 module.exports = router;
