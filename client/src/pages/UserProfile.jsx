@@ -190,6 +190,59 @@ export default function UserProfile() {
                 </Button>
               </Box>
             }
+            {addReview ? 
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Select Landlord
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={landlord}
+                    label="landLords"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={10}>Ten</MenuItem>
+                   
+                  </Select>
+                </FormControl>
+
+                <button
+                  style={{
+                    padding: "7px 15px",
+                    borderRadius: "10px",
+                    border: "none",
+                    color: "white",
+                    backgroundColor: "tomato",
+                    marginRight: "10px",
+                    cursor: "pointer",
+                  }}
+                  //  onClick={}
+                >
+                  Search
+                </button>
+              </Box>
+             : 
+              <Box>
+                {/* adding review button that opens to select which landlord to add review */}
+
+                <Button
+                  variant="contained"
+                  style={{
+                    width: "80%",
+                    backgroundColor: "tomato",
+                    color: "white",
+                    marginTop: 12,
+                  }}
+                  onClick={() => {
+                    setAddReview(true);
+                  }}
+                >
+                  Add Review
+                </Button>
+              </Box>
+            }
           </Grid >
           <Grid item xs={9} >
             <Tabs
