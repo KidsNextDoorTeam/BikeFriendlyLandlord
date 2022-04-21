@@ -1,20 +1,20 @@
-import React, { Component, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import '../index.css';
+import React, { Component, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import "../index.css";
 
 // import MUI components
-import Button from '@mui/material/Button';
-import Rating from '@mui/material/Rating';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Container from '@mui/material/Container';
-import Stack from '@mui/material/Stack';
-import Checkbox from '@mui/material/Checkbox';
-import Grid from '@mui/material/Grid';
-import { ThemeProvider } from '@mui/material/styles';
+import Button from "@mui/material/Button";
+import Rating from "@mui/material/Rating";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Container from "@mui/material/Container";
+import Stack from "@mui/material/Stack";
+import Checkbox from "@mui/material/Checkbox";
+import Grid from "@mui/material/Grid";
+import { ThemeProvider } from "@mui/material/styles";
 
 // import theme
-import tomatopalette from '../components/tomatopalette.jsx';
+import tomatopalette from "../components/tomatopalette.jsx";
 
 export function ReviewPage({ userData }) {
   // get landlord id
@@ -22,16 +22,16 @@ export function ReviewPage({ userData }) {
   // console.log('landlordID:  ',landlordID)
   // console.log('userdata:  ',userData)
   //get landlordName
-  const [landlordName, setlandlordName] = React.useState('');
+  const [landlordName, setlandlordName] = React.useState("");
 
   useEffect(() => {
     fetch(`/landlords/getByID/${landlordID.landlord_id}`, {
-      method: 'GET',
+      method: "GET",
     })
       .then((res) => res.json())
       .then((parsed) => {
         console.log(parsed);
-        setlandlordName(parsed.first_name + ' ' + parsed.last_name);
+        setlandlordName(parsed.first_name + " " + parsed.last_name);
       })
       .catch((error) => {
         console.log(error);
@@ -39,7 +39,7 @@ export function ReviewPage({ userData }) {
   }, []);
 
   // handle title input (limit 100)
-  const [title, setTitle] = React.useState('');
+  const [title, setTitle] = React.useState("");
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
@@ -67,7 +67,7 @@ export function ReviewPage({ userData }) {
   };
 
   //handle description input (limit 1000)
-  const [description, setDescription] = React.useState('');
+  const [description, setDescription] = React.useState("");
   const handleDescChange = (e) => {
     setDescription(e.target.value);
   };
@@ -89,10 +89,10 @@ export function ReviewPage({ userData }) {
     };
 
     fetch(`/reviews/${landlordID.landlord_id}`, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(formBody),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
       .then((res) => {
@@ -107,46 +107,46 @@ export function ReviewPage({ userData }) {
   return (
     <ThemeProvider theme={tomatopalette}>
       <div
-        className='reviewPageGlobalContainer'
+        className="reviewPageGlobalContainer"
         sx={{
           margin: 0,
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
         }}
       >
         <Container
-          className='reviewMainContainer'
-          maxwidth='sm'
+          className="reviewMainContainer"
+          maxwidth="sm"
           sx={{
             p: 2,
-            textDecoration: 'none',
-            fontFamily: 'Nunito',
-            color: 'rgb(68, 67, 67)',
+            textDecoration: "none",
+            fontFamily: "Nunito",
+            color: "rgb(68, 67, 67)",
           }}
         >
           <Box
-            className='reviewformContainer'
-            sx={{ p: 2, background: 'rgba(241, 241, 241, 0.6)' }}
+            className="reviewformContainer"
+            sx={{ p: 2, background: "rgba(241, 241, 241, 0.6)" }}
           >
             <h2>Review of {landlordName}</h2>
             <TextField
               fullWidth
               required
-              label='Title'
+              label="Title"
               value={title}
               onChange={handleTitleChange}
               inputProps={{ maxLength: 100 }}
-              helperText='Max 100 Characters'
+              helperText="Max 100 Characters"
               sx={{ mb: 2, mt: 2 }}
             />
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <h3
-                  className='reviewLabel'
+                  className="reviewLabel"
                   sx={{
                     margin: 0,
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    justifyContent: "center",
+                    alignItems: "center",
                     paddingTop: 4,
                   }}
                 >
@@ -156,58 +156,58 @@ export function ReviewPage({ userData }) {
               <Grid item xs={6}>
                 <Rating
                   required
-                  size='large'
-                  style={{ color: 'tomato' }}
+                  size="large"
+                  style={{ color: "tomato" }}
                   precision={0.5}
                   value={overallCalc(respect, response)}
                   readOnly
                 />
               </Grid>
               <Grid item xs={6}>
-                <h3 className='reviewLabel'>Respectfulness</h3>
+                <h3 className="reviewLabel">Respectfulness</h3>
               </Grid>
               <Grid item xs={6}>
                 <Rating
                   required
-                  size='large'
-                  style={{ color: 'tomato' }}
+                  size="large"
+                  style={{ color: "tomato" }}
                   precision={0.5}
                   value={respect}
                   onChange={(e, val) => setRespect(val)}
                 />
               </Grid>
               <Grid item xs={6}>
-                <h3 className='reviewLabel'>Responsiveness</h3>
+                <h3 className="reviewLabel">Responsiveness</h3>
               </Grid>
               <Grid item xs={6}>
                 <Rating
                   required
-                  size='large'
-                  style={{ color: 'tomato' }}
+                  size="large"
+                  style={{ color: "tomato" }}
                   precision={0.5}
                   value={response}
                   onChange={(e, val) => setResponse(val)}
                 />
               </Grid>
               <Grid item xs={6}>
-                <h3 className='reviewLabel'>Bike Friendly?</h3>
+                <h3 className="reviewLabel">Bike Friendly?</h3>
               </Grid>
               <Grid item xs={6}>
                 <Checkbox
                   checked={bike}
                   onChange={handleBikeChange}
-                  size='medium'
+                  size="medium"
                   style={{ paddingTop: 4, paddingLeft: 0 }}
                 />
               </Grid>
               <Grid item xs={6}>
-                <h3 className='reviewLabel'>Pet Friendly?</h3>
+                <h3 className="reviewLabel">Pet Friendly?</h3>
               </Grid>
               <Grid item xs={6}>
                 <Checkbox
                   checked={pet}
                   onChange={handlePetChange}
-                  size='medium'
+                  size="medium"
                   style={{ paddingTop: 4, paddingLeft: 0 }}
                 />
               </Grid>
@@ -215,25 +215,25 @@ export function ReviewPage({ userData }) {
             <TextField
               fullWidth
               required
-              label='Additional Comments'
+              label="Additional Comments"
               multiline
               rows={4}
               inputProps={{ maxLength: 1000 }}
-              helperText='Max 1000 Characters'
+              helperText="Max 1000 Characters"
               value={description}
               onChange={handleDescChange}
               sx={{ mb: 2, mt: 2 }}
             />
-            <Stack direction='row' spacing={2} justifyContent='flex-end'>
+            <Stack direction="row" spacing={2} justifyContent="flex-end">
               <Button
-                variant='outlined'
+                variant="outlined"
                 onClick={() =>
                   window.location.replace(`/landlord/${landlordID.landlord_id}`)
                 }
               >
                 Cancel
               </Button>
-              <Button variant='contained' onClick={sendReview}>
+              <Button variant="contained" onClick={sendReview}>
                 Submit
               </Button>
             </Stack>
