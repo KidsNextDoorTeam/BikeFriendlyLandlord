@@ -14,14 +14,14 @@ import { stringAvatar } from '../common/styling.js';
 import { useAuth } from '../hooks/authContext';
 
 export default function UserProfile() {
-  const {user, setUser } = useAuth();
+  const {user, setUser, user: {first_name, last_name, description, email, profile_pic} } = useAuth();
 
   const [reviews, setReviews] = useState([]);
-  const [firstname, setFirstName] = useState('');
-  const [lastname, setLastName] = useState('');
-  const [description, setDescription] = useState('');
-  const [email, setEmail] = useState('');
-  const [profilePic, setProfilePic] = useState('');
+  const [firstname, setFirstName] = useState(first_name);
+  const [lastname, setLastName] = useState(last_name);
+  const [userDescription, setDescription] = useState(description);
+  const [userEmail, setEmail] = useState(email);
+  const [profilePic, setProfilePic] = useState(profile_pic);
   const [currentTab, setCurrentTab] = useState(0);
   const [updateMode, setUpdateMode] = useState(false);
   const [updateUser, setUpdateUser] = useState(false);
@@ -88,13 +88,12 @@ export default function UserProfile() {
     axios.put(`/user/${user._id}/updateUserInfo`, {
       firstname:firstname,
       lastname:lastname,
-      description: description, 
-      email: email,
+      description: userDescription, 
+      email: userEmail,
       profilePic: profilePic,
     }).then((response) => {
       if (response) {
         setUpdateUser(true);
-        setProfilePic('');
       }
     });
 
@@ -182,7 +181,11 @@ export default function UserProfile() {
                     marginTop: '10px',
                   }}
                   onClick={() => {
+                    setFirstName('');
+                    setLastName('');
                     setProfilePic('');
+                    setDescription('');
+                    setEmail('');
                     setUpdateMode(false);
                   }}
                 >
