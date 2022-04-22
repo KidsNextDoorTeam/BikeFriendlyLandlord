@@ -4,13 +4,15 @@ import axios from 'axios';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { Stack } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import Rating from '@mui/material/Rating';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Icon from '@mui/material/Icon';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import { useAuth } from '../hooks/authContext';
 
 export function Review(props) {
@@ -48,11 +50,12 @@ export function Review(props) {
   };
 
   return (
-    <Card sx={{ minWidth: 275, marginBottom: '10px', backgroundColor: 'transparent' }}>
+    <Card sx={{ minWidth: 275, marginBottom: '10px' }}>
       <CardContent direction='row'>
         {updateMode ? (
-          <input
-            type='text'
+          <TextField
+            size='small'
+            label='Title'
             value={title}
             onChange={(event) => setTitle(event.target.value)}
           />
@@ -88,8 +91,8 @@ export function Review(props) {
                   </Icon>
                   <Icon>
                     <DeleteIcon
-                      style={{
-                        color: 'tomato',
+                      sx={{
+                        color: 'primary.main',
                         fontSize: '20px',
                         cursor: 'pointer',
                       }}
@@ -110,7 +113,7 @@ export function Review(props) {
           <Stack spacing={2} direction='row'>
             <Typography variant='h7'>Overall Rating</Typography>
             <Rating
-              style={{ color: 'tomato' }}
+              sx={{ color: 'primary.main' }}
               name='read-only'
               required
               size='small'
@@ -148,10 +151,10 @@ export function Review(props) {
             <Icon>
               {props.bike_friendly ? (
                 <CheckIcon
-                  style={{ color: 'green', fontSize: '20px' }}
+                  style={{ color: 'limeGreen', fontSize: '20px' }}
                 ></CheckIcon>
               ) : (
-                <ClearIcon style={{ color: 'tomato', fontSize: '20px' }} />
+                <ClearIcon color='primary' />
               )}
             </Icon>
           </Stack>
@@ -163,29 +166,23 @@ export function Review(props) {
                   style={{ color: 'limeGreen', fontSize: '20px' }}
                 ></CheckIcon>
               ) : (
-                <ClearIcon style={{ color: 'tomato', fontSize: '20px' }} />
+                <ClearIcon color='primary' />
               )}
             </Icon>
           </Stack>
         </Stack>
         {updateMode ? (
           <>
-            <textarea
-              type='text'
-              defaultValue={props.description}
-              style={{ width: '100%' }}
+            <TextField
+              multiline
+              value={description}
+              label='Description'
+              fullWidth
+              sx={{ mt: 1 }}
               onChange={(event) => setDescription(event.target.value)}
             />
-            <button
-              style={{
-                padding: '7px 15px',
-                borderRadius: '10px',
-                border: '1px solid tomato',
-                color: 'tomato',
-                backgroundColor: 'white',
-                marginRight: '10px',
-                cursor: 'pointer',
-              }}
+            <Button
+              size='small'
               onClick={() => {
                 setUpdateMode(false);
                 setTitle(props.title);
@@ -193,21 +190,14 @@ export function Review(props) {
               }}
             >
               Cancel
-            </button>
-            <button
-              style={{
-                padding: '7px 15px',
-                borderRadius: '10px',
-                border: 'none',
-                color: 'white',
-                backgroundColor: 'tomato',
-                marginRight: '10px',
-                cursor: 'pointer',
-              }}
+            </Button>
+            <Button
+              variant='contained'
+              size='small'
               onClick={handleSave}
             >
               Save
-            </button>
+            </Button>
           </>
         ) : (
           <Typography className='Description' variant='h7'>

@@ -8,7 +8,6 @@ export default function Footer() {
       backgroundColor: 'grey',
       color: 'white',
       fontSize: 40,
-      fontFamily: 'Nunito',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
