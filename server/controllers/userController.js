@@ -83,7 +83,6 @@ userController.getUserData = async (req, res, next) => {
     `;
 
     const result = await db.query(queryString, [userId]);
-    console.log(result)
     delete result.rows[0].password;
 
     res.locals.userData = result.rows[0];
