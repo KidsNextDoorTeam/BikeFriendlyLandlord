@@ -14,14 +14,17 @@ import { stringAvatar } from '../common/styling.js';
 import { useAuth } from '../hooks/authContext';
 
 export default function UserProfile() {
-  const {user, user : {first_name}} = useAuth();
+  const {user, setUser, user:{first_name} } = useAuth();
 
   const [reviews, setReviews] = useState([]);
-  const [username, setUsername] = useState('');
-  const [firstname, setFirstName] = useState(first_name);
-
+  const [firstname, setFirstName] = useState('');
+  const [lastname, setLastName] = useState('');
+  const [description, setDescription] = useState('');
+  const [email, setEmail] = useState('');
+  const [profilePic, setProfilePic] = useState('');
   const [currentTab, setCurrentTab] = useState(0);
   const [updateMode, setUpdateMode] = useState(false);
+  const [updateUser, setUpdateUser] = useState(false);
 
   const navigate = useNavigate();
   // let [searchParams, setSearchParams] = useSearchParams();
@@ -35,7 +38,7 @@ export default function UserProfile() {
       const { status, data } = await axios.get(`/user/${user._id}/reviews`);
       if (status >= 200 && status < 300 && mounted.current) setReviews(data.reviews);
     } catch (err) {
-      if (err?.repsonse?.status === 401) {
+      if (err?.response?.status === 401) {
         navigate('/');
       } else {
         console.error('Error fetching users reviews -->', err);
@@ -43,11 +46,30 @@ export default function UserProfile() {
     }
   };
 
+  const getUserData = async () => {
+    if (!user._id) {
+      navigate('/'); // user needs to sign in
+      return;
+    }
+    try {
+      const result = await axios.get(`/user/${user._id}/getUser`);
+      setUser(result.data);
+      // if (status >= 200 && status < 300 && mounted.current) setUser(data.reviews);
+    } catch (err) {
+      if (err?.response?.status === 401) {
+        navigate('/');
+      } else {
+        console.error('Error fetching user info -->', err);
+      }
+    }
+  };
+
 
   useEffect(() => {
     getReviews();
+    getUserData();
     return () => () => mounted.current = false;
-  }, [user]);
+  }, [updateUser]);
 
   const onReviewDelete = () => {
     getReviews();
@@ -63,8 +85,18 @@ export default function UserProfile() {
 
   const userProfileChange = () => {
     setUpdateMode(false);
-    console.log(firstname);
-    console.log(username);
+    setUpdateUser(false);
+    axios.put(`/user/${user._id}/updateUserInfo`, {
+      firstname:firstname,
+      lastname:lastname,
+      description: description, 
+      email: email,
+    }).then((response) => {
+      if (response) {
+        setUpdateUser(true);
+      }
+    });
+
   };
 
   return (
@@ -109,13 +141,13 @@ export default function UserProfile() {
                   <TextField
                     label='Last Name'
                     variant='outlined'
-                    // onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => setLastName(e.target.value)}
                     size="small"
                   />
                   <TextField
-                    label='Username'
+                    label='Email'
                     variant='outlined'
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                     size="small"
                   />
                   <TextField
@@ -123,7 +155,7 @@ export default function UserProfile() {
                     variant='outlined'
                     multiline
                     rows={4}
-                  // onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => setDescription(e.target.value)}
                   />
                   <Button variant='contained' component='label'>
                     {' '}
