@@ -210,8 +210,8 @@ export default function UserProfile() {
                 >
                   You have no reviews yet
                 </h3>}
-              {reviews.map((review, index) => {
-                return <Review
+              {reviews.map((review) => (
+                <Review
                   username={user.username}
                   _id={review._id}
                   title={review.title}
@@ -221,11 +221,11 @@ export default function UserProfile() {
                   bike_rating={review.bike_rating}
                   pet_friendly_rating={review.pet_friendly}
                   description={review.description}
-                  key={index}
+                  key={review._id}
                   onSave={onReviewSave}
                   onDelete={onReviewDelete}
-                />;
-              })}
+                />
+              ))}
             </div>}
             {currentTab === 2 &&
               <div

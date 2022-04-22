@@ -198,9 +198,9 @@ export default function ProfilePage() {
             </Stack>
             <Stack >
               <div>
-                {reviewData.map((eachReview, i) => (
+                {reviewData.map((eachReview) => (
                   <Review
-                    key={i}
+                    key={eachReview._id}
                     {...eachReview}
                     onSave={onReviewSave}
                     onDelete={onReviewDelete}
