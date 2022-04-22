@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Avatar from '@mui/material/Avatar';
-import { Button, Grid, TextField, Input } from '@material-ui/core';
+import { Button, Grid, TextField, Input } from '@mui/material';
 
 import { Review } from '../components/Review';
 import { stringAvatar } from '../common/styling.js';
