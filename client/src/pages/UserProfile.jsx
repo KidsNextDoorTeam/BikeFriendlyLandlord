@@ -83,12 +83,6 @@ export default function UserProfile() {
     setCurrentTab(newValue);
   };
 
-  // const handlePicChange = event => {
-  //   const fileUploaded = event.target.files[0].name;
-  //   console.log(fileUploaded)
-  //   setProfilePic(event.target.files[0].name);
-  // };
-
   const userProfileChange = () => {
     setUpdateMode(false);
     setUpdateUser(false);
