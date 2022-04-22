@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -7,15 +7,17 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Avatar from '@mui/material/Avatar';
-import { Button, Grid, TextField, Input } from '@material-ui/core';
+import { Button, Grid, TextField, Input } from '@mui/material';
 
 import { Review } from '../components/Review';
 import { stringAvatar } from '../common/styling.js';
 import { useAuth } from '../hooks/authContext';
+import PropertiesList from '../components/ProperitesList';
 
 export default function UserProfile() {
-  const {user, user : {first_name}} = useAuth();
+  const { user, user: { first_name } } = useAuth();
 
+  const [properties, setProperties] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [username, setUsername] = useState('');
   const [firstname, setFirstName] = useState(first_name);
@@ -43,9 +45,31 @@ export default function UserProfile() {
     }
   };
 
+  const getLandlordInfo = async () => {
+    if (!user._id) {
+      navigate('/'); // user needs to sign in
+      return;
+    }
+    try {
+      const { status, data } = await axios.get(`/landlords/${user._id}`);
+      if (status >= 200 && status < 300 && mounted.current) setProperties(data.landlord.properties);
+    } catch (err) {
+      if (err?.repsonse?.status === 401) {
+        navigate('/');
+      } else {
+        console.error('Error fetching landlordProperties -->', err);
+      }
+    }
+  };
+
 
   useEffect(() => {
     getReviews();
+
+    // Get properties if the user is a landlord
+    if (user.roles?.includes('landlord')) {
+      getLandlordInfo();
+    }
     return () => () => mounted.current = false;
   }, [user]);
 
@@ -123,7 +147,7 @@ export default function UserProfile() {
                     variant='outlined'
                     multiline
                     rows={4}
-                  // onChange={(e) => setUsername(e.target.value)}
+                    // onChange={(e) => setUsername(e.target.value)}
                   />
                   <Button variant='contained' component='label'>
                     {' '}
@@ -162,24 +186,26 @@ export default function UserProfile() {
                 >
                   Save
                 </button>
-              </Box > :
-              <Box>
-                <div style={{ marginBottom: '10px', color: '#333' }}>
-                  <h2> {user.first_name} {user.last_name}</h2>
-                  <span> {user.username} </span>
-                </div>
-                <Button
-                  variant="contained"
-                  style={{
-                    width: '80%',
-                    backgroundColor: 'tomato',
-                    color: 'white'
-                  }}
-                  onClick={() => { setUpdateMode(true); }}
-                >
-                  Edit Profile
-                </Button>
-              </Box>
+              </Box >
+              :
+              <>
+                <Box>
+                  <div style={{ marginBottom: '10px', color: '#333' }}>
+                    <h2> {user.first_name} {user.last_name}</h2>
+                    <span> {user.username} </span>
+                    <Button
+                      variant="contained"
+                      style={{
+                        width: '80%',
+                        backgroundColor: 'tomato',
+                        color: 'white'
+                      }}
+                      component="label"
+                      onClick={() => { setUpdateMode(true); }}
+                    >Edit Profile</Button> 
+                  </div>
+                </Box>
+              </>
             }
           </Grid >
           <Grid item xs={9} >
@@ -197,6 +223,7 @@ export default function UserProfile() {
               <Tab label="Overview" />
               <Tab label="Reviews" />
               <Tab label="Saved Landlords" />
+              {user.isLandlord && <Tab label="My Properties" />}
             </Tabs>
             {currentTab === 0 &&
               <div id="userDetails">
@@ -252,6 +279,8 @@ export default function UserProfile() {
               >
                 <h3> You don&apos;t have any saved landlords yet</h3>
               </div>}
+            {currentTab === 3 &&
+              <PropertiesList properties={properties} />}
           </Grid>
         </Grid >
       </Typography >
