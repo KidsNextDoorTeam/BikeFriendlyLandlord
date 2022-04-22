@@ -59,7 +59,7 @@ export default function Login(props) {
           Need an account? Signup
         </Link>
         <Button
-          variant='contained'
+          variant='outlined'
           size='small'
           sx={{ textTransform: 'none' }}
           onClick={() => setAuthDisplay(false)}
