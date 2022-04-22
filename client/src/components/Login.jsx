@@ -31,7 +31,7 @@ export default function Login(props) {
         noValidate>
         <h3>Login</h3>
         <TextField
-          id='outlined-basic'
+          id='username'
           label='Username'
           variant='outlined'
           onChange={(event) => setUsername(event.target.value)}
@@ -39,7 +39,7 @@ export default function Login(props) {
           sx={{ mb: 2 }}
         />
         <TextField
-          id='outlined-basic'
+          id='password'
           label='Password'
           variant='outlined'
           type='password'
