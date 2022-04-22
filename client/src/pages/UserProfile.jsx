@@ -12,6 +12,7 @@ import { Button, Grid, TextField, Input } from '@mui/material';
 import { Review } from '../components/Review';
 import { stringAvatar } from '../common/styling.js';
 import { useAuth } from '../hooks/authContext';
+import { useAlert } from '../hooks/alertContext';
 import PropertiesList from '../components/ProperitesList';
 
 export default function UserProfile() {
@@ -24,6 +25,7 @@ export default function UserProfile() {
 
   const [currentTab, setCurrentTab] = useState(0);
   const [updateMode, setUpdateMode] = useState(false);
+  const { setAlert, setAlertSeverity } = useAlert();
 
   const navigate = useNavigate();
   // let [searchParams, setSearchParams] = useSearchParams();
@@ -60,6 +62,26 @@ export default function UserProfile() {
         console.error('Error fetching landlordProperties -->', err);
       }
     }
+  };
+
+  const toggleAvailability = async (id, available) => {
+    try {
+      const { status } = await axios.put(`/properties/${id}`, {
+        is_available: available
+      });
+
+      if (status >= 200) {
+        setAlert('Great Sucess. Very nice');
+        setAlertSeverity('success');
+        getLandlordInfo();
+      }
+    } catch (err) {
+      if (err?.response?.status === 401) {
+        setAlert('Go login bruh');
+        setAlertSeverity('error');
+      }
+    }
+    
   };
 
 
@@ -262,7 +284,7 @@ export default function UserProfile() {
                 <h3> You don&apos;t have any saved landlords yet</h3>
               </div>}
             {currentTab === 3 &&
-              <PropertiesList properties={properties} />}
+              <PropertiesList properties={properties} toggleAvailability={toggleAvailability} />}
           </Grid>
         </Grid >
       </Typography >

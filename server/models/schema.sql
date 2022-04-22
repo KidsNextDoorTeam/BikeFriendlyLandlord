@@ -38,7 +38,8 @@ CREATE TABLE public.properties (
     zip_code integer,
     landlord_id integer,
     latitude numeric,
-    longitude numeric
+    longitude numeric,
+    is_available boolean NOT NULL
 );
 
 

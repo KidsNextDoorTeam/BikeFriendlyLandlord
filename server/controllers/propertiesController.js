@@ -1,3 +1,5 @@
+const format = require('pg-format');
+
 const db = require('../models/BFLL.js');
 const AppError = require('../util/AppError');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
@@ -73,6 +75,32 @@ propertiesController.getProperty = async (req, res, next) => {
     return next();
   } catch (error) {
     return next(new AppError(error, 'propertiesController', 'getProperty', 500));
+  }
+};
+
+propertiesController.updateProperty = async (req, res, next) => {
+  const { propertyId } = req.params;
+  
+  const setStrings = [];
+  const values = [];
+  const columns = Object.keys(req.body);
+  for (let i = 0; i < columns.length; i++) {
+    setStrings.push(format('%I = %L', columns[i], req.body[columns[i]]));
+  }
+  const updateQuery = format('UPDATE properties SET %s WHERE _id = %L;', setStrings, propertyId);
+  console.log(updateQuery);
+
+  try {
+    const { rowCount, rows: [property] } = await db.query(updateQuery);
+
+    if (rowCount === 0) {
+      return res.sendStatus(404);
+    }
+
+    res.locals.property = { ...property };
+    return next();
+  } catch (error) {
+    return next(new AppError(error, 'propertiesController', 'updateProperty', 500));
   }
 };
 
