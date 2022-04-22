@@ -100,7 +100,7 @@ export default function Signup(props) {
             textDecoration: 'underline',
             mb: 1,
           }}
-          onClick={() => setDisplayLogin(false)}>
+          onClick={() => setDisplayLogin(true)}>
           Already have an account? Login.
         </Link>
         <Button
