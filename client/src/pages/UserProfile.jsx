@@ -167,7 +167,7 @@ export default function UserProfile() {
                   <label htmlFor="contained-button-file">
                     <Button variant="contained" color="primary" component="span">
                     Update Picture
-                    </Button>
+                    </Button><br></br>{profilePic}
                   </label>
                 </div>
                 <button
@@ -182,6 +182,7 @@ export default function UserProfile() {
                     marginTop: '10px',
                   }}
                   onClick={() => {
+                    setProfilePic('');
                     setUpdateMode(false);
                   }}
                 >
