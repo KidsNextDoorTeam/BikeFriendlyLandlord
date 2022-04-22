@@ -149,63 +149,45 @@ export default function UserProfile() {
                     rows={4}
                     // onChange={(e) => setUsername(e.target.value)}
                   />
-                  <Button variant='contained' component='label'>
-                    {' '}
+                  <Button variant='contained' component='label' sx={{mb: 2}}>
                     Upload Picture
                     <input type='file' hidden />
                   </Button>
                 </div>
-                <button
-                  style={{
-                    padding: '7px 15px',
-                    borderRadius: '10px',
-                    border: '1px solid tomato',
-                    color: 'tomato',
-                    backgroundColor: 'transparent',
-                    marginRight: '10px',
-                    cursor: 'pointer',
-                    marginTop: '10px',
-                  }}
+                <Button
+                  variant='outlined'
                   onClick={() => {
                     setUpdateMode(false);
                   }}
+                  sx={{mr: 2, textTransform: 'none'}}
                 >
                   Cancel
-                </button>
-                <button
-                  style={{
-                    padding: '7px 15px',
-                    borderRadius: '10px',
-                    border: 'none',
-                    color: 'white',
-                    backgroundColor: 'tomato',
-                    marginRight: '10px',
-                    cursor: 'pointer',
-                  }}
+                </Button>
+                <Button
+                  variant='contained'
                   onClick={userProfileChange}
+                  sx={{textTransform: 'none'}}
                 >
                   Save
-                </button>
-              </Box >
-              :
-              <>
-                <Box>
-                  <div style={{ marginBottom: '10px', color: '#333' }}>
-                    <h2> {user.first_name} {user.last_name}</h2>
-                    <span> {user.username} </span>
-                    <Button
-                      variant="contained"
-                      style={{
-                        width: '80%',
-                        backgroundColor: 'tomato',
-                        color: 'white'
-                      }}
-                      component="label"
-                      onClick={() => { setUpdateMode(true); }}
-                    >Edit Profile</Button> 
-                  </div>
-                </Box>
-              </>
+                </Button>
+              </Box > :
+              <Box>
+                <div style={{ marginBottom: '10px', color: '#333' }}>
+                  <h2> {user.first_name} {user.last_name}</h2>
+                  <span> {user.username} </span>
+                </div>
+                <Button
+                  variant="contained"
+                  style={{
+                    width: '80%',
+                    backgroundColor: 'tomato',
+                    color: 'white'
+                  }}
+                  onClick={() => { setUpdateMode(true); }}
+                >
+                  Edit Profile
+                </Button>
+              </Box>
             }
           </Grid >
           <Grid item xs={9} >
@@ -253,8 +235,8 @@ export default function UserProfile() {
                 >
                   You have no reviews yet
                 </h3>}
-              {reviews.map((review, index) => {
-                return <Review
+              {reviews.map((review) => (
+                <Review
                   username={user.username}
                   _id={review._id}
                   title={review.title}
@@ -264,11 +246,11 @@ export default function UserProfile() {
                   bike_rating={review.bike_rating}
                   pet_friendly_rating={review.pet_friendly}
                   description={review.description}
-                  key={index}
+                  key={review._id}
                   onSave={onReviewSave}
                   onDelete={onReviewDelete}
-                />;
-              })}
+                />
+              ))}
             </div>}
             {currentTab === 2 &&
               <div
