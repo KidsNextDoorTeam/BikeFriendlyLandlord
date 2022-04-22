@@ -54,7 +54,6 @@ export default function UserProfile() {
     try {
       const result = await axios.get(`/user/${user._id}/getUser`);
       setUser(result.data);
-      // if (status >= 200 && status < 300 && mounted.current) setUser(data.reviews);
     } catch (err) {
       if (err?.response?.status === 401) {
         navigate('/');

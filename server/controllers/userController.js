@@ -102,13 +102,11 @@ userController.updateUserData = async (req, res, next) => {
     const queryString = `
     UPDATE users SET
     first_name = $1, last_name = $2, email = $3, description = $4, profile_pic = $5   
-    WHERE users._id = $6;
+    WHERE users._id = $6 RETURNING first_name, last_name, email, description, profile_pic ;
     `;
 
     const result = await db.query(queryString, [firstname, lastname, email, description, profilePic, userId]);
-    // delete result.rows[0].password;
-
-    // res.locals.userData = result.rows[0];
+    res.locals.userData = result.rows[0];
 
     return next();
   } catch (error) {
