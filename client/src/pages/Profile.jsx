@@ -18,6 +18,7 @@ import ListItemText from '@mui/material/ListItemText';
 import EmailIcon from '@mui/icons-material/Email';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import ApartmentIcon from '@mui/icons-material/Apartment';
+import ChatIcon from '@mui/icons-material/Chat';
 import Button from '@mui/material/Button';
 import { ThemeProvider } from '@mui/material/styles';
 
@@ -26,12 +27,14 @@ import { Review } from '../components/Review.jsx';
 import { LandlordInfoCard } from '../components/LandlordInfoCard.jsx';
 
 import '../index.css';
+import Chat from "../components/chatbot/chat.jsx"
 
 export default function ProfilePage({ userData, isLoggedIn }) {
   const navigate = useNavigate();
   const [landlordData, setLandlordData] = useState({});
   const [reviewData, setReviewData] = useState([]);
   const [reviewFilter, setReviewFilter] = useState('helpful');
+  const [chatClicked, setChatClicked] = useState(false);
 
   const { landlord_id: landlordId } = useParams();
   const mounted = useRef(true);
@@ -165,6 +168,14 @@ export default function ProfilePage({ userData, isLoggedIn }) {
                         <ListItemText primary="Office Location" />
                       </ListItemButton>
                     </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemButton onClick={() => {setChatClicked(true)}}>
+                        <ListItemIcon>
+                          <ChatIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Chat" />
+                      </ListItemButton>
+                    </ListItem>
                   </nav>
                 </Box>
               </Card>
@@ -198,8 +209,8 @@ export default function ProfilePage({ userData, isLoggedIn }) {
               <div>
                 {reviewData.map((eachReview, i) => (
                   <Review
-                    key={i}
-                    {...eachReview}
+                  key={i}
+                  {...eachReview}
                     userData={userData}
                     onSave={onReviewSave}
                     onDelete={onReviewDelete}
@@ -209,6 +220,7 @@ export default function ProfilePage({ userData, isLoggedIn }) {
             </Stack>
           </Container>
         </Container>
+        {chatClicked ? <Chat setChatClicked={setChatClicked} landlordData={landlordData}/> : null}
       </div>
     </ThemeProvider>
   );

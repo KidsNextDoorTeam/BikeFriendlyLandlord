@@ -25,32 +25,31 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import { ListItemIcon } from '@mui/material';
+import { ListItemIcon, Collapse } from '@mui/material';
+
+import ChatWindow from './chatWindow.jsx'
+import ChatLogin from './chatLogin.jsx'
+import Minimized from './minimized.jsx'
 
 const client = new W3CWebSocket('ws://localhost:3001');
 
-const SpecialTextField = styled((props) => (
-  <TextField InputProps={{ disableUnderline: true }} {...props} />
-))(({ theme }) => ({
-  '& .MuiFilledInput-root': {
-    border: '1px solid #e2e2e1',
-    overflow: 'hidden',
-    borderRadius: 1,
-    backgroundColor: 'rgb(255, 255, 255)',
-    color: 'grey',
-    maxHeight: '40px'
-  },
-}));
-
 export default class Chat extends Component {
-  
-  state ={
+  constructor(props) {
+  super(props);
+  this.state = {
     userName: '',
     isLoggedIn: false,
     initialMessage: '',
     messages: [],
-    minimized: false
+    chatCollapsed: false,
+    chatClosed: false,
   }
+  this.onButtonClicked = this.onButtonClicked.bind(this);
+  this.onNameEnter = this.onNameEnter.bind(this);
+  this.onChatLogin = this.onChatLogin.bind(this);
+  this.onMinimized = this.onMinimized.bind(this);
+  this.onClosed = this.onClosed.bind(this);
+}
   
   onButtonClicked = (value) => {
     client.send(JSON.stringify({
@@ -60,6 +59,23 @@ export default class Chat extends Component {
     }));
     this.setState({ initialMessage: '' })
   }
+
+  onNameEnter = (value) => {
+    this.setState({ initialMessage: value })
+  }
+
+  onChatLogin = (user) => {
+    this.setState({ isLoggedIn: true, userName: user, chatClosed: false});
+  }
+
+  onMinimized = (value) => {
+    this.setState({chatCollapsed: value ? false : true, chatClosed: false})
+  }
+  
+  onClosed = () => {
+    this.setState({chatClosed: true})
+  }
+
   componentDidMount() {
     client.onopen = () => {
       console.log('WebSocket Client Connected');
@@ -81,75 +97,34 @@ export default class Chat extends Component {
     };
   }
   
+  
   render(){
     const darkTheme = createTheme({ palette: { mode: 'dark' } });
-    let theUser = '';
     return (
       <div>
       <React.Fragment >
         <CssBaseline />
         <ThemeProvider theme={darkTheme}>
-        <Box sx={{width: "100vw",height: "100vh",position:'absolute',display: "flex",alignItems: "bottom",justifyContent: "right", overflowY: "scroll"}}>
-          {this.state.isLoggedIn ?
-          <Paper sx={{ width: "80vw",height: "80vh",maxWidth: "300px",maxHeight: "500px",display: "flex",flexDirection: "column", position: "absolute" }}>
-            <Typography variant="h8" gutterBottom component="div" sx={{ p: 2, pb: 0 }}>
-              {this.state.userName}'s Chat Window
-            </Typography>
-            <List sx={{ mb: 2, display: 'flex', flexDirection: 'column', paddingBottom: 5, width: "calc( 100% - 20px )", height: "calc( 100% - 80px )"}}>
-              {this.state.messages.map(message => (
-                    <Card sx={{margin: '12px 3px 0 3px', alignSelf: this.state.userName === message.user ? 'flex-end' : 'flex-start' }} key={message.msg}>
-                      <ListItemIcon>
-                        <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-                      </ListItemIcon>
-                      <CardContent>
-                        <Typography variant="body2" color="text.secondary">
-                          {message.user+": "}{message.msg}
-                        </Typography>
-                       </CardContent>
-                  </Card> 
-              ))
-            }
-            </List>
-            <Box mt={3} position="absolute" bottom="0px">
-              <SpecialTextField
-                label="Type a message"
-                variant="filled"
-                value={this.state.initialMessage}
-                onChange={e => this.setState({initialMessage: e.target.value})}
-              />
-              <Button sx={{height:'40px',padding:'11px'}} variant="contained" onClick={() => {this.onButtonClicked(this.state.initialMessage)}}>Send</Button>
-            </Box>
-            </Paper>
-          /* <AppBar position="fixed" color="primary" sx={{ top: 'auto', bottom: 0 }}>
-            <Toolbar>
-              <IconButton color="inherit" aria-label="open drawer">
-                <MenuIcon />
-              </IconButton>
-              <StyledFab color="secondary" aria-label="add">
-                <AddIcon />
-              </StyledFab>
-              <Box sx={{ flexGrow: 1 }} />
-              <IconButton color="inherit">
-                <SearchIcon />
-              </IconButton>
-              <IconButton color="inherit">
-                <MoreIcon />
-              </IconButton>
-            </Toolbar>
-          </AppBar> */
+        <Box sx={{width: "100vw",height: "100vh",position:'absolute',display: "flex",justifyContent: "right"}}>
+          {this.state.isLoggedIn & !this.state.chatCollapsed & !this.state.chatClosed ?
+            <ChatWindow 
+              userName={this.state.userName}
+              isLoggedIn={this.state.isLoggedIn}
+              initialMessage={this.state.initialMessage}
+              messages={this.state.messages}
+              setChatClicked={this.props.setChatClicked}
+              onButtonClicked={this.onButtonClicked}
+              onNameEnter={this.onNameEnter}
+              onClosed={this.onClosed}
+              onMinimized={this.onMinimized}/>
+          : this.state.isLoggedIn & this.state.chatCollapsed & !this.state.chatClosed ?
+          <Minimized
+            chatCollapsed={this.state.chatCollapsed}
+            onMinimized={this.onMinimized}
+            landlordData={this.props.landlordData}/>
           :
-          <Box>
-          <SpecialTextField
-            label="Your Name"
-            variant="filled"
-            style={{ marginTop: 11 }}
-            onChange={e => theUser = e.target.value}
-          />
-          <Button sx={{height:'40px',margin:'11px'}} variant="contained"
-          onClick={() => {this.setState({ isLoggedIn: true, userName: theUser})}
-          }
-          >Submit</Button>
-          </Box>
+          <ChatLogin
+            onChatLogin={this.onChatLogin}/>
         }
         </Box>
           </ThemeProvider>
