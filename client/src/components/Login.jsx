@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-// import { InputAdornment, IconButton } from "@material-ui/core";
-// import Visibility from "@material-ui/icons/Visibility";
-// import VisibilityOff from "@material-ui/icons/VisibilityOff";
-// import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 
 export default function Login(props) {
   const { handleSubmit, setAuthDisplay, setDisplayLogin, loginError, loginErrorMessage } = props;
@@ -52,17 +49,23 @@ export default function Login(props) {
         <Button variant="contained" type="submit" sx={{ mb: 2 }}>
           Login
         </Button>
-        <div className='linkButton'
+        <Link className='linkButton'
           sx={{
             color: 'blueviolet',
             textDecoration: 'underline',
+            mb: 1,
           }}
           onClick={() => setDisplayLogin(false)}>
           Need an account? Signup
-        </div>
-        <button className='exitButton' onClick={() => setAuthDisplay(false)}>
+        </Link>
+        <Button
+          variant='contained'
+          size='small'
+          sx={{ textTransform: 'none' }}
+          onClick={() => setAuthDisplay(false)}
+        >
           Continue without logging in
-        </button>
+        </Button>
       </Box>
     </>
   );

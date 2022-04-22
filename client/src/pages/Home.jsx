@@ -37,7 +37,6 @@ export default function Home() {
         justifyContent='center'
         alignItems='center'
       >
-        <CssBaseline />
         <div
           className='homeTitle'
           data-aos='fade-up'

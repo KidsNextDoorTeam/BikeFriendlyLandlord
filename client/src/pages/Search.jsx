@@ -10,10 +10,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
-import { ThemeProvider } from '@mui/material/styles';
 
 import ResultDisplay from '../components/resultDisplay';
-import tomatopalette from '../components/tomatopalette';
 
 export default function Search() {
   // handle search results
@@ -76,103 +74,101 @@ export default function Search() {
   };
 
   return (
-    <ThemeProvider theme={tomatopalette}>
-      <div
-        className='searchPageMain'
+    <div
+      className='searchPageMain'
+      sx={{
+        margin: 0,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      <Container
+        className='searchMainContainer'
+        maxwidth='sm'
         sx={{
-          margin: 0,
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          backgroundAttachment: 'fixed',
+          p: 2,
+          textDecoration: 'none',
+          fontFamily: 'Nunito',
+          color: 'rgb(68, 67, 67)',
         }}
       >
-        <Container
-          className='searchMainContainer'
-          maxwidth='sm'
-          sx={{
-            p: 2,
-            textDecoration: 'none',
-            fontFamily: 'Nunito',
-            color: 'rgb(68, 67, 67)',
-          }}
+        <Box
+          className='searchContainer'
+          sx={{ p: 2, background: 'rgba(241, 241, 241, 0.4)' }}
         >
-          <Box
-            className='searchContainer'
-            sx={{ p: 2, background: 'rgba(241, 241, 241, 0.4)' }}
+          <Stack
+            className='searchFields'
+            direction='column'
+            spacing={3}
+            justifyContent='center'
+            alignItems='center'
           >
             <Stack
-              className='searchFields'
-              direction='column'
-              spacing={3}
+              direction='row'
+              spacing={10}
               justifyContent='center'
               alignItems='center'
             >
               <Stack
                 direction='row'
-                spacing={10}
+                spacing={1}
                 justifyContent='center'
                 alignItems='center'
               >
-                <Stack
-                  direction='row'
-                  spacing={1}
-                  justifyContent='center'
-                  alignItems='center'
-                >
-                  <h2>City</h2>
-                  <Autocomplete
-                    disablePortal
-                    clearOnEscape
-                    options={options}
-                    sx={{ width: 300 }}
-                    renderInput={(params) => (
-                      <TextField {...params} label='Select a City' />
-                    )}
-                    value={city}
-                    onChange={(e, newVal) => {
-                      setCity(newVal);
-                    }}
-                  />
-                </Stack>
-                <Stack
-                  direction='row'
-                  spacing={1}
-                  justifyContent='center'
-                  alignItems='center'
-                >
-                  <h2>Bike Friendly</h2>
-                  <Checkbox
-                    checked={bikeR}
-                    onChange={handleBikeRChange}
-                    size='large'
-                  />
-                </Stack>
-                <Stack
-                  direction='row'
-                  spacing={1}
-                  justifyContent='center'
-                  alignItems='center'
-                >
-                  <h2>Pet Friendly</h2>
-                  <Checkbox
-                    checked={petR}
-                    onChange={handlePetRChange}
-                    size='large'
-                  />
-                </Stack>
+                <h2>City</h2>
+                <Autocomplete
+                  disablePortal
+                  clearOnEscape
+                  options={options}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label='Select a City' />
+                  )}
+                  value={city}
+                  onChange={(e, newVal) => {
+                    setCity(newVal);
+                  }}
+                />
               </Stack>
-              <Button
-                variant='contained'
-                // fullWidth
-                onClick={handleSearch}
+              <Stack
+                direction='row'
+                spacing={1}
+                justifyContent='center'
+                alignItems='center'
               >
-                Search
-              </Button>
+                <h2>Bike Friendly</h2>
+                <Checkbox
+                  checked={bikeR}
+                  onChange={handleBikeRChange}
+                  size='large'
+                />
+              </Stack>
+              <Stack
+                direction='row'
+                spacing={1}
+                justifyContent='center'
+                alignItems='center'
+              >
+                <h2>Pet Friendly</h2>
+                <Checkbox
+                  checked={petR}
+                  onChange={handlePetRChange}
+                  size='large'
+                />
+              </Stack>
             </Stack>
-            <ResultDisplay resultsArr={searchResults} />
-          </Box>
-        </Container>
-      </div>
-    </ThemeProvider>
+            <Button
+              variant='contained'
+              // fullWidth
+              onClick={handleSearch}
+            >
+                Search
+            </Button>
+          </Stack>
+          <ResultDisplay resultsArr={searchResults} />
+        </Box>
+      </Container>
+    </div>
   );
 }
