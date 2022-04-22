@@ -94,6 +94,7 @@ export default function UserProfile() {
     }).then((response) => {
       if (response) {
         setUpdateUser(true);
+        setProfilePic('');
       }
     });
 
