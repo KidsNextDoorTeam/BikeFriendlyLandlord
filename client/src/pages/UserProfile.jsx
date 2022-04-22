@@ -1,53 +1,53 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
-import { Button, Grid, TextField, Input} from '@material-ui/core';
+import { Button, Grid, TextField, Input } from '@material-ui/core';
+
+import { Review } from '../components/Review';
 import { stringAvatar } from '../common/styling.js';
-import IconButton from '@mui/material/IconButton';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { useAuth } from '../hooks/authContext';
 
-import { Review } from '../components/Review.jsx';
+export default function UserProfile() {
+  const {user, user : {first_name}} = useAuth();
 
-import '../index.css';
-
-export function UserProfile(props) {
-  const { userData, setUserData, setIsLoggedIn, setAuthDisplay } = props;
   const [reviews, setReviews] = useState([]);
+  const [username, setUsername] = useState('');
+  const [firstname, setFirstName] = useState(first_name);
+
   const [currentTab, setCurrentTab] = useState(0);
   const [updateMode, setUpdateMode] = useState(false);
-  const [username, setUsername] = useState('');
+
   const navigate = useNavigate();
   // let [searchParams, setSearchParams] = useSearchParams();
   const mounted = useRef(true);
   const getReviews = async () => {
-    if (!userData._id) return;
+    if (!user._id) {
+      navigate('/'); // user needs to sign in
+      return;
+    }
     try {
-      const { status, data } = await axios.get(`/user/${userData._id}/reviews`);
-      if (status >= 200 && status < 300) {
-        if (mounted.current)
-          setReviews(data.reviews);
-      }
-      else if (status === 401) {
-        // TODO: Move this to protected components
-        // if the user is not authenticated, navigate them back to the hamepage and prompt them to login
-        setIsLoggedIn(false);
-        setAuthDisplay(true);
-        navigate('/');
-      }
+      const { status, data } = await axios.get(`/user/${user._id}/reviews`);
+      if (status >= 200 && status < 300 && mounted.current) setReviews(data.reviews);
     } catch (err) {
-      console.error('Error fetching users reviews -->', err);
+      if (err?.repsonse?.status === 401) {
+        navigate('/');
+      } else {
+        console.error('Error fetching users reviews -->', err);
+      }
     }
   };
+
 
   useEffect(() => {
     getReviews();
     return () => () => mounted.current = false;
-  }, [userData]);
+  }, [user]);
 
   const onReviewDelete = () => {
     getReviews();
@@ -63,58 +63,72 @@ export function UserProfile(props) {
 
   const userProfileChange = () => {
     setUpdateMode(false);
+    console.log(firstname);
     console.log(username);
   };
 
   return (
-    <div id="userProfile">
-      <Typography
-        variant="h6"
-        component="div"
-        style={{ fontFamily: 'Nunito' }}
-      >
+    <div
+      id='userProfile'
+      sx={{
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      <Typography variant='h6' component='div' style={{ fontFamily: 'Nunito' }}>
         <Grid container spacing={1}>
           <Grid item xs={3} >
-            <div style={{display:'flex'}}>
-              {userData.profile_pic ? <Avatar alt="User picture" src={`/images/${userData.profile_pic}`} sx={{ width: 200, height: 200, minWidth:20, minHeight:20, marginTop: '20px', marginBottom: '20px' }}/>
-                : <Avatar alt="User picture" {...stringAvatar(`${userData.first_name} ${userData.last_name}`)}/> }
-            </div> 
-            {updateMode ? 
-              <Box> 
-                <div style={{display:'flex', flexDirection: 'column', gap: '10px'}} >
+            <div style={{ display: 'flex' }}>
+              {user.profile_pic ?
+                <Avatar
+                  alt="User picture"
+                  src={`/images/${user.profile_pic}`}
+                  sx={{
+                    width: 200,
+                    height: 200,
+                    minWidth: 20,
+                    minHeight: 20,
+                    my: 2.5,
+                  }} />
+                : <Avatar
+                  alt="User picture"
+                  {...stringAvatar(`${user.first_name} ${user.last_name}`)}
+                />}
+            </div>
+            {updateMode ?
+              <Box>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }} >
+                  {/* TODO: Hanlde form updates and submission */}
                   <TextField
-                    label="First Name"
-                    variant="outlined"
+                    label='First Name'
+                    variant='outlined'
+                    onChange={(e) => setFirstName(e.target.value)}
+                    size="small"
+                  />
+                  <TextField
+                    label='Last Name'
+                    variant='outlined'
                     // onChange={(e) => setUsername(e.target.value)}
                     size="small"
-                  /> 
+                  />
                   <TextField
-                    label="Last Name"
-                    variant="outlined"
-                    // onChange={(e) => setUsername(e.target.value)}
-                    size="small"
-                  /> 
-                  <TextField
-                    label="Username"
-                    variant="outlined"
+                    label='Username'
+                    variant='outlined'
                     onChange={(e) => setUsername(e.target.value)}
                     size="small"
-                  /> 
+                  />
                   <TextField
-                    label="Bio"
-                    variant="outlined"
+                    label='Bio'
+                    variant='outlined'
                     multiline
                     rows={4}
-                    // onChange={(e) => setUsername(e.target.value)}
+                  // onChange={(e) => setUsername(e.target.value)}
                   />
-                  <Button
-                    variant="contained"
-                    component="label"
-                  > Upload Picture
-                    <input
-                      type="file"
-                      hidden
-                    />
+                  <Button variant='contained' component='label'>
+                    {' '}
+                    Upload Picture
+                    <input type='file' hidden />
                   </Button>
                 </div>
                 <button
@@ -126,13 +140,13 @@ export function UserProfile(props) {
                     backgroundColor: 'transparent',
                     marginRight: '10px',
                     cursor: 'pointer',
-                    marginTop: '10px'
+                    marginTop: '10px',
                   }}
                   onClick={() => {
                     setUpdateMode(false);
                   }}
                 >
-              Cancel
+                  Cancel
                 </button>
                 <button
                   style={{
@@ -146,33 +160,75 @@ export function UserProfile(props) {
                   }}
                   onClick={userProfileChange}
                 >
-              Save
+                  Save
                 </button>
-              </Box> : 
+              </Box > :
               <Box>
-                <div style={{ marginBottom:'10px', color: '#333' }}>
-                  <h2> {userData.first_name} {userData.last_name}</h2>
-                  <span> {userData.username} </span> 
+                <div style={{ marginBottom: '10px', color: '#333' }}>
+                  <h2> {user.first_name} {user.last_name}</h2>
+                  <span> {user.username} </span>
                 </div>
-                <Button variant="contained" style={{width: '80%', backgroundColor: 'tomato', color: 'white'}} onClick={()=>{setUpdateMode(true)}}>Edit Profile</Button> 
-              </Box>}
-          </Grid>
+                <Button
+                  variant="contained"
+                  style={{
+                    width: '80%',
+                    backgroundColor: 'tomato',
+                    color: 'white'
+                  }}
+                  onClick={() => { setUpdateMode(true); }}
+                >
+                  Edit Profile
+                </Button>
+              </Box>
+            }
+          </Grid >
           <Grid item xs={9} >
-            <Tabs textColor="inherit" variant="fullWidth" TabIndicatorProps={{style: { backgroundColor: '#df4f35ea' }}} value={currentTab} onChange={handleTabChange}>
+            <Tabs
+              textColor="inherit"
+              variant="fullWidth"
+              TabIndicatorProps={{
+                style: {
+                  backgroundColor: '#df4f35ea'
+                }
+              }}
+              value={currentTab}
+              onChange={handleTabChange}
+            >
               <Tab label="Overview" />
               <Tab label="Reviews" />
               <Tab label="Saved Landlords" />
             </Tabs>
-            {currentTab === 0 && <div id="userDetails">
-              { userData.description ? <span style={{marginTop: '2em'}}>{userData.description}</span> : 
-                <span style={{textAlign: 'center', marginTop: '2em'}}>Welcome to Bike Friendly Landlord. <br></br> Edit your profile, add a bio and explore!</span>}
-            </div> }
-            {currentTab === 1  && <div>
-              {reviews.length === 0 && <h3 style={{textAlign: 'center', marginTop: '2em'}}>You have no reviews yet</h3>}
+            {currentTab === 0 &&
+              <div id="userDetails">
+                {user.description
+                  ? <span
+                    style={{ marginTop: '2em' }}
+                  >
+                    {user.description}
+                  </span>
+                  : <span
+                    style={{
+                      textAlign: 'center',
+                      marginTop: '2em'
+                    }}
+                  >
+                    Welcome to Bike Friendly Landlord.<br></br>
+                    Edit your profile, add a bio and explore!
+                  </span>}
+              </div>}
+            {currentTab === 1 && <div>
+              {reviews.length === 0 &&
+                <h3
+                  style={{
+                    textAlign: 'center',
+                    marginTop: '2em'
+                  }}
+                >
+                  You have no reviews yet
+                </h3>}
               {reviews.map((review, index) => {
                 return <Review
-                  userData={userData}
-                  username={userData.username}
+                  username={user.username}
                   _id={review._id}
                   title={review.title}
                   overall_rating={review.overall_rating}
@@ -185,14 +241,20 @@ export function UserProfile(props) {
                   onSave={onReviewSave}
                   onDelete={onReviewDelete}
                 />;
-              })} 
-            </div> }
-            {currentTab === 2 && <div style={{ marginTop: '50px', textAlign:'center' }}>
-              <h3> You don&apos;t have any saved landlords yet</h3>
+              })}
             </div>}
+            {currentTab === 2 &&
+              <div
+                style={{
+                  marginTop: '50px',
+                  textAlign: 'center'
+                }}
+              >
+                <h3> You don&apos;t have any saved landlords yet</h3>
+              </div>}
           </Grid>
-        </Grid>
-      </Typography>
-    </div> 
+        </Grid >
+      </Typography >
+    </div >
   );
 }

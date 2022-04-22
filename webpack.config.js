@@ -27,8 +27,13 @@ module.exports = {
       {
         test: /.(css|scss)$/,
         exclude: /node_modules/,
-        use: ['style-loader','css-loader']
-      }
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
+      },
     ],
   },
   plugins: [
@@ -51,13 +56,13 @@ module.exports = {
       '/images': 'http://localhost:3000',
       '/properties': 'http://localhost:3000',
       '/chat': {
-        'target':'http://localhost:3001',
-        'ws':true
+        'target': 'http://localhost:3001',
+        'ws': true
       }
     },
   },
   resolve: {
-    extensions: ['.js', '.jsx', 'scss', 'jpg', 'png', 'css','less']
+    extensions: ['.js', '.jsx', 'jpg', 'png']
   },
 };
 

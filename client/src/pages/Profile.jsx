@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-
-import { FormControl, MenuItem, Select, InputLabel } from '@mui/material';
+import { FormControl, MenuItem, Select, InputLabel, Tab, Tabs } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -28,13 +27,17 @@ import { LandlordInfoCard } from '../components/LandlordInfoCard.jsx';
 
 import '../index.css';
 import Chat from "../components/chatbot/chat.jsx"
+import { useAuth } from '../hooks/authContext';
+import { PropertyCard } from '../components/PropertyCard';
 
-export default function ProfilePage({ userData, isLoggedIn }) {
+export default function ProfilePage() {
   const navigate = useNavigate();
   const [landlordData, setLandlordData] = useState({});
   const [reviewData, setReviewData] = useState([]);
   const [reviewFilter, setReviewFilter] = useState('helpful');
   const [chatClicked, setChatClicked] = useState(false);
+  const {user} = useAuth();
+  const [currentTab, setCurrentTab] = useState(0);
 
   const { landlord_id: landlordId } = useParams();
   const mounted = useRef(true);
@@ -58,22 +61,13 @@ export default function ProfilePage({ userData, isLoggedIn }) {
   }, []);
 
 
-  //onclick for button
   const handleReview = (e) => {
-    if (isLoggedIn) {
-      // TODO: Map this as /landlord/:landlordId/review
-      navigate(`/review/${landlordId}/`);
-    }
-    else {
-      alert('Please log in to submit a review');
-    }
+    navigate(`/review/${landlordId}/`);
   };
 
-  const handleFilter = async (e) => {
+  const handleFilter = (e) => {
     setReviewFilter(e.target.value);
     getReviews(e.target.value);
-
-
   };
 
   const getReviews = async (filter) => {
@@ -125,29 +119,35 @@ export default function ProfilePage({ userData, isLoggedIn }) {
     getReviews();
   };
 
+  const handleTabChange = (e, newValue) => {
+    setCurrentTab(newValue);
+  };
+
   return (
     <ThemeProvider theme={tomatopalette}>
-      <div id='background'>
-        <Container className="MainContainer" >
-          <Stack className="LandlordInfo" sx={{ pb: 5, pl: 5 }} direction="row" justifyContent="space-around">
+      <div id='profileBackground'
+        sx={{ width: 'auto' }}>
+        <Container className='MainContainer' >
+          <Stack className='LandlordInfo' sx={{ pb: 5, pl: 5 }} direction='row' justifyContent='space-around'>
             <Stack>
               <Card sx={{ minWidth: 275 }}>
-                <CardContent>
-                  <div className="ProfilePicture">
-                    <img style={{ height: '100px' }} src={`/images/${landlordData.profile_pic}`} />
+                <CardContent sx={{ml: '50px', fontSize: '20px'}}>
+                  <div className='ProfilePicture'>
+                    <img style={{ height: '150px' }} src={`/images/${landlordData.profile_pic}`} />
                   </div>
+                  {landlordData.first_name} {landlordData.last_name}
                 </CardContent>
               </Card>
               <Card>
                 <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                  <nav aria-label="main mailbox folders">
+                  <nav aria-label='main mailbox folders'>
                     <List>
                       <ListItem disablePadding>
                         <ListItemButton>
                           <ListItemIcon>
                             <EmailIcon />
                           </ListItemIcon>
-                          <ListItemText primary="Email" />
+                          <ListItemText primary={landlordData.email} />
                           <ListItemText />
                         </ListItemButton>
                       </ListItem>
@@ -156,7 +156,7 @@ export default function ProfilePage({ userData, isLoggedIn }) {
                           <ListItemIcon>
                             <LocalPhoneIcon />
                           </ListItemIcon>
-                          <ListItemText primary="Phone Number" />
+                          <ListItemText primary='Phone Number' />
                         </ListItemButton>
                       </ListItem>
                     </List>
@@ -184,18 +184,37 @@ export default function ProfilePage({ userData, isLoggedIn }) {
               <LandlordInfoCard {...landlordData} />
             </Stack>
           </Stack>
+          <Tabs
+            textColor="inherit"
+            variant="fullWidth"
+            TabIndicatorProps={{
+              style: {
+                backgroundColor: '#df4f35ea'
+              }
+            }}
+            value={currentTab}
+            onChange={handleTabChange}
+            sx={{mt:'35px'}}
+          >
+            <Tab label="About" />
+            <Tab label="Reviews" />
+            <Tab label="All Properties" />
+          </Tabs>
+          {currentTab === 0 &&
+            <div style={{ alignItems: 'center', marginTop: '30px'}}>
+              {landlordData.description}
+            </div>
+          }
+          {currentTab === 1 && 
           <Container>
-            <Stack spacing={2} direction="row" >
-              <Typography variant="h3" gutterBottom component="div">
-                Reviews
-              </Typography>
-              <Stack sx={{ alignItems: 'center', p: 1, m: 1, }}>
-                <Button variant="contained" onClick={handleReview}>Create Review</Button>
+            <Stack spacing={2} direction='row' sx={{marginTop: '30px'}} >
+              <Stack>
+                {user && <Button variant='contained' onClick={handleReview}>Create Review</Button>}
               </Stack>
-              <Stack sx={{ alignItems: 'center', p: 1, m: 1, }}>
-                <FormControl sx={{ minWidth: 120 }} size="small" >
+              <Stack>
+                <FormControl sx={{ minWidth: 120 }} size='small' >
                   <InputLabel>Sort by</InputLabel>
-                  <Select value={reviewFilter} label="Sort by" onChange={handleFilter}>
+                  <Select MenuProps={{ sx: { '&& .MuiPaper-root': { backgroundColor: 'lightgrey' }}}} value={reviewFilter} label='Sort by' onChange={handleFilter}>
                     <MenuItem value={'helpful'}>Most Helpful</MenuItem>
                     <MenuItem value={'critical'}>Most Critical</MenuItem>
                     <MenuItem value={'recent'}>Most Recent</MenuItem>
@@ -203,9 +222,7 @@ export default function ProfilePage({ userData, isLoggedIn }) {
                 </FormControl>
               </Stack>
             </Stack>
-          </Container>
-          <Container>
-            <Stack>
+            <Stack >
               <div>
                 {reviewData.map((eachReview, i) => (
                   <Review
@@ -217,9 +234,23 @@ export default function ProfilePage({ userData, isLoggedIn }) {
                   />
                 ))}
               </div>
-            </Stack>
-          </Container>
-        </Container>
+            </Stack> 
+          </Container> }
+          {currentTab === 2 &&
+          <Stack sx={{marginTop:'20px'}}>
+            <div>
+              {landlordData.properties.map((eachProperty, i) => (
+                <PropertyCard
+                  key={i}
+                  {...eachProperty}
+
+                />
+              ))}
+            </div>
+          </Stack> 
+
+          }
+        </Container> 
         {chatClicked ? <Chat setChatClicked={setChatClicked} landlordData={landlordData}/> : null}
       </div>
     </ThemeProvider>

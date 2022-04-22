@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import HomeCard from '../components/HomeCard.jsx';
-
-import '../index.css';
+import HomeCard from '../components/HomeCard';
 
 export default function MapSearch(props) {
   // 'pins' is an array of pins to post on the map based on address from the database
@@ -48,7 +46,7 @@ export default function MapSearch(props) {
 
   /** Display the map positioned over the USA by default */
   return (
-    <div id="map">
+    <div id='map'>
       <MapContainer center={[37.09024, -95.712891]} zoom={4}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

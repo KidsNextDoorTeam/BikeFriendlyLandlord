@@ -5,7 +5,7 @@ const landlordController = {};
 
 landlordController.getById = async (req, res, next) => {
   const landlordQuery = {
-    text: `SELECT l.*, u.first_name, u.last_name, u.username, u.email, u.profile_pic 
+    text: `SELECT l.*, u.first_name, u.last_name, u.username, u.email, u.description, u.profile_pic 
     FROM landlords l LEFT JOIN users u ON u._id = l._id WHERE l._id = $1`,
     values: [req.params.landlordId]
   };
@@ -93,8 +93,12 @@ landlordController.searchLandlords = async (req, res, next) => {
     ) p 
     ON p.landlord_id = l._id
     LEFT JOIN users u ON u._id = l._id
-    WHERE bike_friendly = $2 AND pet_friendly = $3;`,
-    values: [city, bike_friendly, pet_friendly]
+    ${bike_friendly || pet_friendly ? 'WHERE' : ''}
+    ${bike_friendly ? 'bike_friendly = true' : ''}
+    ${bike_friendly && pet_friendly ? 'AND' : ''}
+    ${pet_friendly ? 'pet_friendly = true' : ''}
+    ;`,
+    values: [city]
   };
 
   try {
