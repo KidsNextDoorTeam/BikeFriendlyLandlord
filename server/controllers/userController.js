@@ -97,16 +97,16 @@ userController.getUserData = async (req, res, next) => {
 userController.updateUserData = async (req, res, next) => {
   try {
 
-    const { firstname, lastname, description, email} = req.body;
+    const { firstname, lastname, description, email, profilePic} = req.body;
     const { userId } = req.params;
 
     const queryString = `
     UPDATE users SET
-    first_name = $1, last_name = $2, email = $3, description = $4   
-    WHERE users._id = $5;
+    first_name = $1, last_name = $2, email = $3, description = $4, profile_pic = $5   
+    WHERE users._id = $6;
     `;
 
-    const result = await db.query(queryString, [firstname, lastname, email, description, userId]);
+    const result = await db.query(queryString, [firstname, lastname, email, description, profilePic, userId]);
     // delete result.rows[0].password;
 
     // res.locals.userData = result.rows[0];

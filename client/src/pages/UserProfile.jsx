@@ -17,7 +17,7 @@ export default function UserProfile() {
   const {user, setUser, user:{first_name} } = useAuth();
 
   const [reviews, setReviews] = useState([]);
-  const [firstname, setFirstName] = useState('');
+  const [firstname, setFirstName] = useState(first_name);
   const [lastname, setLastName] = useState('');
   const [description, setDescription] = useState('');
   const [email, setEmail] = useState('');
@@ -83,6 +83,12 @@ export default function UserProfile() {
     setCurrentTab(newValue);
   };
 
+  // const handlePicChange = event => {
+  //   const fileUploaded = event.target.files[0].name;
+  //   console.log(fileUploaded)
+  //   setProfilePic(event.target.files[0].name);
+  // };
+
   const userProfileChange = () => {
     setUpdateMode(false);
     setUpdateUser(false);
@@ -91,6 +97,7 @@ export default function UserProfile() {
       lastname:lastname,
       description: description, 
       email: email,
+      profilePic: profilePic,
     }).then((response) => {
       if (response) {
         setUpdateUser(true);
@@ -157,11 +164,17 @@ export default function UserProfile() {
                     rows={4}
                     onChange={(e) => setDescription(e.target.value)}
                   />
-                  <Button variant='contained' component='label'>
-                    {' '}
-                    Upload Picture
-                    <input type='file' hidden />
-                  </Button>
+                  <input
+                    style={{ display: 'none' }}
+                    id="contained-button-file"
+                    type="file"
+                    onChange={(e) => setProfilePic(e.target.files[0].name)}
+                  />
+                  <label htmlFor="contained-button-file">
+                    <Button variant="contained" color="primary" component="span">
+                    Update Picture
+                    </Button>
+                  </label>
                 </div>
                 <button
                   style={{
