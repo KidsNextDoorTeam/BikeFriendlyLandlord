@@ -14,10 +14,10 @@ import { stringAvatar } from '../common/styling.js';
 import { useAuth } from '../hooks/authContext';
 
 export default function UserProfile() {
-  const {user, setUser, user:{first_name} } = useAuth();
+  const {user, setUser } = useAuth();
 
   const [reviews, setReviews] = useState([]);
-  const [firstname, setFirstName] = useState(first_name);
+  const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
   const [description, setDescription] = useState('');
   const [email, setEmail] = useState('');
