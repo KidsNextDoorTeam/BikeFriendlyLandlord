@@ -4,13 +4,13 @@ import { createTheme } from '@mui/material/styles';
 const tomatopalette = createTheme({
   palette: {
     background: {
-      paper: '#f1f1f1',
+      paper: 'rgba(241, 241, 241, 0.6)',
     },
     primary: {
       main: '#ff6347',
       contrastText: '#fff',
     },
-    background: '#a1a1a1'
+    // background: '#a1a1a1'
   },
   typography: {
     fontFamily: [

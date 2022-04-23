@@ -12,6 +12,7 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Select from '@mui/material/Select';
 import { Co2Sharp } from '@mui/icons-material';
+import Link from '@mui/material/Link';
 
 export default function Signup(props) {
   const { handleSubmit, setAuthDisplay, setDisplayLogin } = props;
@@ -192,12 +193,23 @@ export default function Signup(props) {
         <Button variant='contained' type='submit' sx={inputButtonStyle}>
           Signup
         </Button>
-        <div className='linkButton' onClick={() => setDisplayLogin(true)}>
+        <Link className='linkButton'
+          sx={{
+            color: 'blueviolet',
+            textDecoration: 'underline',
+            mb: 1,
+          }}
+          onClick={() => setDisplayLogin(true)}>
           Already have an account? Login.
-        </div>
-        <button className='exitButton' onClick={() => setAuthDisplay(false)}>
+        </Link>
+        <Button
+          variant='contained'
+          size='small'
+          sx={{ textTransform: 'none' }}
+          onClick={() => setAuthDisplay(false)}
+        >
           Continue without logging in
-        </button>
+        </Button>
       </Box>
     </>
   );
