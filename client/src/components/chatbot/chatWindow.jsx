@@ -69,7 +69,7 @@ export default function ChatWindow (props){
             {props.messages.map(message => (
                   <Card sx={{margin: '12px 3px 0 3px', alignSelf: props.userName === message.user ? 'flex-end' : 'flex-start' }} key={message.msg}>
                     <ListItemIcon sx={{float: props.userName === message.user ? 'right' : 'left' }}>
-                      <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
+                      <Avatar alt="RandomPic" src= {props.userName === message.user ? "https://source.unsplash.com/random" : props.src} />
                     </ListItemIcon>
                     <CardContent>
                       <Typography variant="body2" color="text.secondary">

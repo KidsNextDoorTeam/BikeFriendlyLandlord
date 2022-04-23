@@ -251,7 +251,11 @@ export default function ProfilePage() {
 
           }
         </Container> 
-        {chatClicked ? <Chat setChatClicked={setChatClicked} landlordData={landlordData}/> : null}
+        {chatClicked ? <Chat 
+        setChatClicked={setChatClicked} 
+        landlordData={landlordData}
+        src={`/images/${landlordData.profile_pic}`}
+        /> : null}
       </div>
     </ThemeProvider>
   );

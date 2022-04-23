@@ -116,7 +116,8 @@ export default class Chat extends Component {
               onButtonClicked={this.onButtonClicked}
               onNameEnter={this.onNameEnter}
               onClosed={this.onClosed}
-              onMinimized={this.onMinimized}/>
+              onMinimized={this.onMinimized}
+              src={this.props.src}/>
           : this.state.isLoggedIn & this.state.chatCollapsed & !this.state.chatClosed ?
           <Minimized
             chatCollapsed={this.state.chatCollapsed}
