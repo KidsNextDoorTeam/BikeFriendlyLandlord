@@ -38,7 +38,8 @@ CREATE TABLE public.properties (
     zip_code integer,
     landlord_id integer,
     latitude numeric,
-    longitude numeric
+    longitude numeric,
+    is_available boolean NOT NULL
 );
 
 
@@ -169,3 +170,7 @@ ALTER TABLE ONLY public.user_roles
 
 ALTER TABLE ONLY public.reviews
     ADD CONSTRAINT users_fk0 FOREIGN KEY (landlord_id) REFERENCES public.landlords(_id);
+
+ALTER TABLE ONLY public.properties
+    ADD CONSTRAINT properties_fk0 FOREIGN KEY (landlord_id) REFERENCES public.landlords(_id);
+    

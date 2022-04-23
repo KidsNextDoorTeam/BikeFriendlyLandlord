@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -12,6 +12,8 @@ import { Button, Grid, TextField, Input } from '@mui/material';
 import { Review } from '../components/Review';
 import { stringAvatar } from '../common/styling.js';
 import { useAuth } from '../hooks/authContext';
+import { useAlert } from '../hooks/alertContext';
+import PropertiesList from '../components/ProperitesList';
 
 // for landlord selecting
 import InputLabel from '@mui/material/InputLabel';
@@ -21,6 +23,7 @@ import Select from '@mui/material/Select';
 
 export default function UserProfile() {
   const {user, getUser } = useAuth();
+  const [properties, setProperties] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [firstname, setFirstName] = useState(user.first_name);
   const [lastname, setLastName] = useState(user.last_name);
@@ -29,6 +32,7 @@ export default function UserProfile() {
   const [profilePic, setProfilePic] = useState(user.profile_pic);
   const [currentTab, setCurrentTab] = useState(0);
   const [updateMode, setUpdateMode] = useState(false);
+  const { setAlert, setAlertSeverity } = useAlert();
 
   //Todo for landlord fetching
   //1. import use navigation to route to review page with landlord ID
@@ -59,6 +63,7 @@ export default function UserProfile() {
   const navigate = useNavigate();
   // let [searchParams, setSearchParams] = useSearchParams();
   const mounted = useRef(true);
+
   const getReviews = async () => {
     if (!user._id) {
       navigate('/'); // user needs to sign in
@@ -77,6 +82,23 @@ export default function UserProfile() {
     }
   };
 
+  const getLandlordInfo = async () => {
+    if (!user._id) {
+      navigate('/'); // user needs to sign in
+      return;
+    }
+    try {
+      const { status, data } = await axios.get(`/landlords/${user._id}`);
+      if (status >= 200 && status < 300 && mounted.current) setProperties(data.landlord.properties);
+    } catch (err) {
+      if (err?.response?.status === 401) {
+        navigate('/');
+      } else {
+        console.error('Error fetching landlordProperties -->', err);
+      }
+    }
+  };
+
   //create function for axios get request to /landlords path
   const getLandlords = async () => {
     try {
@@ -84,17 +106,41 @@ export default function UserProfile() {
       if (status >= 200 && status < 300 && mounted.current) console.log(data);
       setLandlords(data.landlords);
     } catch (err) {
-      if (err?.repsonse?.status === 401) {
+      if (err?.response?.status === 401) {
         navigate('/');
       } else {
-        console.error('Error fetching landlord name-->', err);
+        console.error('Error fetching landlordProperties -->', err);
       }
     }
+  };
+
+  const toggleAvailability = async (id, available) => {
+    try {
+      const { status } = await axios.put(`/properties/${id}`, {
+        is_available: available
+      });
+
+      if (status >= 200) {
+        setAlert('Great Success. Very nice');
+        setAlertSeverity('success');
+        getLandlordInfo();
+      }
+    } catch (err) {
+      if (err?.response?.status === 401) {
+        setAlert('Go login bruh');
+        setAlertSeverity('error');
+      }
+    }
+    
   };
 
   useEffect(() => {
     getReviews();
     getLandlords();
+    if (user.roles?.includes('landlord')) {
+      getLandlordInfo();
+    }
+
     return () => () => (mounted.current = false);
   }, [user]);
 
@@ -267,6 +313,7 @@ export default function UserProfile() {
               <Tab label="Overview" />
               <Tab label="Reviews" />
               <Tab label="Saved Landlords" />
+              {user.isLandlord && <Tab label="My Properties" />}
             </Tabs>
             {currentTab === 0 && (
               <div id="userDetails">
@@ -397,6 +444,8 @@ export default function UserProfile() {
                 <h3> You don&apos;t have any saved landlords yet</h3>
               </div>
             )}
+            {currentTab === 3 &&
+              <PropertiesList properties={properties} toggleAvailability={toggleAvailability} />}
           </Grid>
         </Grid>
       </Typography>
