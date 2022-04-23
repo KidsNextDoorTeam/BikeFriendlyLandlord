@@ -61,19 +61,19 @@ export default function ChatWindow (props){
           </Grid>
           <Grid item xs={8}>
             <Typography variant="h8" gutterBottom component="div" sx={{ p: 2, pb: 0 }}>
-              {props.userName}'s Chat Window
+              {props.user.first_name}'s Chat Window
             </Typography>
           </Grid>
         </Grid>
           <List sx={{ mb: 2, display: 'flex', flexDirection: 'column', paddingBottom: 5}}>
             {props.messages.map(message => (
-                  <Card sx={{margin: '12px 3px 0 3px', alignSelf: props.userName === message.user ? 'flex-end' : 'flex-start' }} key={message.msg}>
-                    <ListItemIcon sx={{float: props.userName === message.user ? 'right' : 'left' }}>
-                      <Avatar alt="RandomPic" src= {props.userName === message.user ? "https://source.unsplash.com/random" : props.src} />
+                  <Card sx={{margin: '12px 3px 0 3px', alignSelf: props.user.username === message.user ? 'flex-end' : 'flex-start' }} key={message.msg}>
+                    <ListItemIcon sx={{float: props.user.username === message.user ? 'right' : 'left' }}>
+                      <Avatar alt="RandomPic" src= {props.user.profile_pic ? message.profilePic : "https://source.unsplash.com/random"} />
                     </ListItemIcon>
                     <CardContent>
                       <Typography variant="body2" color="text.secondary">
-                        {message.user+": "}{message.msg}
+                        {message.firstName+": "}{message.msg}
                       </Typography>
                      </CardContent>
                 </Card> 

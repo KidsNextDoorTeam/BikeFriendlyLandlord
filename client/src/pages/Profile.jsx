@@ -25,7 +25,6 @@ import tomatopalette from '../components/tomatopalette.jsx';
 import { Review } from '../components/Review.jsx';
 import { LandlordInfoCard } from '../components/LandlordInfoCard.jsx';
 
-import '../index.css';
 import Chat from "../components/chatbot/chat.jsx"
 import { useAuth } from '../hooks/authContext';
 import { PropertyCard } from '../components/PropertyCard';
@@ -122,7 +121,7 @@ export default function ProfilePage() {
   const handleTabChange = (e, newValue) => {
     setCurrentTab(newValue);
   };
-
+  console.log('USER',user)
   return (
     <ThemeProvider theme={tomatopalette}>
       <div id='profileBackground'
@@ -255,6 +254,7 @@ export default function ProfilePage() {
         setChatClicked={setChatClicked} 
         landlordData={landlordData}
         src={`/images/${landlordData.profile_pic}`}
+        user={user}
         /> : null}
       </div>
     </ThemeProvider>

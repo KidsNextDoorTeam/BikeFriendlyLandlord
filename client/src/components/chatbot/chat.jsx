@@ -55,7 +55,9 @@ export default class Chat extends Component {
     client.send(JSON.stringify({
       type: "message",
       msg: value,
-      user: this.state.userName
+      user: this.props.user.username,
+      firstName: this.props.user.first_name,
+      profilePic: `/images/${this.props.user.profile_pic}`
     }));
     this.setState({ initialMessage: '' })
   }
@@ -89,7 +91,9 @@ export default class Chat extends Component {
             messages: [...state.messages,
               {
               msg: dataFromServer.msg,
-              user: dataFromServer.user
+              user: dataFromServer.user,
+              firstName: dataFromServer.firstName,
+              profilePic: dataFromServer.profilePic
             }]
           })
         );
@@ -106,7 +110,7 @@ export default class Chat extends Component {
         <CssBaseline />
         <ThemeProvider theme={darkTheme}>
         <Box sx={{width: "100vw",height: "100vh",position:'absolute',display: "flex",justifyContent: "right"}}>
-          {this.state.isLoggedIn & !this.state.chatCollapsed & !this.state.chatClosed ?
+          {!this.state.chatCollapsed & !this.state.chatClosed ?
             <ChatWindow 
               userName={this.state.userName}
               isLoggedIn={this.state.isLoggedIn}
@@ -117,13 +121,15 @@ export default class Chat extends Component {
               onNameEnter={this.onNameEnter}
               onClosed={this.onClosed}
               onMinimized={this.onMinimized}
-              src={this.props.src}/>
-          : this.state.isLoggedIn & this.state.chatCollapsed & !this.state.chatClosed ?
+              src={this.props.src}
+              user={this.props.user}/>
+          : this.state.chatCollapsed & !this.state.chatClosed ?
           <Minimized
             chatCollapsed={this.state.chatCollapsed}
             onMinimized={this.onMinimized}
             landlordData={this.props.landlordData}/>
           :
+          // this component is obsolete with working auth
           <ChatLogin
             onChatLogin={this.onChatLogin}/>
         }
