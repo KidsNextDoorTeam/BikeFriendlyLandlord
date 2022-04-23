@@ -11,6 +11,12 @@ module.exports = function (passport) {
       }
       const match = await bcrypt.compare(password, user.password);
       delete user.password;
+      const { rows: roles } = await db.query(
+        'SELECT r.role FROM user_roles u LEFT JOIN roles r ON u.role_id = r._id WHERE u.user_id = $1;',
+        [user._id]
+      );
+      console.log('rolling');
+      user.roles = roles.map(role => role.role);
       if (match) return cb(null, {
         ...user
       });
@@ -35,6 +41,11 @@ module.exports = function (passport) {
       try {
         const { rows: [userData] } = await db.query('SELECT * from users where _id = $1', [id]);
         delete userData.password;
+        const { rows: roles } = await db.query(
+          'SELECT r.role FROM user_roles u LEFT JOIN roles r ON u.role_id = r._id WHERE u.user_id = $1;',
+          [userData._id]
+        );
+        userData.roles = roles.map(role => role.role);
         cb(null, userData);
       } catch (error) {
         console.log('error deserializing');

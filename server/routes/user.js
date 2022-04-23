@@ -5,9 +5,8 @@ const reviewsController = require('../controllers/reviewsController');
 
 const router = express.Router();
 
-router.get('/getUser', authController.isAuthenticated, userController.getUserData, (req, res) => {
-
-  res.status(200).json(res.locals.userData);
+router.get('/:userId', authController.isAuthenticated, userController.getUserData, (req, res) => {
+  res.status(200).json({user: res.locals.userData});
 });
 
 router.get('/:userId/reviews', authController.isAuthenticated, reviewsController.getReviewsByUser, (req, res) => {

@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+<<<<<<< HEAD
 // import Typography from '@mui/material/Typography';
+=======
+>>>>>>> 3efcb62fcf7ffb816c3f6e6efefac4eb539315d8
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
@@ -11,13 +14,19 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Select from '@mui/material/Select';
+<<<<<<< HEAD
 import { Co2Sharp } from '@mui/icons-material';
+=======
+>>>>>>> 3efcb62fcf7ffb816c3f6e6efefac4eb539315d8
 import Link from '@mui/material/Link';
 
 export default function Signup(props) {
+  // TODO: handleSubmit in this component so we can handle 409 errors and render error messages
   const { handleSubmit, setAuthDisplay, setDisplayLogin } = props;
 
   const [isLandlord, setIsLandlord] = useState(false);
+  const [petFriendly, setPetFriendly] = useState(false);
+  const [bikeFriendly, setBikeFriendly] = useState(false);
   const [formData, setFormData] = useState({
     firstname: '',
     lastname: '',
@@ -58,11 +67,6 @@ export default function Signup(props) {
     }
   }, [formData.password]);
 
-  // function validateEmail(email) {
-  //   const res = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  //   return res.test(String(email).toLowerCase());
-  // }
-
   return (
     <>
       <Box
@@ -71,11 +75,10 @@ export default function Signup(props) {
         onSubmit={(e) =>
           handleSubmit(
             e,
-            { ...formData, isLandlord, petfriendly, bikefriendly },
+            { ...formData, isLandlord, petFriendly, bikeFriendly },
             false
           )
         }
-        // noValidate
       >
         <h3>Signup</h3>
         <TextField
@@ -92,6 +95,7 @@ export default function Signup(props) {
         />
         <TextField
           fullWidth
+          required
           sx={inputButtonStyle}
           id='last'
           label='Last Name'
@@ -103,6 +107,7 @@ export default function Signup(props) {
         />
         <TextField
           fullWidth
+          required
           sx={inputButtonStyle}
           id='username'
           label='username'
@@ -114,6 +119,7 @@ export default function Signup(props) {
         />
         <TextField
           fullWidth
+          required
           sx={inputButtonStyle}
           id='email'
           label='Email'
@@ -127,6 +133,7 @@ export default function Signup(props) {
         />
         <TextField
           fullWidth
+          required
           sx={inputButtonStyle}
           id='password'
           label='Password'
@@ -141,6 +148,7 @@ export default function Signup(props) {
         />
         <TextField
           fullWidth
+          required
           sx={inputButtonStyle}
           id='confirm-password'
           label='Confirm Password'
@@ -156,6 +164,7 @@ export default function Signup(props) {
         <FormControl fullWidth>
           <InputLabel id='role-input-label'>Role</InputLabel>
           <Select
+            required
             sx={inputButtonStyle}
             labelId='role-input-label'
             id='role'
@@ -168,27 +177,27 @@ export default function Signup(props) {
           </Select>
         </FormControl>
         <FormControl>
-          {isLandlord === false ? (
-            console.log('Not a landlord')
-          ) : (
+          {isLandlord && 
             <FormControl component='fieldset'>
               <FormLabel component='legend'>Select your friendliness</FormLabel>
               <FormGroup aria-label='position' row>
                 <FormControlLabel
-                  value='pet_friendly'
+                  value={petFriendly}
+                  onChange={() => setPetFriendly(!petFriendly)}
                   control={<Checkbox />}
                   label='Pet'
                   labelPlacement='end'
                 />
                 <FormControlLabel
-                  value='bike_friendly'
+                  value={bikeFriendly}
+                  onChange={() => setBikeFriendly(!bikeFriendly)}
                   control={<Checkbox />}
                   label='Bike'
                   labelPlacement='end'
                 />
               </FormGroup>
             </FormControl>
-          )}
+          }
         </FormControl>
         <Button variant='contained' type='submit' sx={inputButtonStyle}>
           Signup
@@ -203,7 +212,7 @@ export default function Signup(props) {
           Already have an account? Login.
         </Link>
         <Button
-          variant='contained'
+          variant='outlined'
           size='small'
           sx={{ textTransform: 'none' }}
           onClick={() => setAuthDisplay(false)}

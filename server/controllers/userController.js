@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const db = require('../models/BFLL.js');
+const format = require('pg-format');
 const AppError = require('../util/AppError');
 const SqlError = require('../util/SqlError.js');
 
@@ -55,8 +56,11 @@ userController.createUser = async (req, res, next) => {
     delete user.password;
     res.locals.user = user;
 
-    // TODO: User roles query
+    const roles = [[user._id, 3]];
+    if (isLandlord) roles.push([[user._id, 2]]);
 
+    const roleQuery = format('INSERT INTO user_roles VALUES %L;', roles);
+    await client.query(roleQuery);
     // If they're a landlord add them to the landlords table as well
     if (isLandlord) {
       if (
@@ -112,21 +116,33 @@ userController.deleteUser = async (req, res, next) => {
   }
 };
 
-// TODO: Is this still needed? 
 userController.getUserData = async (req, res, next) => {
   try {
-    const userId = res.locals.user;
+    const { id } = req.params;
 
-    const queryString = `
-    SELECT * FROM users
-    WHERE users._id = $1;
-    `;
+    const userQuery = {
+      text: `
+      SELECT first_name, last_name, username, email, profile_pic, description 
+      FROM users WHERE _id = $1;
+      `, 
+      values: [id],
+    };
 
-    const result = await db.query(queryString, [userId._id]);
+    const roleQuery = {
+      text: `
+      SELECT role FROM user_roles ur 
+      LEFT JOIN roles r ON  r.id = ur.role_id
+      WHERE ur.user_id = $1;
+      `,
+      values: [id],
+    };
 
-    delete result.rows[0].password;
+    const {rows: [user]} = await db.query(userQuery);
+    const { rows: roles } = await db.query(userQuery);
+    user.roles = roles;
+    delete user.password;
 
-    res.locals.userData = result.rows[0];
+    res.locals.userData = user;
 
     return next();
   } catch (error) {
