@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Avatar from '@mui/material/Avatar';
-import { Button, Grid, TextField, Input } from '@mui/material';
+import { Button, Grid, TextField } from '@mui/material';
 
 import { Review } from '../components/Review';
 import { stringAvatar } from '../common/styling.js';
@@ -142,7 +142,7 @@ export default function UserProfile() {
               {user.profile_pic ? (
                 <Avatar
                   alt="User picture"
-                  src={`/images/${user.profile_pic}`}
+                  src={`/images/${profilePic}`}
                   sx={{
                     width: 200,
                     height: 200,
@@ -202,27 +202,27 @@ export default function UserProfile() {
                   <label htmlFor="contained-button-file">
                     <Button variant="contained" color="primary" component="span">
                     Update Picture
-                    </Button><br></br>{profilePic}
+                    </Button>
                   </label>
                 </div>
                 <Button
                   variant="outlined"
                   onClick={() => {
-                    setFirstName('');
-                    setLastName('');
-                    setProfilePic('');
-                    setDescription('');
-                    setEmail('');
+                    setFirstName(user.first_name);
+                    setLastName(user.last_name);
+                    setProfilePic(user.profile_pic);
+                    setDescription(user.description);
+                    setEmail(user.email);
                     setUpdateMode(false);
                   }}
-                  sx={{ mr: 2, textTransform: 'none' }}
+                  sx={{ mt: 1, mr: 2, textTransform: 'none' }}
                 >
                   Cancel
                 </Button>
                 <Button
                   variant="contained"
                   onClick={userProfileChange}
-                  sx={{ textTransform: 'none' }}
+                  sx={{ mt:1, textTransform: 'none' }}
                 >
                   Save
                 </Button>
