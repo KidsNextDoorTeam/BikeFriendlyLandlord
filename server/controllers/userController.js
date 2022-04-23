@@ -119,7 +119,6 @@ userController.deleteUser = async (req, res, next) => {
 userController.getUserData = async (req, res, next) => {
   try {
     const { userId: id } = req.params;
-
     const userQuery = {
       text: `
       SELECT first_name, last_name, username, email, profile_pic, description 
@@ -131,15 +130,15 @@ userController.getUserData = async (req, res, next) => {
     const roleQuery = {
       text: `
       SELECT role FROM user_roles ur 
-      LEFT JOIN roles r ON  r.id = ur.role_id
+      LEFT JOIN roles r ON  r._id = ur.role_id
       WHERE ur.user_id = $1;
       `,
       values: [id],
     };
 
     const {rows: [user]} = await db.query(userQuery);
-    const { rows: roles } = await db.query(userQuery);
-    user.roles = roles;
+    const { rows: roles } = await db.query(roleQuery);
+    user.roles = roles.map(role => role.role);
     delete user.password;
 
     res.locals.userData = user;
