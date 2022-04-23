@@ -170,6 +170,7 @@ a {
   padding-right: 10px;
   list-style: none;
   color: #666;
+  cursor: pointer;
 }
 
 h3 {

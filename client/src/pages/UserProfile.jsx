@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Avatar from '@mui/material/Avatar';
-import { Button, Grid, TextField, Input } from '@material-ui/core';
+import { Button, Grid, TextField, Input } from '@mui/material';
 
 import { Review } from '../components/Review';
 import { stringAvatar } from '../common/styling.js';
@@ -125,43 +125,27 @@ export default function UserProfile() {
                     rows={4}
                   // onChange={(e) => setUsername(e.target.value)}
                   />
-                  <Button variant='contained' component='label'>
-                    {' '}
+                  <Button variant='contained' component='label' sx={{mb: 2}}>
                     Upload Picture
                     <input type='file' hidden />
                   </Button>
                 </div>
-                <button
-                  style={{
-                    padding: '7px 15px',
-                    borderRadius: '10px',
-                    border: '1px solid tomato',
-                    color: 'tomato',
-                    backgroundColor: 'transparent',
-                    marginRight: '10px',
-                    cursor: 'pointer',
-                    marginTop: '10px',
-                  }}
+                <Button
+                  variant='outlined'
                   onClick={() => {
                     setUpdateMode(false);
                   }}
+                  sx={{mr: 2, textTransform: 'none'}}
                 >
                   Cancel
-                </button>
-                <button
-                  style={{
-                    padding: '7px 15px',
-                    borderRadius: '10px',
-                    border: 'none',
-                    color: 'white',
-                    backgroundColor: 'tomato',
-                    marginRight: '10px',
-                    cursor: 'pointer',
-                  }}
+                </Button>
+                <Button
+                  variant='contained'
                   onClick={userProfileChange}
+                  sx={{textTransform: 'none'}}
                 >
                   Save
-                </button>
+                </Button>
               </Box > :
               <Box>
                 <div style={{ marginBottom: '10px', color: '#333' }}>
@@ -226,8 +210,8 @@ export default function UserProfile() {
                 >
                   You have no reviews yet
                 </h3>}
-              {reviews.map((review, index) => {
-                return <Review
+              {reviews.map((review) => (
+                <Review
                   username={user.username}
                   _id={review._id}
                   title={review.title}
@@ -237,11 +221,11 @@ export default function UserProfile() {
                   bike_rating={review.bike_rating}
                   pet_friendly_rating={review.pet_friendly}
                   description={review.description}
-                  key={index}
+                  key={review._id}
                   onSave={onReviewSave}
                   onDelete={onReviewDelete}
-                />;
-              })}
+                />
+              ))}
             </div>}
             {currentTab === 2 &&
               <div
