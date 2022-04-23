@@ -2,10 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-<<<<<<< HEAD
-// import Typography from '@mui/material/Typography';
-=======
->>>>>>> 3efcb62fcf7ffb816c3f6e6efefac4eb539315d8
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
@@ -14,10 +10,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Select from '@mui/material/Select';
-<<<<<<< HEAD
-import { Co2Sharp } from '@mui/icons-material';
-=======
->>>>>>> 3efcb62fcf7ffb816c3f6e6efefac4eb539315d8
 import Link from '@mui/material/Link';
 
 export default function Signup(props) {
