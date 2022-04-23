@@ -1,21 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Checkbox from '@mui/material/Checkbox';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import Select from '@mui/material/Select';
 import Link from '@mui/material/Link';
 
 export default function Signup(props) {
+  // TODO: handleSubmit in this component so we can handle 409 errors and render error messages
   const { handleSubmit, setAuthDisplay, setDisplayLogin } = props;
 
-  // const [isLandlord, setIsLandlord] = useState(false);
+  const [isLandlord, setIsLandlord] = useState(false);
+  const [petFriendly, setPetFriendly] = useState(false);
+  const [bikeFriendly, setBikeFriendly] = useState(false);
   const [formData, setFormData] = useState({
-    // isLandlord: isLandlord,
     firstname: '',
     lastname: '',
     username: '',
     password: '',
+    confirmPassword: '',
     email: '',
   });
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const formStyle = {
     // marginTop: 8,
@@ -29,68 +42,155 @@ export default function Signup(props) {
     marginBottom: '10px',
   };
 
+  useEffect(() => {
+    if (formData.confirmPassword.length === 0) return;
+    if (formData.password !== formData.confirmPassword) {
+      setConfirmPasswordError('Passwords do not match');
+    } else {
+      setConfirmPasswordError('');
+    }
+  }, [formData.password, formData.confirmPassword]);
+
+  useEffect(() => {
+    if (formData.password.length > 0 && formData.password.length < 8) {
+      setPasswordError('Must be 8 characters');
+    } else {
+      setPasswordError('');
+    }
+  }, [formData.password]);
+
   return (
     <>
       <Box
         sx={formStyle}
-        component="form"
-        onSubmit={(e) => handleSubmit(e, { ...formData }, false)}
-        noValidate>
+        component='form'
+        onSubmit={(e) =>
+          handleSubmit(
+            e,
+            { ...formData, isLandlord, petFriendly, bikeFriendly },
+            false
+          )
+        }
+      >
         <h3>Signup</h3>
-        {/* <div>
-          <Button variant='contained' onClick={() => setIsLandlord(false)}>
-            Tenant
-          </Button>
-          <Button variant='contained' onClick={() => setIsLandlord(true)}>
-            Landlord
-          </Button>
-        </div> */}
         <TextField
+          fullWidth
+          required
           sx={inputButtonStyle}
-          id='outlined-basic'
+          id='first'
           label='First Name'
           variant='outlined'
+          value={formData.firstname}
           onChange={(event) =>
             setFormData({ ...formData, firstname: event.target.value })
           }
         />
         <TextField
+          fullWidth
+          required
           sx={inputButtonStyle}
-          id='outlined-basic'
+          id='last'
           label='Last Name'
           variant='outlined'
+          value={formData.lastname}
           onChange={(event) =>
             setFormData({ ...formData, lastname: event.target.value })
           }
         />
         <TextField
+          fullWidth
+          required
           sx={inputButtonStyle}
-          id='outlined-basic'
+          id='username'
           label='username'
           variant='outlined'
+          value={formData.userName}
           onChange={(event) =>
             setFormData({ ...formData, username: event.target.value })
           }
         />
         <TextField
+          fullWidth
+          required
           sx={inputButtonStyle}
-          id='outlined-basic'
+          id='email'
           label='Email'
+          type='email'
+          pattern='[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$'
           variant='outlined'
+          value={formData.email}
           onChange={(event) =>
             setFormData({ ...formData, email: event.target.value })
           }
         />
         <TextField
+          fullWidth
+          required
           sx={inputButtonStyle}
-          id='outlined-basic'
+          id='password'
           label='Password'
           type='password'
           variant='outlined'
-          onChange={(event) =>
-            setFormData({ ...formData, password: event.target.value })
-          }
+          value={formData.password}
+          error={passwordError !== ''}
+          helperText={passwordError}
+          onChange={(event) => {
+            setFormData({ ...formData, password: event.target.value });
+          }}
         />
+        <TextField
+          fullWidth
+          required
+          sx={inputButtonStyle}
+          id='confirm-password'
+          label='Confirm Password'
+          type='password'
+          variant='outlined'
+          value={formData.confirmPassword}
+          error={confirmPasswordError !== ''}
+          helperText={confirmPasswordError}
+          onChange={(event) => {
+            setFormData({ ...formData, confirmPassword: event.target.value });
+          }}
+        />
+        <FormControl fullWidth>
+          <InputLabel id='role-input-label'>Role</InputLabel>
+          <Select
+            required
+            sx={inputButtonStyle}
+            labelId='role-input-label'
+            id='role'
+            value={isLandlord}
+            label='role'
+            onChange={(event) => setIsLandlord(event.target.value)}
+          >
+            <MenuItem value={true}>Landlord</MenuItem>
+            <MenuItem value={false}>Tenant</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl>
+          {isLandlord && 
+            <FormControl component='fieldset'>
+              <FormLabel component='legend'>Select your friendliness</FormLabel>
+              <FormGroup aria-label='position' row>
+                <FormControlLabel
+                  value={petFriendly}
+                  onChange={() => setPetFriendly(!petFriendly)}
+                  control={<Checkbox />}
+                  label='Pet'
+                  labelPlacement='end'
+                />
+                <FormControlLabel
+                  value={bikeFriendly}
+                  onChange={() => setBikeFriendly(!bikeFriendly)}
+                  control={<Checkbox />}
+                  label='Bike'
+                  labelPlacement='end'
+                />
+              </FormGroup>
+            </FormControl>
+          }
+        </FormControl>
         <Button variant='contained' type='submit' sx={inputButtonStyle}>
           Signup
         </Button>
@@ -104,7 +204,7 @@ export default function Signup(props) {
           Already have an account? Login.
         </Link>
         <Button
-          variant='contained'
+          variant='outlined'
           size='small'
           sx={{ textTransform: 'none' }}
           onClick={() => setAuthDisplay(false)}

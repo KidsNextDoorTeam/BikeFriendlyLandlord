@@ -11,7 +11,7 @@ import ReviewPage from './pages/ReviewPage';
 import UserProfile from './pages/UserProfile';
 import ProtectedRoute from './components/ProtectedRoute';
 import Alerts from './components/Alerts';
-import AlertContext from './hooks/alertContext';
+import {AlertProvider} from './hooks/alertContext';
 import useAlert from './hooks/useAlert';
 import Chat from '../src/components/chatbot/chat';
 import { AuthProvider } from './hooks/authContext';
@@ -24,11 +24,9 @@ import theme from './components/tomatopalette';
 import './index.css';
 
 export function App() {
-  const { alert, setAlert, alertSeverity, setAlertSeverity } = useAlert();
-
   return (
     <AuthProvider>
-      <AlertContext.Provider value={{ alert, setAlert, alertSeverity, setAlertSeverity }}>
+      <AlertProvider>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Navbar />
@@ -51,7 +49,7 @@ export function App() {
           <Chat />
           <Footer />
         </ThemeProvider>
-      </AlertContext.Provider>
+      </AlertProvider>
     </AuthProvider>
   );
 }

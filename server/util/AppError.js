@@ -8,6 +8,7 @@ class AppError extends Error {
    */
   constructor(error, controllerName, controllerMethod, status = 500) {
     super(error.message);  // bult-in param for Error object 
+    this.msg = error.message;
     this.serverLog = `ERROR: ${controllerName}.${controllerMethod}: ${error.message}`;
     this.status = status;
     Error.captureStackTrace(this, this.constructor);

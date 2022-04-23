@@ -20,16 +20,15 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 export default function UserProfile() {
-  const {user, setUser, user: {first_name, last_name, description, email, profile_pic} } = useAuth();
+  const {user, getUser } = useAuth();
   const [reviews, setReviews] = useState([]);
-  const [firstname, setFirstName] = useState(first_name);
-  const [lastname, setLastName] = useState(last_name);
-  const [userDescription, setDescription] = useState(description);
-  const [userEmail, setEmail] = useState(email);
-  const [profilePic, setProfilePic] = useState(profile_pic);
+  const [firstname, setFirstName] = useState(user.first_name);
+  const [lastname, setLastName] = useState(user.last_name);
+  const [userDescription, setDescription] = useState(user.description);
+  const [userEmail, setEmail] = useState(user.email);
+  const [profilePic, setProfilePic] = useState(user.profile_pic);
   const [currentTab, setCurrentTab] = useState(0);
   const [updateMode, setUpdateMode] = useState(false);
-  const [updateUser, setUpdateUser] = useState(false);
 
   //Todo for landlord fetching
   //1. import use navigation to route to review page with landlord ID
@@ -78,29 +77,8 @@ export default function UserProfile() {
     }
   };
 
-  const getUserData = async () => {
-    if (!user._id) {
-      navigate('/'); // user needs to sign in
-      return;
-    }
-    try {
-      const result = await axios.get(`/user/${user._id}/getUser`);
-      setUser(result.data);
-    } catch (err) {
-      if (err?.response?.status === 401) {
-        navigate('/');
-      } else {
-        console.error('Error fetching user info -->', err);
-      }
-    }
-  };
-
   //create function for axios get request to /landlords path
   const getLandlords = async () => {
-    if (!user._id) {
-      navigate('/'); // user needs to sign in
-      return;
-    }
     try {
       const { status, data } = await axios.get('/landlords');
       if (status >= 200 && status < 300 && mounted.current) console.log(data);
@@ -117,9 +95,8 @@ export default function UserProfile() {
   useEffect(() => {
     getReviews();
     getLandlords();
-    getUserData();
     return () => () => (mounted.current = false);
-  }, [user, updateUser]);
+  }, [user]);
 
   const onReviewDelete = () => {
     getReviews();
@@ -135,7 +112,6 @@ export default function UserProfile() {
 
   const userProfileChange = () => {
     setUpdateMode(false);
-    setUpdateUser(false);
     axios.put(`/user/${user._id}/updateUserInfo`, {
       firstname:firstname,
       lastname:lastname,
@@ -144,7 +120,7 @@ export default function UserProfile() {
       profilePic: profilePic,
     }).then((response) => {
       if (response) {
-        setUpdateUser(true);
+        getUser();
       }
     });
 
@@ -418,39 +394,6 @@ export default function UserProfile() {
                   textAlign: 'center',
                 }}
               >
-                <FormControl>
-                  <InputLabel id="landlord-select-label">
-                    Select Landlord
-                  </InputLabel>
-                  <Select
-                    labelId="landlord-select-label"
-                    id="landlord-select"
-                    value={selectedLandlord}
-                    label="landlords"
-                    onChange={handleChange}
-                  >
-                    {landLords.map((element, index) => (
-                      // TODO: .MuiButtonBase-root is setting display: inline-flex on the menu items
-                      <MenuItem key={index} value={element._id}>
-                        {element.first_name} {element.last_name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-
-                <FormControl fullWidth>
-                  <InputLabel id="role-input-label">Role</InputLabel>
-                  <Select
-                    labelId="role-label"
-                    id="role"
-                    value={true}
-                    label="role"
-                  >
-                    <MenuItem value={true}>Landlord</MenuItem>
-                    <MenuItem value={false}>Tenant</MenuItem>
-                  </Select>
-                </FormControl>
-
                 <h3> You don&apos;t have any saved landlords yet</h3>
               </div>
             )}

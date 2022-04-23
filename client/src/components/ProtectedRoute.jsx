@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import AlertContext from '../hooks/alertContext';
+import { useAlert } from '../hooks/alertContext';
 import { useAuth } from '../hooks/authContext';
 
 export default function ProtectedRoute({ children }) {
   const {user, isLoading} = useAuth();
-  const { setAlert, setAlertSeverity } = useContext(AlertContext);
+  const { alert, alertSeverity, setAlert, setAlertSeverity } = useAlert();
 
   const location = useLocation();
 
