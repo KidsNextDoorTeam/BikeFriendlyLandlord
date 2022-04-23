@@ -74,20 +74,38 @@ userController.deleteUser = async (req, res, next) => {
   }
 };
 
-// TODO: Is this still needed? 
 userController.getUserData = async (req, res, next) => {
   try {
-    const userId = res.locals.user;
-
+    const { userId } = req.params;
     const queryString = `
     SELECT * FROM users
     WHERE users._id = $1;
     `;
 
-    const result = await db.query(queryString, [userId._id]);
-
+    const result = await db.query(queryString, [userId]);
     delete result.rows[0].password;
 
+    res.locals.userData = result.rows[0];
+
+    return next();
+  } catch (error) {
+    return next(new AppError(error, 'userController', 'getUserData', 500));
+  }
+};
+
+userController.updateUserData = async (req, res, next) => {
+  try {
+
+    const { firstname, lastname, description, email, profilePic} = req.body;
+    const { userId } = req.params;
+
+    const queryString = `
+    UPDATE users SET
+    first_name = $1, last_name = $2, email = $3, description = $4, profile_pic = $5   
+    WHERE users._id = $6 RETURNING first_name, last_name, email, description, profile_pic ;
+    `;
+
+    const result = await db.query(queryString, [firstname, lastname, email, description, profilePic, userId]);
     res.locals.userData = result.rows[0];
 
     return next();

@@ -1,36 +1,35 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Avatar from "@mui/material/Avatar";
-import { Button, Grid, TextField, Input } from "@mui/material";
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Avatar from '@mui/material/Avatar';
+import { Button, Grid, TextField, Input } from '@mui/material';
 
-import { Review } from "../components/Review";
-import { stringAvatar } from "../common/styling.js";
-import { useAuth } from "../hooks/authContext";
+import { Review } from '../components/Review';
+import { stringAvatar } from '../common/styling.js';
+import { useAuth } from '../hooks/authContext';
 
 // for landlord selecting
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 export default function UserProfile() {
-  const {
-    user,
-    user: { first_name },
-  } = useAuth();
-
+  const {user, setUser, user: {first_name, last_name, description, email, profile_pic} } = useAuth();
   const [reviews, setReviews] = useState([]);
-  const [username, setUsername] = useState("");
   const [firstname, setFirstName] = useState(first_name);
-
+  const [lastname, setLastName] = useState(last_name);
+  const [userDescription, setDescription] = useState(description);
+  const [userEmail, setEmail] = useState(email);
+  const [profilePic, setProfilePic] = useState(profile_pic);
   const [currentTab, setCurrentTab] = useState(0);
   const [updateMode, setUpdateMode] = useState(false);
+  const [updateUser, setUpdateUser] = useState(false);
 
   //Todo for landlord fetching
   //1. import use navigation to route to review page with landlord ID
@@ -44,7 +43,7 @@ export default function UserProfile() {
   const [landLords, setLandlords] = React.useState([]);
 
   //state represents which landlord is selected
-  const [selectedLandlord, setSelectedLandlord] = useState("");
+  const [selectedLandlord, setSelectedLandlord] = useState('');
 
   //for changing landlord state
   const handleChange = (event) => {
@@ -63,7 +62,7 @@ export default function UserProfile() {
   const mounted = useRef(true);
   const getReviews = async () => {
     if (!user._id) {
-      navigate("/"); // user needs to sign in
+      navigate('/'); // user needs to sign in
       return;
     }
     try {
@@ -71,10 +70,27 @@ export default function UserProfile() {
       if (status >= 200 && status < 300 && mounted.current)
         setReviews(data.reviews);
     } catch (err) {
-      if (err?.repsonse?.status === 401) {
-        navigate("/");
+      if (err?.response?.status === 401) {
+        navigate('/');
       } else {
-        console.error("Error fetching users reviews -->", err);
+        console.error('Error fetching users reviews -->', err);
+      }
+    }
+  };
+
+  const getUserData = async () => {
+    if (!user._id) {
+      navigate('/'); // user needs to sign in
+      return;
+    }
+    try {
+      const result = await axios.get(`/user/${user._id}/getUser`);
+      setUser(result.data);
+    } catch (err) {
+      if (err?.response?.status === 401) {
+        navigate('/');
+      } else {
+        console.error('Error fetching user info -->', err);
       }
     }
   };
@@ -82,18 +98,18 @@ export default function UserProfile() {
   //create function for axios get request to /landlords path
   const getLandlords = async () => {
     if (!user._id) {
-      navigate("/"); // user needs to sign in
+      navigate('/'); // user needs to sign in
       return;
     }
     try {
-      const { status, data } = await axios.get("/landlords");
+      const { status, data } = await axios.get('/landlords');
       if (status >= 200 && status < 300 && mounted.current) console.log(data);
       setLandlords(data.landlords);
     } catch (err) {
       if (err?.repsonse?.status === 401) {
-        navigate("/");
+        navigate('/');
       } else {
-        console.error("Error fetching landlord name-->", err);
+        console.error('Error fetching landlord name-->', err);
       }
     }
   };
@@ -101,8 +117,9 @@ export default function UserProfile() {
   useEffect(() => {
     getReviews();
     getLandlords();
+    getUserData();
     return () => () => (mounted.current = false);
-  }, [user]);
+  }, [user, updateUser]);
 
   const onReviewDelete = () => {
     getReviews();
@@ -118,23 +135,34 @@ export default function UserProfile() {
 
   const userProfileChange = () => {
     setUpdateMode(false);
-    console.log(firstname);
-    console.log(username);
+    setUpdateUser(false);
+    axios.put(`/user/${user._id}/updateUserInfo`, {
+      firstname:firstname,
+      lastname:lastname,
+      description: userDescription, 
+      email: userEmail,
+      profilePic: profilePic,
+    }).then((response) => {
+      if (response) {
+        setUpdateUser(true);
+      }
+    });
+
   };
 
   return (
     <div
       id="userProfile"
       sx={{
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        backgroundAttachment: "fixed",
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundAttachment: 'fixed',
       }}
     >
-      <Typography variant="h6" component="div" style={{ fontFamily: "Nunito" }}>
+      <Typography variant="h6" component="div" style={{ fontFamily: 'Nunito' }}>
         <Grid container spacing={1}>
           <Grid item xs={3}>
-            <div style={{ display: "flex" }}>
+            <div style={{ display: 'flex' }}>
               {user.profile_pic ? (
                 <Avatar
                   alt="User picture"
@@ -158,9 +186,9 @@ export default function UserProfile() {
               <Box>
                 <div
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "10px",
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '10px',
                   }}
                 >
                   {/* TODO: Hanlde form updates and submission */}
@@ -171,15 +199,15 @@ export default function UserProfile() {
                     size="small"
                   />
                   <TextField
-                    label="Last Name"
-                    variant="outlined"
-                    // onChange={(e) => setUsername(e.target.value)}
+                    label='Last Name'
+                    variant='outlined'
+                    onChange={(e) => setLastName(e.target.value)}
                     size="small"
                   />
                   <TextField
-                    label="Username"
-                    variant="outlined"
-                    onChange={(e) => setUsername(e.target.value)}
+                    label='Email'
+                    variant='outlined'
+                    onChange={(e) => setEmail(e.target.value)}
                     size="small"
                   />
                   <TextField
@@ -187,35 +215,47 @@ export default function UserProfile() {
                     variant="outlined"
                     multiline
                     rows={4}
-                    // onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => setDescription(e.target.value)}
                   />
-                  <Button variant="contained" component="label" sx={{ mb: 2 }}>
-                    Upload Picture
-                    <input type="file" hidden />
-                  </Button>
+                  <input
+                    style={{ display: 'none' }}
+                    id="contained-button-file"
+                    type="file"
+                    onChange={(e) => setProfilePic(e.target.files[0].name)}
+                  />
+                  <label htmlFor="contained-button-file">
+                    <Button variant="contained" color="primary" component="span">
+                    Update Picture
+                    </Button><br></br>{profilePic}
+                  </label>
                 </div>
                 <Button
                   variant="outlined"
                   onClick={() => {
+                    setFirstName('');
+                    setLastName('');
+                    setProfilePic('');
+                    setDescription('');
+                    setEmail('');
                     setUpdateMode(false);
                   }}
-                  sx={{ mr: 2, textTransform: "none" }}
+                  sx={{ mr: 2, textTransform: 'none' }}
                 >
                   Cancel
                 </Button>
                 <Button
                   variant="contained"
                   onClick={userProfileChange}
-                  sx={{ textTransform: "none" }}
+                  sx={{ textTransform: 'none' }}
                 >
                   Save
                 </Button>
               </Box>
             ) : (
               <Box>
-                <div style={{ marginBottom: "10px", color: "#333" }}>
+                <div style={{ marginBottom: '10px', color: '#333' }}>
                   <h2>
-                    {" "}
+                    {' '}
                     {user.first_name} {user.last_name}
                   </h2>
                   <span> {user.username} </span>
@@ -223,9 +263,9 @@ export default function UserProfile() {
                 <Button
                   variant="contained"
                   style={{
-                    width: "80%",
-                    backgroundColor: "tomato",
-                    color: "white",
+                    width: '80%',
+                    backgroundColor: 'tomato',
+                    color: 'white',
                   }}
                   onClick={() => {
                     setUpdateMode(true);
@@ -242,7 +282,7 @@ export default function UserProfile() {
               variant="fullWidth"
               TabIndicatorProps={{
                 style: {
-                  backgroundColor: "#df4f35ea",
+                  backgroundColor: '#df4f35ea',
                 },
               }}
               value={currentTab}
@@ -255,12 +295,12 @@ export default function UserProfile() {
             {currentTab === 0 && (
               <div id="userDetails">
                 {user.description ? (
-                  <span style={{ marginTop: "2em" }}>{user.description}</span>
+                  <span style={{ marginTop: '2em' }}>{user.description}</span>
                 ) : (
                   <span
                     style={{
-                      textAlign: "center",
-                      marginTop: "2em",
+                      textAlign: 'center',
+                      marginTop: '2em',
                     }}
                   >
                     Welcome to Bike Friendly Landlord.<br></br>
@@ -282,24 +322,24 @@ export default function UserProfile() {
                         Select Landlord
                       </InputLabel>
                       <Select
-                        sx={{ minWidth: "160px" }}
+                        sx={{ minWidth: '160px' }}
                         labelId="landlord-select-label"
                         id="landlord-select"
                         value={selectedLandlord}
                         label="landlords"
                         onChange={handleChange}
                       >
-                        {" "}
+                        {' '}
                         <MenuItem
-                          value={""}
-                          sx={{ display: "block", bgcolor: "white" }}
+                          value={''}
+                          sx={{ display: 'block', bgcolor: 'white' }}
                         />
                         {landLords.map((element, index) => (
                           // TODO: .MuiButtonBase-root is setting display: inline-flex on the menu items
                           <MenuItem
                             key={index}
                             value={element._id}
-                            sx={{ display: "block", bgcolor: "white" }}
+                            sx={{ display: 'block', bgcolor: 'white' }}
                           >
                             {element.first_name} {element.last_name}
                           </MenuItem>
@@ -327,9 +367,9 @@ export default function UserProfile() {
                     <Button
                       variant="contained"
                       style={{
-                        width: "20%",
-                        backgroundColor: "tomato",
-                        color: "white",
+                        width: '20%',
+                        backgroundColor: 'tomato',
+                        color: 'white',
                         marginTop: 12,
                         marginBottom: 10,
                       }}
@@ -344,8 +384,8 @@ export default function UserProfile() {
                 {reviews.length === 0 && (
                   <h3
                     style={{
-                      textAlign: "center",
-                      marginTop: "2em",
+                      textAlign: 'center',
+                      marginTop: '2em',
                     }}
                   >
                     You have no reviews yet
@@ -374,8 +414,8 @@ export default function UserProfile() {
             {currentTab === 2 && (
               <div
                 style={{
-                  marginTop: "50px",
-                  textAlign: "center",
+                  marginTop: '50px',
+                  textAlign: 'center',
                 }}
               >
                 <FormControl>
