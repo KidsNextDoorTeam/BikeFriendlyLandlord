@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Avatar from "@mui/material/Avatar";
-import { Button, Grid, TextField, Input } from "@material-ui/core";
+import { Button, Grid, TextField, Input } from "@mui/material";
 
 import { Review } from "../components/Review";
 import { stringAvatar } from "../common/styling.js";
@@ -44,7 +44,7 @@ export default function UserProfile() {
   const [landLords, setLandlords] = React.useState([]);
 
   //state represents which landlord is selected
-  const [selectedLandlord, setSelectedLandlord] = useState(1);
+  const [selectedLandlord, setSelectedLandlord] = useState("");
 
   //for changing landlord state
   const handleChange = (event) => {
@@ -189,43 +189,27 @@ export default function UserProfile() {
                     rows={4}
                     // onChange={(e) => setUsername(e.target.value)}
                   />
-                  <Button variant="contained" component="label">
-                    {" "}
+                  <Button variant="contained" component="label" sx={{ mb: 2 }}>
                     Upload Picture
                     <input type="file" hidden />
                   </Button>
                 </div>
-                <button
-                  style={{
-                    padding: "7px 15px",
-                    borderRadius: "10px",
-                    border: "1px solid tomato",
-                    color: "tomato",
-                    backgroundColor: "transparent",
-                    marginRight: "10px",
-                    cursor: "pointer",
-                    marginTop: "10px",
-                  }}
+                <Button
+                  variant="outlined"
                   onClick={() => {
                     setUpdateMode(false);
                   }}
+                  sx={{ mr: 2, textTransform: "none" }}
                 >
                   Cancel
-                </button>
-                <button
-                  style={{
-                    padding: "7px 15px",
-                    borderRadius: "10px",
-                    border: "none",
-                    color: "white",
-                    backgroundColor: "tomato",
-                    marginRight: "10px",
-                    cursor: "pointer",
-                  }}
+                </Button>
+                <Button
+                  variant="contained"
                   onClick={userProfileChange}
+                  sx={{ textTransform: "none" }}
                 >
                   Save
-                </button>
+                </Button>
               </Box>
             ) : (
               <Box>
@@ -298,18 +282,24 @@ export default function UserProfile() {
                         Select Landlord
                       </InputLabel>
                       <Select
+                        sx={{ minWidth: "160px" }}
                         labelId="landlord-select-label"
                         id="landlord-select"
                         value={selectedLandlord}
                         label="landlords"
                         onChange={handleChange}
                       >
+                        {" "}
+                        <MenuItem
+                          value={""}
+                          sx={{ display: "block", bgcolor: "white" }}
+                        />
                         {landLords.map((element, index) => (
                           // TODO: .MuiButtonBase-root is setting display: inline-flex on the menu items
                           <MenuItem
                             key={index}
                             value={element._id}
-                            sx={{ display: "block" }}
+                            sx={{ display: "block", bgcolor: "white" }}
                           >
                             {element.first_name} {element.last_name}
                           </MenuItem>
@@ -318,11 +308,8 @@ export default function UserProfile() {
                     </FormControl>
 
                     <Button
+                      variant="contained"
                       style={{
-                        variant: "contained",
-                        width: "15%",
-                        backgroundColor: "tomato",
-                        color: "white",
                         marginTop: 12,
                         marginBottom: 10,
                         marginLeft: 10,
