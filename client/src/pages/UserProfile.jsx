@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Avatar from '@mui/material/Avatar';
-import { Button, Grid, TextField, Input } from '@mui/material';
+import { Button, Grid, TextField } from '@mui/material';
 
 import { Review } from '../components/Review';
 import { stringAvatar } from '../common/styling.js';
@@ -188,7 +188,7 @@ export default function UserProfile() {
               {user.profile_pic ? (
                 <Avatar
                   alt="User picture"
-                  src={`/images/${user.profile_pic}`}
+                  src={`/images/${profilePic}`}
                   sx={{
                     width: 200,
                     height: 200,
@@ -248,27 +248,27 @@ export default function UserProfile() {
                   <label htmlFor="contained-button-file">
                     <Button variant="contained" color="primary" component="span">
                     Update Picture
-                    </Button><br></br>{profilePic}
+                    </Button>
                   </label>
                 </div>
                 <Button
                   variant="outlined"
                   onClick={() => {
-                    setFirstName('');
-                    setLastName('');
-                    setProfilePic('');
-                    setDescription('');
-                    setEmail('');
+                    setFirstName(user.first_name);
+                    setLastName(user.last_name);
+                    setProfilePic(user.profile_pic);
+                    setDescription(user.description);
+                    setEmail(user.email);
                     setUpdateMode(false);
                   }}
-                  sx={{ mr: 2, textTransform: 'none' }}
+                  sx={{ mt: 1, mr: 2, textTransform: 'none' }}
                 >
                   Cancel
                 </Button>
                 <Button
                   variant="contained"
                   onClick={userProfileChange}
-                  sx={{ textTransform: 'none' }}
+                  sx={{ mt:1, textTransform: 'none' }}
                 >
                   Save
                 </Button>
@@ -316,16 +316,11 @@ export default function UserProfile() {
               {user.isLandlord && <Tab label="My Properties" />}
             </Tabs>
             {currentTab === 0 && (
-              <div id="userDetails">
+              <div id="userDetails" style={{ marginTop: '15px', textAlign: 'center' }}>
                 {user.description ? (
-                  <span style={{ marginTop: '2em' }}>{user.description}</span>
+                  <span>{user.description}</span>
                 ) : (
-                  <span
-                    style={{
-                      textAlign: 'center',
-                      marginTop: '2em',
-                    }}
-                  >
+                  <span>
                     Welcome to Bike Friendly Landlord.<br></br>
                     Edit your profile, add a bio and explore!
                   </span>
@@ -340,12 +335,13 @@ export default function UserProfile() {
                       minWidth: 120,
                     }}
                   >
-                    <FormControl size="large">
-                      <InputLabel id="landlord-select-label">
+                    <FormControl size="small">
+                      <InputLabel id="landlord-select-label" sx={{marginTop:'10px'}}> 
                         Select Landlord
                       </InputLabel>
                       <Select
-                        sx={{ minWidth: '160px' }}
+                        MenuProps={{ sx: { '&& .MuiPaper-root': { backgroundColor: 'lightgrey' }}}}
+                        sx={{ minWidth: '160px',marginTop: 1.5 ,marginBottom: 1}}
                         labelId="landlord-select-label"
                         id="landlord-select"
                         value={selectedLandlord}
@@ -377,7 +373,7 @@ export default function UserProfile() {
                         marginBottom: 10,
                         marginLeft: 10,
                       }}
-                      //  onClick={handleReview} need to select landlordid and send to review page
+                      //  onClick={handleReview} need to select landlord id and send to review page
                       onClick={handleReview}
                     >
                       Create Review
