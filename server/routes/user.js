@@ -9,6 +9,10 @@ router.get('/:userId', authController.isAuthenticated, userController.getUserDat
   res.status(200).json({user: res.locals.userData});
 });
 
+router.put('/:userId/updateUserInfo', userController.updateUserData, (req, res) => {
+  res.status(200).json(res.locals);
+});
+
 router.get('/:userId/reviews', authController.isAuthenticated, reviewsController.getReviewsByUser, (req, res) => {
   res.status(200).json({ reviews: res.locals.reviews });
 });
