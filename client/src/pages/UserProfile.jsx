@@ -269,16 +269,11 @@ export default function UserProfile() {
               <Tab label="Saved Landlords" />
             </Tabs>
             {currentTab === 0 && (
-              <div id="userDetails">
+              <div id="userDetails" style={{ marginTop: '15px', textAlign: 'center' }}>
                 {user.description ? (
-                  <span style={{ marginTop: '2em' }}>{user.description}</span>
+                  <span>{user.description}</span>
                 ) : (
-                  <span
-                    style={{
-                      textAlign: 'center',
-                      marginTop: '2em',
-                    }}
-                  >
+                  <span>
                     Welcome to Bike Friendly Landlord.<br></br>
                     Edit your profile, add a bio and explore!
                   </span>
