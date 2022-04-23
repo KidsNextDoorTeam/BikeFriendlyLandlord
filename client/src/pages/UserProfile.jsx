@@ -293,7 +293,7 @@ export default function UserProfile() {
                       minWidth: 120,
                     }}
                   >
-                    <FormControl>
+                    <FormControl size="large">
                       <InputLabel id="landlord-select-label">
                         Select Landlord
                       </InputLabel>
@@ -317,22 +317,21 @@ export default function UserProfile() {
                       </Select>
                     </FormControl>
 
-                    {/* <button
+                    <Button
                       style={{
-                        padding: "7px 15px",
-                        borderRadius: "10px",
-                        border: "none",
-                        color: "white",
+                        variant: "contained",
+                        width: "15%",
                         backgroundColor: "tomato",
-                        marginRight: "10px",
-                        cursor: "pointer",
+                        color: "white",
+                        marginTop: 12,
                         marginBottom: 10,
+                        marginLeft: 10,
                       }}
                       //  onClick={handleReview} need to select landlordid and send to review page
                       onClick={handleReview}
                     >
                       Create Review
-                    </button> */}
+                    </Button>
                   </Box>
                 ) : (
                   <Box>
