@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 import Typography from "@mui/material/Typography";
@@ -32,6 +32,32 @@ export default function UserProfile() {
   const [currentTab, setCurrentTab] = useState(0);
   const [updateMode, setUpdateMode] = useState(false);
 
+  //Todo for landlord fetching
+  //1. import use navigation to route to review page with landlord ID
+  //2.create getLandlords function and invoke function in useEffect underneath getreviews()
+  //3.create handleChange when button is clicked for
+
+  // state for addReview onclick leading to landlord selection
+  const [addReview, setAddReview] = useState(false);
+
+  //state for landlord, set landlord state **DOES THIS NEED TO BE A STRING OR ARRAY**?
+  const [landLords, setLandlords] = React.useState([]);
+
+  //state represents which landlord is selected
+  const [selectedLandlord, setSelectedLandlord] = useState(1);
+
+  //for changing landlord state
+  const handleChange = (event) => {
+    setSelectedLandlord(event.target.value);
+  };
+
+  //routing for landlord review page
+  const handleReview = (e) => {
+    navigate(`/review/${landlordId}/`);
+  };
+  //landlord params
+  const { landlord_id: landlordId } = useParams();
+
   const navigate = useNavigate();
   // let [searchParams, setSearchParams] = useSearchParams();
   const mounted = useRef(true);
@@ -53,18 +79,28 @@ export default function UserProfile() {
     }
   };
 
-  // state for addReview onclick leading to landlord selection
-  const [addReview, setAddReview] = useState(false);
-
-  //state for landlord, set landlord state
-  const [landlord, setLandlord] = React.useState("");
-  //for changing landlord state
-  const handleChange = (event) => {
-    setLandlord(event.target.value);
+  //create function for axios get request to /landlords path
+  const getLandlords = async () => {
+    if (!user._id) {
+      navigate("/"); // user needs to sign in
+      return;
+    }
+    try {
+      const { status, data } = await axios.get("/landlords");
+      if (status >= 200 && status < 300 && mounted.current) console.log(data);
+      setLandlords(data.landlords);
+    } catch (err) {
+      if (err?.repsonse?.status === 401) {
+        navigate("/");
+      } else {
+        console.error("Error fetching landlord name-->", err);
+      }
+    }
   };
 
   useEffect(() => {
     getReviews();
+    getLandlords();
     return () => () => (mounted.current = false);
   }, [user]);
 
@@ -215,7 +251,6 @@ export default function UserProfile() {
                 </Button>
               </Box>
             )}
-            
           </Grid>
           <Grid item xs={9}>
             <Tabs
@@ -253,23 +288,36 @@ export default function UserProfile() {
             {currentTab === 1 && (
               <div>
                 {addReview ? (
-                  <Box sx={{ minWidth: 120 }}>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">
+                  <Box
+                    sx={{
+                      minWidth: 120,
+                    }}
+                  >
+                    <FormControl>
+                      <InputLabel id="landlord-select-label">
                         Select Landlord
                       </InputLabel>
                       <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={landlord}
-                        label="landLords"
+                        labelId="landlord-select-label"
+                        id="landlord-select"
+                        value={selectedLandlord}
+                        label="landlords"
                         onChange={handleChange}
                       >
-                        <MenuItem value={10}>Ten</MenuItem>
+                        {landLords.map((element, index) => (
+                          // TODO: .MuiButtonBase-root is setting display: inline-flex on the menu items
+                          <MenuItem
+                            key={index}
+                            value={element._id}
+                            sx={{ display: "block" }}
+                          >
+                            {element.first_name} {element.last_name}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
 
-                    <button
+                    {/* <button
                       style={{
                         padding: "7px 15px",
                         borderRadius: "10px",
@@ -280,10 +328,11 @@ export default function UserProfile() {
                         cursor: "pointer",
                         marginBottom: 10,
                       }}
-                      //  onClick={} need to select landlordid and send to review page router
+                      //  onClick={handleReview} need to select landlordid and send to review page
+                      onClick={handleReview}
                     >
                       Create Review
-                    </button>
+                    </button> */}
                   </Box>
                 ) : (
                   <Box>
@@ -343,6 +392,39 @@ export default function UserProfile() {
                   textAlign: "center",
                 }}
               >
+                <FormControl>
+                  <InputLabel id="landlord-select-label">
+                    Select Landlord
+                  </InputLabel>
+                  <Select
+                    labelId="landlord-select-label"
+                    id="landlord-select"
+                    value={selectedLandlord}
+                    label="landlords"
+                    onChange={handleChange}
+                  >
+                    {landLords.map((element, index) => (
+                      // TODO: .MuiButtonBase-root is setting display: inline-flex on the menu items
+                      <MenuItem key={index} value={element._id}>
+                        {element.first_name} {element.last_name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth>
+                  <InputLabel id="role-input-label">Role</InputLabel>
+                  <Select
+                    labelId="role-label"
+                    id="role"
+                    value={true}
+                    label="role"
+                  >
+                    <MenuItem value={true}>Landlord</MenuItem>
+                    <MenuItem value={false}>Tenant</MenuItem>
+                  </Select>
+                </FormControl>
+
                 <h3> You don&apos;t have any saved landlords yet</h3>
               </div>
             )}
