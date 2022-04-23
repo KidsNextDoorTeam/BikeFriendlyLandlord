@@ -11,8 +11,7 @@ function AuthProvider({children}) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-
-  useEffect(async () => {
+  const getUser = async () => {
     try {
       const { status, data } = await axios.get('/auth');
       if (status >= 200 && status < 300) {
@@ -25,6 +24,11 @@ function AuthProvider({children}) {
     } finally {
       setIsLoading(false);
     }
+  };
+
+
+  useEffect(async () => {
+    getUser();
   }, []);
 
   useEffect(() => {
@@ -33,7 +37,9 @@ function AuthProvider({children}) {
     user.isTenant = user.roles?.includes(ROLES.TENANT);
   }, [user]);
 
-  const value = { user, setUser, isLoading, setIsLoading  };
+  
+
+  const value = { user, setUser, getUser, isLoading, setIsLoading };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 

@@ -2,17 +2,23 @@ import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-// import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
+import Checkbox from '@mui/material/Checkbox';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 import Select from '@mui/material/Select';
 import Link from '@mui/material/Link';
 
 export default function Signup(props) {
+  // TODO: handleSubmit in this component so we can handle 409 errors and render error messages
   const { handleSubmit, setAuthDisplay, setDisplayLogin } = props;
 
   const [isLandlord, setIsLandlord] = useState(false);
+  const [petFriendly, setPetFriendly] = useState(false);
+  const [bikeFriendly, setBikeFriendly] = useState(false);
   const [formData, setFormData] = useState({
     firstname: '',
     lastname: '',
@@ -53,33 +59,35 @@ export default function Signup(props) {
     }
   }, [formData.password]);
 
-  function validateEmail(email) {
-    const res = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return res.test(String(email).toLowerCase());
-  }
-
   return (
     <>
       <Box
         sx={formStyle}
-        component="form"
-        onSubmit={(e) => handleSubmit(e, { ...formData, isLandlord }, false)}
-        noValidate>
+        component='form'
+        onSubmit={(e) =>
+          handleSubmit(
+            e,
+            { ...formData, isLandlord, petFriendly, bikeFriendly },
+            false
+          )
+        }
+      >
         <h3>Signup</h3>
         <TextField
           fullWidth
+          required
           sx={inputButtonStyle}
           id='first'
           label='First Name'
           variant='outlined'
           value={formData.firstname}
-
           onChange={(event) =>
             setFormData({ ...formData, firstname: event.target.value })
           }
         />
         <TextField
           fullWidth
+          required
           sx={inputButtonStyle}
           id='last'
           label='Last Name'
@@ -91,6 +99,7 @@ export default function Signup(props) {
         />
         <TextField
           fullWidth
+          required
           sx={inputButtonStyle}
           id='username'
           label='username'
@@ -102,11 +111,12 @@ export default function Signup(props) {
         />
         <TextField
           fullWidth
+          required
           sx={inputButtonStyle}
           id='email'
           label='Email'
           type='email'
-          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+          pattern='[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$'
           variant='outlined'
           value={formData.email}
           onChange={(event) =>
@@ -115,6 +125,7 @@ export default function Signup(props) {
         />
         <TextField
           fullWidth
+          required
           sx={inputButtonStyle}
           id='password'
           label='Password'
@@ -129,6 +140,7 @@ export default function Signup(props) {
         />
         <TextField
           fullWidth
+          required
           sx={inputButtonStyle}
           id='confirm-password'
           label='Confirm Password'
@@ -142,20 +154,42 @@ export default function Signup(props) {
           }}
         />
         <FormControl fullWidth>
-          <InputLabel id="role-input-label">Role</InputLabel>
+          <InputLabel id='role-input-label'>Role</InputLabel>
           <Select
+            required
             sx={inputButtonStyle}
-            labelId="role-label"
-            id="role"
+            labelId='role-input-label'
+            id='role'
             value={isLandlord}
-            label="role"
-            onChange={(event) =>
-              setIsLandlord(event.target.value)
-            }
+            label='role'
+            onChange={(event) => setIsLandlord(event.target.value)}
           >
             <MenuItem value={true}>Landlord</MenuItem>
             <MenuItem value={false}>Tenant</MenuItem>
           </Select>
+        </FormControl>
+        <FormControl>
+          {isLandlord && 
+            <FormControl component='fieldset'>
+              <FormLabel component='legend'>Select your friendliness</FormLabel>
+              <FormGroup aria-label='position' row>
+                <FormControlLabel
+                  value={petFriendly}
+                  onChange={() => setPetFriendly(!petFriendly)}
+                  control={<Checkbox />}
+                  label='Pet'
+                  labelPlacement='end'
+                />
+                <FormControlLabel
+                  value={bikeFriendly}
+                  onChange={() => setBikeFriendly(!bikeFriendly)}
+                  control={<Checkbox />}
+                  label='Bike'
+                  labelPlacement='end'
+                />
+              </FormGroup>
+            </FormControl>
+          }
         </FormControl>
         <Button variant='contained' type='submit' sx={inputButtonStyle}>
           Signup
@@ -170,7 +204,7 @@ export default function Signup(props) {
           Already have an account? Login.
         </Link>
         <Button
-          variant='contained'
+          variant='outlined'
           size='small'
           sx={{ textTransform: 'none' }}
           onClick={() => setAuthDisplay(false)}
