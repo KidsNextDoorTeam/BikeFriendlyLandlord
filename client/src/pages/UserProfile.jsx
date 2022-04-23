@@ -293,12 +293,13 @@ export default function UserProfile() {
                       minWidth: 120,
                     }}
                   >
-                    <FormControl size="large">
-                      <InputLabel id="landlord-select-label">
+                    <FormControl size="small">
+                      <InputLabel id="landlord-select-label" sx={{marginTop:'10px'}}> 
                         Select Landlord
                       </InputLabel>
                       <Select
-                        sx={{ minWidth: '160px' }}
+                        MenuProps={{ sx: { '&& .MuiPaper-root': { backgroundColor: 'lightgrey' }}}}
+                        sx={{ minWidth: '160px',marginTop: 1.5 ,marginBottom: 1}}
                         labelId="landlord-select-label"
                         id="landlord-select"
                         value={selectedLandlord}
@@ -330,7 +331,7 @@ export default function UserProfile() {
                         marginBottom: 10,
                         marginLeft: 10,
                       }}
-                      //  onClick={handleReview} need to select landlordid and send to review page
+                      //  onClick={handleReview} need to select landlord id and send to review page
                       onClick={handleReview}
                     >
                       Create Review
