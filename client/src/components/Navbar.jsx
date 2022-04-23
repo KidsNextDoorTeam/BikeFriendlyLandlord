@@ -100,7 +100,6 @@ export function Navbar() {
         {!user && (
           <Button
             sx={{
-              fontFamily: 'Nunito',
               color: '#666',
               '&:hover': { backgroundColor: 'rgba(253, 143, 124, 0.577)' },
             }}
@@ -122,7 +121,6 @@ export function Navbar() {
             <Button
               variant='text'
               sx={{
-                fontFamily: 'Nunito',
                 color: '#666',
                 '&:hover': { backgroundColor: 'rgba(253, 143, 124, 0.577)' },
               }}
@@ -130,7 +128,7 @@ export function Navbar() {
                 paddingTop: '8px',
               }}
               onClick={logout}>
-              Log Out
+              LogOut
             </Button>
           </div>
         )}

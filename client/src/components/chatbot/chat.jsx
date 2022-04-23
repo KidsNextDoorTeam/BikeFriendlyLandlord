@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -32,6 +31,8 @@ import ChatLogin from './chatLogin.jsx'
 import Minimized from './minimized.jsx'
 
 const client = new W3CWebSocket('ws://localhost:3001');
+
+
 
 export default class Chat extends Component {
   constructor(props) {
@@ -101,7 +102,6 @@ export default class Chat extends Component {
     };
   }
   
-  
   render(){
     const darkTheme = createTheme({ palette: { mode: 'dark' } });
     return (
@@ -135,7 +135,7 @@ export default class Chat extends Component {
         }
         </Box>
           </ThemeProvider>
-          </React.Fragment>
+        </React.Fragment>
       </div>
     );
   }

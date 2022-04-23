@@ -11,7 +11,7 @@ landlordController.getById = async (req, res, next) => {
   };
 
   const propertiesQuery = {
-    text: 'SELECT * FROM properties WHERE landlord_id = $1;',
+    text: 'SELECT * FROM properties WHERE landlord_id = $1 ORDER BY _id;',
     values: [req.params.landlordId]
   };
 

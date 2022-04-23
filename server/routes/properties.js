@@ -16,6 +16,11 @@ router.get('/:propertyId', propertiesController.getProperty, (req, res) => {
   return res.status(200).json({ property: res.locals.property });
 });
 
+// Auth check that user is a landlord that owns the property
+router.put('/:propertyId', propertiesController.updateProperty, (req, res) => {
+  return res.status(200).json({ property: res.locals.property });
+});
+
 router.post('/',
   propertiesController.geocodeAddress,
   propertiesController.addProperty,

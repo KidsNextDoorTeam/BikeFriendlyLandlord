@@ -1,13 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
+import {useAlert} from '../hooks/alertContext';
 import Alert from '@mui/material/Alert';
-import AlertContext from '../hooks/alertContext';
 import Collapse from '@mui/material/Collapse';
 // import Stack from '@mui/material/Stack';
 
 export default function Alerts() {
   // TODO: Support multiple alerts with array 
   // (individual timers for each ? how to track with re - renders)
-  const { alert, alertSeverity, setAlert, setAlertSeverity } = useContext(AlertContext);
+  const { alert, alertSeverity, setAlert, setAlertSeverity } = useAlert();
   const [open, setOpen] = useState(true);
 
   useEffect(() => {

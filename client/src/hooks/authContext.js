@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const AuthContext = React.createContext();
+const ROLES = {
+  LANDLORD: 'landlord',
+  TENANT: 'tenant'
+};
 
 function AuthProvider({children}) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-
-  useEffect(async () => {
+  const getUser = async () => {
     try {
       const { status, data } = await axios.get('/auth');
       if (status >= 200 && status < 300) {
@@ -21,9 +24,22 @@ function AuthProvider({children}) {
     } finally {
       setIsLoading(false);
     }
+  };
+
+
+  useEffect(async () => {
+    getUser();
   }, []);
 
-  const value = { user, setUser, isLoading, setIsLoading  };
+  useEffect(() => {
+    if (!user) return;
+    user.isLandlord = user.roles?.includes(ROLES.LANDLORD);
+    user.isTenant = user.roles?.includes(ROLES.TENANT);
+  }, [user]);
+
+  
+
+  const value = { user, setUser, getUser, isLoading, setIsLoading };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
